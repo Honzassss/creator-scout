@@ -1,0 +1,137 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*), invented texts and values. Shaped like the live runs of 9. 10. 2026 (T6/T6b, post-scraper detailedData): paidPartnership is always a bool (True only on labelled posts), sponsors and affiliate never appear, coauthorProducers {id, username, full_name, is_verified, is_unpublished, profile_pic_url, __typename} on about half the posts, latestComments up to 15 {id, text, timestamp, likesCount, repliesCount, replies, ownerUsername, ownerProfilePicUrl, owner}, firstComment a string, isPinned absent, url always the /p/ form, likesCount -1 for many posts fetched by username. The second item repeats the first (basicData duplicates).",
+  "actor": "apify/instagram-post-scraper",
+  "input": {
+    "username": [
+      "sample_cukrarka_brno"
+    ],
+    "resultsLimit": 50,
+    "skipPinnedPosts": true,
+    "dataDetailLevel": "detailedData"
+  },
+  "items": [
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "id": "3700000000000000301",
+      "type": "Image",
+      "productType": "feed",
+      "shortCode": "SAMPLEd1",
+      "url": "https://www.instagram.com/p/SAMPLEd1/",
+      "ownerUsername": "sample_cukrarka_brno",
+      "ownerId": "900000101",
+      "ownerFullName": "Sample Cukrářka",
+      "caption": "Spolupráce s @sample_brand #reklama",
+      "hashtags": [
+        "reklama"
+      ],
+      "mentions": [
+        "sample_brand"
+      ],
+      "taggedUsers": [],
+      "timestamp": "2026-10-06T10:00:00.000Z",
+      "likesCount": 200,
+      "commentsCount": 9,
+      "coauthorProducers": [
+        {
+          "id": "9",
+          "username": "sample_brand",
+          "full_name": "Sample Brand",
+          "is_verified": true,
+          "is_unpublished": false,
+          "profile_pic_url": "https://sample.example/brand.jpg",
+          "__typename": "XDTUserDict"
+        }
+      ],
+      "locationName": "Sample Kavárna Zelný trh",
+      "locationId": "100000001",
+      "paidPartnership": true,
+      "isCommentsDisabled": false,
+      "latestComments": [
+        {
+          "id": "180000000101",
+          "text": "Vypadá skvěle! @kamaradka_sample",
+          "timestamp": "2026-10-06T11:00:00.000Z",
+          "likesCount": 1,
+          "repliesCount": 0,
+          "replies": [],
+          "ownerUsername": "real.person.should.vanish",
+          "ownerProfilePicUrl": "https://x/pic.jpg",
+          "owner": {
+            "id": "55",
+            "username": "real.person.should.vanish",
+            "is_verified": false,
+            "profile_pic_url": "https://x/pic.jpg"
+          }
+        },
+        {
+          "id": "180000000102",
+          "text": "Kde to koupím?",
+          "timestamp": "2026-10-06T12:00:00.000Z",
+          "likesCount": 0,
+          "repliesCount": 0,
+          "replies": [],
+          "ownerUsername": "another.person",
+          "ownerProfilePicUrl": "https://x/pic2.jpg",
+          "owner": {
+            "id": "56",
+            "username": "another.person",
+            "is_verified": false,
+            "profile_pic_url": "https://x/pic2.jpg"
+          }
+        }
+      ],
+      "firstComment": "Vypadá skvěle!"
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "shortCode": "SAMPLEd1",
+      "url": "https://www.instagram.com/p/SAMPLEd1/",
+      "ownerUsername": "sample_cukrarka_brno",
+      "caption": "Spolupráce s @sample_brand #reklama",
+      "timestamp": "2026-10-06T10:00:00.000Z",
+      "type": "Image",
+      "productType": "feed",
+      "paidPartnership": true
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "id": "3700000000000000302",
+      "type": "Video",
+      "productType": "clips",
+      "shortCode": "SAMPLEd2",
+      "url": "https://www.instagram.com/p/SAMPLEd2/",
+      "ownerUsername": "sample_cukrarka_brno",
+      "ownerId": "900000101",
+      "caption": "Obyčejný post",
+      "hashtags": [],
+      "mentions": [],
+      "timestamp": "2026-09-20T10:00:00.000Z",
+      "likesCount": -1,
+      "commentsCount": 3,
+      "videoPlayCount": 9100,
+      "videoViewCount": null,
+      "paidPartnership": false,
+      "latestComments": [],
+      "firstComment": ""
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "id": "3700000000000000303",
+      "type": "Image",
+      "productType": "feed",
+      "shortCode": "SAMPLEold",
+      "url": "https://www.instagram.com/p/SAMPLEold/",
+      "ownerUsername": "sample_cukrarka_brno",
+      "ownerId": "900000101",
+      "caption": "Starý post",
+      "hashtags": [],
+      "mentions": [],
+      "timestamp": "2025-12-01T10:00:00.000Z",
+      "likesCount": 50,
+      "commentsCount": 1,
+      "paidPartnership": false,
+      "latestComments": [],
+      "firstComment": ""
+    }
+  ]
+}

@@ -1,0 +1,657 @@
+{
+ "bakery": {
+  "brief": {
+   "business_type": "pekárna",
+   "city": "Brno",
+   "audience": "rodiny a mladí lidé v Brně",
+   "goal": "víc lidí v prodejně, představit nový kváskový chléb",
+   "budget_hint": "do 20 tisíc Kč",
+   "competitors": [
+    {
+     "name": "Pekárna B",
+     "handles": [
+      "pekarna_b"
+     ]
+    },
+    {
+     "name": "Chlebárna Vlnka",
+     "handles": [
+      "chlebarna_vlnka"
+     ]
+    }
+   ],
+   "lang": "cs"
+  },
+  "criteria": [
+   {
+    "id": "public_account",
+    "kind": "public_account",
+    "round": 1,
+    "label": {
+     "cs": "Veřejný účet",
+     "en": "Public account"
+    },
+    "why": {
+     "cs": "Obsah soukromého účtu nevidíme, takže ho nejde prověřit.",
+     "en": "We cannot see a private account's content, so it cannot be checked."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "followers_range",
+    "kind": "followers_range",
+    "round": 1,
+    "label": {
+     "cs": "Velikost (sledující)",
+     "en": "Size (followers)"
+    },
+    "why": {
+     "cs": "Menší tvůrci mívají bližší vztah s publikem a jsou dostupnější.",
+     "en": "Smaller creators tend to have a closer audience and are more affordable."
+    },
+    "params": {
+     "min": 1000,
+     "max": 50000
+    },
+    "enabled": true
+   },
+   {
+    "id": "active_recently",
+    "kind": "active_recently",
+    "round": 1,
+    "label": {
+     "cs": "Aktivní v poslední době",
+     "en": "Recently active"
+    },
+    "why": {
+     "cs": "Tvůrce, který měsíc nic nezveřejnil, kampaň nejspíš neodvede.",
+     "en": "A creator with no post for a month is unlikely to deliver a campaign."
+    },
+    "params": {
+     "days": 30
+    },
+    "enabled": true
+   },
+   {
+    "id": "not_brand_account",
+    "kind": "not_brand_account",
+    "round": 1,
+    "label": {
+     "cs": "Tvůrce, ne firemní účet",
+     "en": "Creator, not a brand account"
+    },
+    "why": {
+     "cs": "Hledáme tvůrce, ne jiné firmy.",
+     "en": "We are looking for creators, not other businesses."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "language_cs",
+    "kind": "language_cs",
+    "round": 1,
+    "label": {
+     "cs": "Píše česky",
+     "en": "Posts in Czech"
+    },
+    "why": {
+     "cs": "Zákazníci pekárny v Brně čtou česky.",
+     "en": "The bakery's customers in Brno read Czech."
+    },
+    "params": {
+     "min_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "topic_share",
+    "kind": "topic_share",
+    "round": 2,
+    "label": {
+     "cs": "Podíl relevantních témat",
+     "en": "Share of relevant topics"
+    },
+    "why": {
+     "cs": "Doporučení pekárny zapadne k tvůrci, který o jídle mluví pravidelně.",
+     "en": "A bakery recommendation fits a creator who talks about food regularly."
+    },
+    "params": {
+     "topics": [
+      "food",
+      "recipes",
+      "restaurants_cafes",
+      "local_tips"
+     ],
+     "min_share": 0.4
+    },
+    "enabled": true
+   },
+   {
+    "id": "formats",
+    "kind": "formats",
+    "round": 2,
+    "label": {
+     "cs": "Formát obsahu",
+     "en": "Content format"
+    },
+    "why": {
+     "cs": "Krátká videa ukážou pečivo a prodejnu nejlépe.",
+     "en": "Short videos show the pastry and the shop best."
+    },
+    "params": {
+     "formats": [
+      "reel",
+      "video"
+     ],
+     "min_share": 0.2
+    },
+    "enabled": true
+   },
+   {
+    "id": "post_frequency",
+    "kind": "post_frequency",
+    "round": 2,
+    "label": {
+     "cs": "Frekvence postů",
+     "en": "Posting frequency"
+    },
+    "why": {
+     "cs": "Pravidelné posty drží publikum aktivní.",
+     "en": "Regular posting keeps the audience engaged."
+    },
+    "params": {
+     "min_per_week": 1.0
+    },
+    "enabled": true
+   },
+   {
+    "id": "max_commercial_share",
+    "kind": "max_commercial_share",
+    "round": 2,
+    "label": {
+     "cs": "Komerční nasycenost",
+     "en": "Commercial saturation"
+    },
+    "why": {
+     "cs": "Když je reklama skoro každý post, lidé jí přestanou věřit.",
+     "en": "When almost every post is an ad, people stop trusting it."
+    },
+    "params": {
+     "max_share": 0.3
+    },
+    "enabled": true
+   },
+   {
+    "id": "min_engagement",
+    "kind": "min_engagement",
+    "round": 3,
+    "label": {
+     "cs": "Aktivita publika",
+     "en": "Audience engagement"
+    },
+    "why": {
+     "cs": "Sledující, kteří reagují, spíš přijdou i do prodejny.",
+     "en": "Followers who react are more likely to visit the shop."
+    },
+    "params": {
+     "min_rate": 0.008
+    },
+    "enabled": true
+   },
+   {
+    "id": "cs_comment_share",
+    "kind": "cs_comment_share",
+    "round": 3,
+    "label": {
+     "cs": "Komentáře v češtině",
+     "en": "Comments in Czech"
+    },
+    "why": {
+     "cs": "Lidé, kteří reagují, píšou česky; je to jazyk komentářů, ne demografie publika.",
+     "en": "People who react write in Czech; this is the language of the comments, not a demographic estimate."
+    },
+    "params": {
+     "min_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "local_signal",
+    "kind": "local_signal",
+    "round": 3,
+    "label": {
+     "cs": "Lokální signály",
+     "en": "Local signals"
+    },
+    "why": {
+     "cs": "Pekárna potřebuje lidi z Brna, ne z celé republiky.",
+     "en": "The bakery needs people from Brno, not the whole country."
+    },
+    "params": {
+     "city": "Brno",
+     "min_count": 1
+    },
+    "enabled": true
+   },
+   {
+    "id": "max_generic_comments",
+    "kind": "max_generic_comments",
+    "round": 3,
+    "label": {
+     "cs": "Pravost komentářů",
+     "en": "Comment authenticity"
+    },
+    "why": {
+     "cs": "Hodně komentářů jen z emoji může znamenat nakoupenou aktivitu.",
+     "en": "Many emoji-only comments can indicate bought engagement."
+    },
+    "params": {
+     "max_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "no_competitor_collab",
+    "kind": "no_competitor_collab",
+    "round": 4,
+    "label": {
+     "cs": "Bez spolupráce s konkurencí",
+     "en": "No competitor collaboration"
+    },
+    "why": {
+     "cs": "Tvůrce, který právě dělá reklamu Pekárně B nebo Chlebárně Vlnka, by pro vás nebyl věrohodný.",
+     "en": "A creator currently promoting Pekárna B or Chlebárna Vlnka would not be credible for you."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "discloses_ads",
+    "kind": "discloses_ads",
+    "round": 4,
+    "label": {
+     "cs": "Označuje reklamu",
+     "en": "Discloses ads"
+    },
+    "why": {
+     "cs": "Neoznačená reklama je problém i pro zadavatele.",
+     "en": "Undisclosed advertising is a problem for the advertiser too."
+    },
+    "params": {
+     "max_undisclosed": 0
+    },
+    "enabled": true
+   }
+  ],
+  "refused": [
+   {
+    "text": "jen věřící tvůrci",
+    "reason": {
+     "cs": "Víra je zvláštní kategorie údajů (čl. 9 GDPR). Podle ní tvůrce netřídíme.",
+     "en": "Religious belief is special-category data (GDPR Art. 9). We do not sort creators by it."
+    }
+   },
+   {
+    "text": "najdi mi toho nejlepšího tvůrce",
+    "reason": {
+     "cs": "Celkové skóre ani „nejlepšího“ tvůrce neurčujeme. Ukážeme, jak kdo splňuje vaše kritéria, a rozhodnete vy.",
+     "en": "We do not produce an overall score or a 'best' creator. We show how each one meets your criteria and you decide."
+    }
+   }
+  ],
+  "discovery": {
+   "keywords": [
+    "cukrárna brno",
+    "pekárna brno",
+    "brno food",
+    "fitness brno",
+    "brno tipy"
+   ],
+   "hashtags": [
+    "brnofood",
+    "brnojidlo",
+    "foodbrno",
+    "brnofitness",
+    "brno"
+   ],
+   "places": [
+    "Brno"
+   ],
+   "city": "Brno",
+   "platforms": [
+    "instagram",
+    "tiktok"
+   ],
+   "limit": 60
+  }
+ },
+ "fitness": {
+  "brief": {
+   "business_type": "fitness studio",
+   "city": "Brno",
+   "audience": "lidé v Brně, kteří chtějí začít cvičit",
+   "goal": "víc přihlášek na zkušební lekci",
+   "budget_hint": "do 30 tisíc Kč",
+   "competitors": [
+    {
+     "name": "FitZone Brno",
+     "handles": [
+      "fitzone_brno"
+     ]
+    },
+    {
+     "name": "ProteoMax",
+     "handles": [
+      "proteomax"
+     ]
+    }
+   ],
+   "lang": "cs"
+  },
+  "criteria": [
+   {
+    "id": "public_account",
+    "kind": "public_account",
+    "round": 1,
+    "label": {
+     "cs": "Veřejný účet",
+     "en": "Public account"
+    },
+    "why": {
+     "cs": "Obsah soukromého účtu nevidíme, takže ho nejde prověřit.",
+     "en": "We cannot see a private account's content, so it cannot be checked."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "followers_range",
+    "kind": "followers_range",
+    "round": 1,
+    "label": {
+     "cs": "Velikost (sledující)",
+     "en": "Size (followers)"
+    },
+    "why": {
+     "cs": "Pro studio stačí menší až střední tvůrce s aktivním publikem.",
+     "en": "Small to mid-size creators with an active audience suit a studio."
+    },
+    "params": {
+     "min": 1000,
+     "max": 50000
+    },
+    "enabled": true
+   },
+   {
+    "id": "active_recently",
+    "kind": "active_recently",
+    "round": 1,
+    "label": {
+     "cs": "Aktivní v poslední době",
+     "en": "Recently active"
+    },
+    "why": {
+     "cs": "Tvůrce, který měsíc nic nezveřejnil, kampaň nejspíš neodvede.",
+     "en": "A creator with no post for a month is unlikely to deliver a campaign."
+    },
+    "params": {
+     "days": 30
+    },
+    "enabled": true
+   },
+   {
+    "id": "not_brand_account",
+    "kind": "not_brand_account",
+    "round": 1,
+    "label": {
+     "cs": "Tvůrce, ne firemní účet",
+     "en": "Creator, not a brand account"
+    },
+    "why": {
+     "cs": "Hledáme tvůrce, ne jiné firmy.",
+     "en": "We are looking for creators, not other businesses."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "language_cs",
+    "kind": "language_cs",
+    "round": 1,
+    "label": {
+     "cs": "Píše česky",
+     "en": "Posts in Czech"
+    },
+    "why": {
+     "cs": "Zákazníci studia v Brně čtou česky.",
+     "en": "The studio's customers in Brno read Czech."
+    },
+    "params": {
+     "min_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "topic_share",
+    "kind": "topic_share",
+    "round": 2,
+    "label": {
+     "cs": "Podíl relevantních témat",
+     "en": "Share of relevant topics"
+    },
+    "why": {
+     "cs": "Pozvánka do studia zapadne k tvůrci, který o pohybu tvoří pravidelně.",
+     "en": "A studio invitation fits a creator who regularly makes content about exercise."
+    },
+    "params": {
+     "topics": [
+      "fitness",
+      "sport",
+      "lifestyle"
+     ],
+     "min_share": 0.4
+    },
+    "enabled": true
+   },
+   {
+    "id": "formats",
+    "kind": "formats",
+    "round": 2,
+    "label": {
+     "cs": "Formát obsahu",
+     "en": "Content format"
+    },
+    "why": {
+     "cs": "Cvičení se nejlépe ukazuje ve videu.",
+     "en": "Exercise is best shown on video."
+    },
+    "params": {
+     "formats": [
+      "reel",
+      "video"
+     ],
+     "min_share": 0.3
+    },
+    "enabled": true
+   },
+   {
+    "id": "post_frequency",
+    "kind": "post_frequency",
+    "round": 2,
+    "label": {
+     "cs": "Frekvence postů",
+     "en": "Posting frequency"
+    },
+    "why": {
+     "cs": "Fitness publikum čeká pravidelný obsah.",
+     "en": "Fitness audiences expect regular content."
+    },
+    "params": {
+     "min_per_week": 1.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "max_commercial_share",
+    "kind": "max_commercial_share",
+    "round": 2,
+    "label": {
+     "cs": "Komerční nasycenost",
+     "en": "Commercial saturation"
+    },
+    "why": {
+     "cs": "Když je reklama skoro každý post, lidé jí přestanou věřit.",
+     "en": "When almost every post is an ad, people stop trusting it."
+    },
+    "params": {
+     "max_share": 0.3
+    },
+    "enabled": true
+   },
+   {
+    "id": "min_engagement",
+    "kind": "min_engagement",
+    "round": 3,
+    "label": {
+     "cs": "Aktivita publika",
+     "en": "Audience engagement"
+    },
+    "why": {
+     "cs": "Zkušební lekce potřebuje lidi, kteří opravdu reagují.",
+     "en": "A trial class needs followers who actually respond."
+    },
+    "params": {
+     "min_rate": 0.008
+    },
+    "enabled": true
+   },
+   {
+    "id": "cs_comment_share",
+    "kind": "cs_comment_share",
+    "round": 3,
+    "label": {
+     "cs": "Komentáře v češtině",
+     "en": "Comments in Czech"
+    },
+    "why": {
+     "cs": "Lidé, kteří reagují, píšou česky; je to jazyk komentářů, ne demografie publika.",
+     "en": "People who react write in Czech; this is the language of the comments, not a demographic estimate."
+    },
+    "params": {
+     "min_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "local_signal",
+    "kind": "local_signal",
+    "round": 3,
+    "label": {
+     "cs": "Lokální signály",
+     "en": "Local signals"
+    },
+    "why": {
+     "cs": "Studio potřebuje lidi z Brna.",
+     "en": "The studio needs people from Brno."
+    },
+    "params": {
+     "city": "Brno",
+     "min_count": 1
+    },
+    "enabled": true
+   },
+   {
+    "id": "max_generic_comments",
+    "kind": "max_generic_comments",
+    "round": 3,
+    "label": {
+     "cs": "Pravost komentářů",
+     "en": "Comment authenticity"
+    },
+    "why": {
+     "cs": "Hodně komentářů jen z emoji může znamenat nakoupenou aktivitu.",
+     "en": "Many emoji-only comments can indicate bought engagement."
+    },
+    "params": {
+     "max_share": 0.5
+    },
+    "enabled": true
+   },
+   {
+    "id": "no_competitor_collab",
+    "kind": "no_competitor_collab",
+    "round": 4,
+    "label": {
+     "cs": "Bez spolupráce s konkurencí",
+     "en": "No competitor collaboration"
+    },
+    "why": {
+     "cs": "Tvůrce, který dělá reklamu FitZone Brno nebo doplňkům ProteoMax, by pro vás nebyl věrohodný.",
+     "en": "A creator promoting FitZone Brno or ProteoMax supplements would not be credible for you."
+    },
+    "params": {},
+    "enabled": true
+   },
+   {
+    "id": "discloses_ads",
+    "kind": "discloses_ads",
+    "round": 4,
+    "label": {
+     "cs": "Označuje reklamu",
+     "en": "Discloses ads"
+    },
+    "why": {
+     "cs": "Neoznačená reklama je problém i pro zadavatele.",
+     "en": "Undisclosed advertising is a problem for the advertiser too."
+    },
+    "params": {
+     "max_undisclosed": 0
+    },
+    "enabled": true
+   }
+  ],
+  "refused": [
+   {
+    "text": "jen tvůrci, kteří nejsou politicky aktivní",
+    "reason": {
+     "cs": "Politické názory jsou zvláštní kategorie údajů (čl. 9 GDPR); podle nich lidi netřídíme.",
+     "en": "Political opinions are special-category data (GDPR Art. 9); we do not sort people by them."
+    }
+   },
+   {
+    "text": "publikum hlavně ženy 20–30 let",
+    "reason": {
+     "cs": "Věk a pohlaví publika z veřejných dat zjistit nejde a neodhadujeme je. Zeptejte se tvůrce na jeho statistiky.",
+     "en": "Audience age and gender cannot be known from public data and we do not estimate them. Ask the creator for their insights."
+    }
+   }
+  ],
+  "discovery": {
+   "keywords": [
+    "cukrárna brno",
+    "pekárna brno",
+    "brno food",
+    "fitness brno",
+    "brno tipy"
+   ],
+   "hashtags": [
+    "brnofood",
+    "brnojidlo",
+    "foodbrno",
+    "brnofitness",
+    "brno"
+   ],
+   "places": [
+    "Brno"
+   ],
+   "city": "Brno",
+   "platforms": [
+    "instagram",
+    "tiktok"
+   ],
+   "limit": 60
+  }
+ }
+}

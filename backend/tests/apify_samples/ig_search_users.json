@@ -1,0 +1,132 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*) and invented values. Shaped like the live runs of 9. 10. 2026 (T1, T5-seed): non-live user items carry the full profile (username, fullName, biography, counts, latestPosts, searchSource google / facebook-ads / threads, searchTerm); a liveSearch item is thin {username, fullName, id, private, verified, url, profilePicUrl, latestMedia}; relatedProfiles is [] on local accounts (one snake_case example kept for the mapper); a missing account comes back as a charged error item {error not_found, errorDescription, url, username}.",
+  "actor": "apify/instagram-search-scraper",
+  "input": {
+    "search": "cukrárna brno",
+    "searchType": "user",
+    "searchLimit": 25
+  },
+  "items": [
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "username": "sample_cukrarka_brno",
+      "fullName": "Sample Cukrářka",
+      "biography": "Peču dorty v Brně 🎂 | spolupráce v DM",
+      "followersCount": 8200,
+      "followsCount": 410,
+      "postsCount": 230,
+      "private": false,
+      "verified": false,
+      "isBusinessAccount": true,
+      "businessCategoryName": "Candy Store",
+      "externalUrls": [],
+      "fbid": "17841400000000001",
+      "searchSource": "facebook-ads",
+      "searchTerm": "cukrárna brno",
+      "relatedProfiles": [
+        {
+          "id": "900000001",
+          "username": "sample_related_kavarna",
+          "full_name": "Sample Related",
+          "is_private": false,
+          "is_verified": false,
+          "profile_pic_url": "https://sample.example/pic1.jpg"
+        },
+        {
+          "id": "900000002",
+          "username": "sample_private_friend",
+          "full_name": "Sample Private",
+          "is_private": true,
+          "is_verified": false,
+          "profile_pic_url": "https://sample.example/pic2.jpg"
+        }
+      ],
+      "latestPosts": [
+        {
+          "id": "3700000000000000001",
+          "type": "Image",
+          "shortCode": "SAMPLEa1",
+          "url": "https://www.instagram.com/p/SAMPLEa1/",
+          "caption": "Makový dort #brnofood",
+          "hashtags": [
+            "brnofood"
+          ],
+          "mentions": [],
+          "commentsCount": 12,
+          "likesCount": 310,
+          "timestamp": "2026-10-01T09:00:00.000Z",
+          "ownerUsername": "sample_cukrarka_brno",
+          "locationName": "Sample Kavárna Zelný trh",
+          "locationId": "100000001",
+          "paidPartnership": false
+        }
+      ],
+      "id": "900000100",
+      "url": "https://www.instagram.com/sample_cukrarka_brno"
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_teen_baker",
+      "username": "sample_teen_baker",
+      "fullName": "Sample Teen",
+      "biography": "15 let | ráda peču 🧁",
+      "followersCount": 900,
+      "followsCount": 200,
+      "postsCount": 30,
+      "private": false,
+      "verified": false,
+      "isBusinessAccount": false,
+      "businessCategoryName": null,
+      "externalUrls": [],
+      "searchSource": "threads",
+      "searchTerm": "cukrárna brno",
+      "latestPosts": [],
+      "id": "900000101",
+      "url": "https://www.instagram.com/sample_teen_baker"
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_bruno_patisserie",
+      "username": "sample_bruno_patisserie",
+      "fullName": "Sample Bruno Pâtisserie",
+      "biography": "Sample pastry studio, worldwide shipping",
+      "followersCount": 2900000,
+      "followsCount": 50,
+      "postsCount": 4100,
+      "private": false,
+      "verified": true,
+      "isBusinessAccount": true,
+      "businessCategoryName": "None",
+      "externalUrls": [],
+      "searchSource": "google",
+      "searchTerm": "cukrárna brno",
+      "relatedProfiles": [
+        {
+          "id": "900000003",
+          "username": "sample_mega_related",
+          "full_name": "Sample Mega Related",
+          "is_private": false,
+          "is_verified": true,
+          "profile_pic_url": "https://sample.example/pic3.jpg"
+        }
+      ],
+      "latestPosts": [],
+      "id": "900000102",
+      "url": "https://www.instagram.com/sample_bruno_patisserie"
+    },
+    {
+      "username": "sample_foodie_live_brno",
+      "fullName": "Sample Foodie",
+      "id": "900000004",
+      "private": false,
+      "verified": false,
+      "url": "https://www.instagram.com/sample_foodie_live_brno",
+      "profilePicUrl": "https://sample.example/pic4.jpg",
+      "latestMedia": null
+    },
+    {
+      "url": "https://www.instagram.com/sample_gone_account",
+      "username": "sample_gone_account",
+      "error": "not_found",
+      "errorDescription": "Profile does not exist"
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+ "_doc": "Brag hook + outro timeline. Times in seconds. Crops are in source-frame pixels (frames are 1440x900 in v1). To swap footage (e.g. v2 light design), change footage_dir and re-measure crop/spot boxes. Render: node scripts/video/brag-render.cjs [hook|outro|all]",
+ "footage_dir": "/Users/honzik/Developer/creator-scout/demo-output/v1/frames",
+ "frame_size": [
+  1440,
+  900
+ ],
+ "fps": 30,
+ "hook": {
+  "duration": 17.4,
+  "scenes": [
+   {
+    "id": "s1-question",
+    "start": 0.0,
+    "end": 3.0,
+    "layout": "side",
+    "headline": "Is <b>@kamvbrne</b> right for your bakery?",
+    "headline_at": 0.0,
+    "crop": {
+     "frame": "05-competitor-check.png",
+     "x": 393,
+     "y": 94,
+     "w": 670,
+     "h": 268,
+     "scale": 1.35,
+     "at": 0.25
+    },
+    "caption": "Real public Instagram data · recorded 9 Oct 2026, cached replay",
+    "caption_at": 0.9,
+    "spots": [
+     {
+      "x": 8,
+      "y": 50,
+      "w": 650,
+      "h": 82,
+      "at": 1.4
+     }
+    ]
+   },
+   {
+    "id": "s2-evidence",
+    "start": 3.0,
+    "end": 7.2,
+    "layout": "side",
+    "headline": "Last month, they promoted <b>your competitor.</b>",
+    "headline_at": 0.15,
+    "crop": {
+     "frame": "05b-check-sources.png",
+     "x": 1095,
+     "y": 20,
+     "w": 326,
+     "h": 220,
+     "scale": 2.15,
+     "at": 0.35
+    },
+    "caption": "The post, in Czech: “@sorrypecemejinak is a unique place!”",
+    "caption_at": 1.3,
+    "spots": [
+     {
+      "x": 8,
+      "y": 72,
+      "w": 314,
+      "h": 30,
+      "at": 1.1
+     },
+     {
+      "x": 4,
+      "y": 168,
+      "w": 306,
+      "h": 30,
+      "at": 2.6
+     }
+    ]
+   },
+   {
+    "id": "s3-sourced",
+    "start": 7.2,
+    "end": 10.8,
+    "layout": "side",
+    "headline": "Every claim, sourced.",
+    "headline_at": 0.15,
+    "sub": "Facts, inferences and gaps, kept apart.",
+    "sub_at": 0.75,
+    "crop": {
+     "frame": "06-fact-inference-gap.png",
+     "x": 393,
+     "y": 290,
+     "w": 670,
+     "h": 400,
+     "scale": 1.5,
+     "at": 0.3,
+     "reveal": [
+      {
+       "h": 130,
+       "at": 0.3
+      },
+      {
+       "h": 265,
+       "at": 1.2
+      },
+      {
+       "h": 400,
+       "at": 1.8
+      }
+     ]
+    },
+    "caption": "",
+    "spots": []
+   },
+   {
+    "id": "s4-goal",
+    "start": 10.8,
+    "end": 14.4,
+    "layout": "stack",
+    "headline": "Same creator. New goal. <b>New report.</b>",
+    "headline_at": 0.15,
+    "crop": {
+     "frame": "07-goal-switch.png",
+     "x": 400,
+     "y": 88,
+     "w": 1000,
+     "h": 275,
+     "scale": 1.5,
+     "at": 0.35
+    },
+    "caption": "Bakery → fitness studio · same data, nothing fetched again",
+    "caption_at": 1.0,
+    "spots": [
+     {
+      "x": 2,
+      "y": 2,
+      "w": 350,
+      "h": 36,
+      "at": 0.9
+     },
+     {
+      "x": 522,
+      "y": 236,
+      "w": 302,
+      "h": 32,
+      "at": 2.0
+     }
+    ]
+   },
+   {
+    "id": "s5-name",
+    "start": 14.4,
+    "end": 17.4,
+    "layout": "logo",
+    "headline": "Creator Scout",
+    "headline_at": 0.1,
+    "sub": "Research a creator for your goal.",
+    "sub_at": 0.5,
+    "foot": "Built on Apify · Instagram, TikTok and news actors",
+    "foot_at": 0.9,
+    "caption": ""
+   }
+  ],
+  "sfx": [
+   {
+    "t": 0.0,
+    "type": "hit"
+   },
+   {
+    "t": 0.25,
+    "type": "swish"
+   },
+   {
+    "t": 1.4,
+    "type": "tick"
+   },
+   {
+    "t": 3.0,
+    "type": "swish"
+   },
+   {
+    "t": 4.1,
+    "type": "tick"
+   },
+   {
+    "t": 5.6,
+    "type": "tick"
+   },
+   {
+    "t": 7.2,
+    "type": "swish"
+   },
+   {
+    "t": 7.5,
+    "type": "tick"
+   },
+   {
+    "t": 8.4,
+    "type": "tick"
+   },
+   {
+    "t": 9.0,
+    "type": "tick"
+   },
+   {
+    "t": 10.8,
+    "type": "swish"
+   },
+   {
+    "t": 11.7,
+    "type": "tick"
+   },
+   {
+    "t": 12.8,
+    "type": "tick"
+   },
+   {
+    "t": 14.4,
+    "type": "bloom"
+   }
+  ]
+ },
+ "outro": {
+  "duration": 4.8,
+  "scenes": [
+   {
+    "id": "o1-end",
+    "start": 0.0,
+    "end": 4.8,
+    "layout": "outro",
+    "headline": "Creator Scout",
+    "headline_at": 0.05,
+    "sub": "Research a creator for your goal.",
+    "sub_at": 0.4,
+    "sub2": "Sources, not scores.",
+    "sub2_at": 0.9,
+    "foot": "Built on Apify",
+    "foot_at": 1.3,
+    "honesty": "Real public data, cached replay · Funnel demo: MOCK",
+    "honesty_at": 1.5,
+    "caption": ""
+   }
+  ],
+  "sfx": [
+   {
+    "t": 0.0,
+    "type": "bloom"
+   }
+  ]
+ }
+}

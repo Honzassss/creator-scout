@@ -1,0 +1,41 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts, invented texts and values. The comment-scraper was NOT run live (T7 skipped on 9. 10. 2026 because post-scraper latestComments already carry text + timestamp, up to 15 per post); the item keys follow the handoff table and match the live latestComments items (id, text, timestamp, likesCount, repliesCount, ownerUsername, owner, ownerProfilePicUrl).",
+  "actor": "apify/instagram-comment-scraper",
+  "input": {
+    "directUrls": [
+      "https://www.instagram.com/p/SAMPLEd1/"
+    ],
+    "resultsLimit": 15
+  },
+  "items": [
+    {
+      "id": "180000000001",
+      "postUrl": "https://www.instagram.com/p/SAMPLEd1/",
+      "commentUrl": "https://www.instagram.com/p/SAMPLEd1/c/180000000001/",
+      "text": "To vypadá výborně, zítra jdu!",
+      "timestamp": "2026-10-06T11:00:00.000Z",
+      "likesCount": 2,
+      "repliesCount": 0,
+      "ownerUsername": "real.person.should.vanish",
+      "owner": {
+        "id": "55",
+        "username": "real.person.should.vanish",
+        "is_verified": false
+      },
+      "ownerProfilePicUrl": "https://x/pic.jpg"
+    },
+    {
+      "id": "180000000002",
+      "postUrl": "https://www.instagram.com/p/SAMPLEd1/?img_index=1",
+      "text": "@kamaradka_sample 😍",
+      "timestamp": "2026-10-06T12:00:00.000Z",
+      "likesCount": 0,
+      "repliesCount": 0,
+      "ownerUsername": "another.person"
+    },
+    {
+      "error": "not_found",
+      "errorDescription": "Sample: post is restricted in this country (404)"
+    }
+  ]
+}

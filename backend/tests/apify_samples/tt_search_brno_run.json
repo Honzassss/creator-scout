@@ -1,0 +1,32 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*), invented texts and values. Shaped like tiktok-scraper searchSection /user items of the Brno run of 9. 10. 2026 (query 'jídlo brno'): found profiles' videos with full authorMeta plus charged 'note' items {authorMeta, input, note, searchQuery}. One note item carries a handle that is not a valid TikTok username ('jídlo': TikTok allows A-Z a-z 0-9 _ . only); sent to the profile scraper it came back as a charged INVALID_URLS error item.",
+  "items": [
+    {
+      "id": "7410000000000000001",
+      "text": "Kebab test 🌯",
+      "textLanguage": "de",
+      "createTime": 0,
+      "createTimeISO": "2026-10-03T15:00:00.000Z",
+      "isAd": false,
+      "authorMeta": {"id": "7010000000000000001", "name": "sample_kebab_wien", "profileUrl": "https://www.tiktok.com/@sample_kebab_wien",
+                     "nickName": "Sample Kebab", "verified": false, "signature": "Wien 🇦🇹", "bioLink": null, "avatar": "https://sample.example/k.jpg",
+                     "commerceUserInfo": {"commerceUser": false}, "privateAccount": false, "roomId": "", "ttSeller": false, "createTime": 1600000000,
+                     "hasActiveStory": false, "following": 20, "friends": 4, "fans": 900, "heart": 9000, "video": 40, "digg": 10,
+                     "followDatasetUrl": null, "originalAvatarUrl": "https://sample.example/k0.jpg"},
+      "webVideoUrl": "https://www.tiktok.com/@sample_kebab_wien/video/7410000000000000001",
+      "diggCount": 120, "shareCount": 1, "playCount": 3000, "collectCount": 2, "commentCount": 5, "repostCount": 0,
+      "mentions": [], "hashtags": [], "isSlideshow": false, "isPinned": false, "isSponsored": false,
+      "input": "jídlo brno", "searchQuery": "jídlo brno"
+    },
+    {
+      "authorMeta": {"id": "7010000000000000002", "name": "jídlo", "profileUrl": "https://www.tiktok.com/@jídlo",
+                     "nickName": "jídlo", "verified": false, "signature": "", "bioLink": null, "avatar": "https://sample.example/j.jpg",
+                     "commerceUserInfo": {"commerceUser": false}, "privateAccount": false, "roomId": "", "ttSeller": false, "createTime": 1600000000,
+                     "hasActiveStory": false, "following": 3, "friends": 0, "fans": 11, "heart": 20, "video": 2, "digg": 0,
+                     "followDatasetUrl": null, "originalAvatarUrl": "https://sample.example/j0.jpg"},
+      "input": "jídlo brno",
+      "note": "Profile has no videos (or is behind a login wall)",
+      "searchQuery": "jídlo brno"
+    }
+  ]
+}

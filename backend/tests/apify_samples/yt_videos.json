@@ -1,0 +1,83 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional channel, titles, texts and ids. Shaped like the live runs of 9. 10. 2026 (T12 /watch URLs, T12b channel URL, streamers/youtube-scraper build 0.0.312): {id, url, type 'video', title, date (ISO Z), viewCount, likes, commentsCount, numberOfSubscribers, channelName, channelUrl, channelUsername, channelId, duration, text, descriptionLinks[{url, text}], hashtags [], location null, isMonetized null, isPaidContent bool}; channel mode adds channelLocation, channelTotalVideos, isChannelVerified, fromChannelListPage and order (0 = newest; the dataset is not in date order).",
+  "actor": "streamers/youtube-scraper",
+  "input": {
+    "startUrls": [
+      {
+        "url": "https://www.youtube.com/@SampleCukrarka"
+      }
+    ],
+    "maxResults": 3,
+    "maxResultsShorts": 0,
+    "maxResultStreams": 0
+  },
+  "items": [
+    {
+      "id": "SAMPLEyt002",
+      "url": "https://www.youtube.com/watch?v=SAMPLEyt002",
+      "type": "video",
+      "title": "Sample: obyčejné video",
+      "date": "2026-09-20T10:00:00.000Z",
+      "viewCount": 2100,
+      "likes": 90,
+      "commentsCount": 8,
+      "numberOfSubscribers": 3400,
+      "channelName": "Sample Cukrářka YT",
+      "channelUrl": "https://www.youtube.com/@SampleCukrarka",
+      "channelUsername": "SampleCukrarka",
+      "channelId": "UCsample000000000000001",
+      "channelLocation": "Czechia",
+      "channelTotalVideos": 120,
+      "isChannelVerified": false,
+      "duration": "00:08:12",
+      "text": "Sample: popis bez spolupráce",
+      "descriptionLinks": [],
+      "hashtags": [],
+      "location": null,
+      "collaborators": null,
+      "isMonetized": null,
+      "isMembersOnly": false,
+      "commentsTurnedOff": false,
+      "isPaidContent": false,
+      "fromChannelListPage": "videos",
+      "order": 1,
+      "input": "https://www.youtube.com/@SampleCukrarka"
+    },
+    {
+      "id": "SAMPLEyt001",
+      "url": "https://www.youtube.com/watch?v=SAMPLEyt001",
+      "type": "video",
+      "title": "Sample: dort ve spolupráci se značkou",
+      "date": "2026-10-04T10:00:00.000Z",
+      "viewCount": 5300,
+      "likes": 240,
+      "commentsCount": 31,
+      "numberOfSubscribers": 3400,
+      "channelName": "Sample Cukrářka YT",
+      "channelUrl": "https://www.youtube.com/@SampleCukrarka",
+      "channelUsername": "SampleCukrarka",
+      "channelId": "UCsample000000000000001",
+      "channelLocation": "Czechia",
+      "channelTotalVideos": 120,
+      "isChannelVerified": false,
+      "duration": "00:11:40",
+      "text": "Sample: popis s odkazem na partnera #dortybrno",
+      "descriptionLinks": [
+        {
+          "url": "https://sample-brand.example",
+          "text": "sample-brand.example"
+        }
+      ],
+      "hashtags": [],
+      "location": null,
+      "collaborators": null,
+      "isMonetized": null,
+      "isMembersOnly": false,
+      "commentsTurnedOff": false,
+      "isPaidContent": true,
+      "fromChannelListPage": "videos",
+      "order": 0,
+      "input": "https://www.youtube.com/@SampleCukrarka"
+    }
+  ]
+}

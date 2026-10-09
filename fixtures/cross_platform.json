@@ -1,0 +1,1184 @@
+{
+ "instagram:brnenska_snidane": [
+  {
+   "handle": "brnenska_snidane",
+   "platform": "tiktok",
+   "url": "https://tiktok.mock.invalid/@brnenska_snidane",
+   "display_name": "Barbora Kolářová (MOCK)",
+   "bio": "Snídaně a kavárny v Brně ☕ | IG @brnenska_snidane",
+   "followers": 7300,
+   "following": 673,
+   "posts_count": 379,
+   "verified": false,
+   "private": false,
+   "is_business": null,
+   "business_category": null,
+   "external_urls": [
+    "https://brnenska-snidane.example",
+    "https://instagram.mock.invalid/brnenska_snidane/"
+   ],
+   "related_handles": [],
+   "region": "CZ",
+   "is_under_18": false,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "tt:video:7412381759994661966",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7412381759994661966",
+     "author_handle": "brnenska_snidane",
+     "created_at": "2026-10-06T23:24:00Z",
+     "caption": "Rychlý oběd mezi schůzkami: polévka dne, krajíc chleba se sýrem a malý dezert. Přesně tohle člověk potřebuje.\n\n#pecivo #foodie #brnofood",
+     "hashtags": [
+      "pecivo",
+      "foodie",
+      "brnofood"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 348,
+     "comments": 29,
+     "views": 3482,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7412381759994661966",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7412381759994661966",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7490159582411026895",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7490159582411026895",
+     "author_handle": "brnenska_snidane",
+     "created_at": "2026-10-03T06:43:12Z",
+     "caption": "Nová kavárna u Brněnské přehrady mě mile překvapila. Výborné espresso, domácí dorty a klidné místo na práci.\n\n#kafe #snidane #brnofood",
+     "hashtags": [
+      "kafe",
+      "snidane",
+      "brnofood"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 380,
+     "comments": 32,
+     "views": 3925,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7490159582411026895",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7490159582411026895",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7497165606118628626",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7497165606118628626",
+     "author_handle": "brnenska_snidane",
+     "created_at": "2026-09-30T07:33:36Z",
+     "caption": "Brunch, na který se vyplatí počkat: lívance s ovocem, vejce benedikt a čerstvě vymačkaný džus.\n\n#brunch #bistro #brnokavarny",
+     "hashtags": [
+      "brunch",
+      "bistro",
+      "brnokavarny"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 350,
+     "comments": 22,
+     "views": 5302,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7497165606118628626",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7497165606118628626",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7436360471742007033",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7436360471742007033",
+     "author_handle": "brnenska_snidane",
+     "created_at": "2026-09-27T03:28:48Z",
+     "caption": "Dneska čistě sladká nálada: povidlová buchta, horká čokoláda a dobrá kniha. Víkend si užívám po svém.\n\n#jidlo #dobrejidlo",
+     "hashtags": [
+      "jidlo",
+      "dobrejidlo"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 460,
+     "comments": 36,
+     "views": 5710,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7436360471742007033",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7436360471742007033",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7442429891740969249",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7442429891740969249",
+     "author_handle": "brnenska_snidane",
+     "created_at": "2026-09-24T09:59:02Z",
+     "caption": "Kavárenský tip na deštivý den: velká okna, gauč u knihovny a perníkové latte. Zůstala jsem tři hodiny.\n\n#snidane #coffeetime #brnokavarny",
+     "hashtags": [
+      "snidane",
+      "coffeetime",
+      "brnokavarny"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 380,
+     "comments": 27,
+     "views": 4586,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7442429891740969249",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane/video/7442429891740969249",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "tt:profile:brnenska_snidane",
+    "url": "https://tiktok.mock.invalid/@brnenska_snidane",
+    "platform": "tiktok",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Snídaně a kavárny v Brně ☕ | IG @brnenska_snidane"
+   }
+  },
+  {
+   "handle": "brnenska_snidane_fans",
+   "platform": "tiktok",
+   "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans",
+   "display_name": "Brněnská snídaně fans (MOCK)",
+   "bio": "Fanouškovský účet 💛 Nejsme Bára, jen ji rádi sledujeme. Not affiliated.",
+   "followers": 410,
+   "following": 826,
+   "posts_count": 94,
+   "verified": false,
+   "private": false,
+   "is_business": null,
+   "business_category": null,
+   "external_urls": [],
+   "related_handles": [],
+   "region": "CZ",
+   "is_under_18": false,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "tt:video:7454637527469477871",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7454637527469477871",
+     "author_handle": "brnenska_snidane_fans",
+     "created_at": "2026-10-05T09:00:00Z",
+     "caption": "Tady pečou vlastní croissanty každé ráno. Přijďte před devátou, potom už bývá vyprodáno.\n\n#kavarna #coffeetime #brnokavarny",
+     "hashtags": [
+      "kavarna",
+      "coffeetime",
+      "brnokavarny"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 16,
+     "comments": 2,
+     "views": 236,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7454637527469477871",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7454637527469477871",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7410717573021927131",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7410717573021927131",
+     "author_handle": "brnenska_snidane_fans",
+     "created_at": "2026-09-29T19:00:28Z",
+     "caption": "Zkoušela jsem tři nové podniky v centru a tohle bistro vyhrálo. Polévka, domácí chleba a příjemná obsluha.\n\n#brunch #snidane #brnofood",
+     "hashtags": [
+      "brunch",
+      "snidane",
+      "brnofood"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 17,
+     "comments": 2,
+     "views": 261,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7410717573021927131",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7410717573021927131",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7426527208911218174",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7426527208911218174",
+     "author_handle": "brnenska_snidane_fans",
+     "created_at": "2026-09-25T20:42:43Z",
+     "caption": "Brunch, na který se vyplatí počkat: lívance s ovocem, vejce benedikt a čerstvě vymačkaný džus.\n\n#coffeetime #brunch #brnokavarny",
+     "hashtags": [
+      "coffeetime",
+      "brunch",
+      "brnokavarny"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 19,
+     "comments": 2,
+     "views": 294,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7426527208911218174",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7426527208911218174",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7466582115948186737",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7466582115948186737",
+     "author_handle": "brnenska_snidane_fans",
+     "created_at": "2026-09-18T22:22:04Z",
+     "caption": "Recenze bistra, o kterém se teď hodně mluví: porce dobré, čekání dlouhé, dezerty vynikající.\n\n#brunch #snidane",
+     "hashtags": [
+      "brunch",
+      "snidane"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 16,
+     "comments": 2,
+     "views": 228,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7466582115948186737",
+      "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans/video/7466582115948186737",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "tt:profile:brnenska_snidane_fans",
+    "url": "https://tiktok.mock.invalid/@brnenska_snidane_fans",
+    "platform": "tiktok",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Fanouškovský účet 💛 Nejsme Bára, jen ji rádi sledujeme. Not affiliated."
+   }
+  }
+ ],
+ "instagram:fit_peci_s_klarou": [
+  {
+   "handle": "fit_peci_s_klarou",
+   "platform": "tiktok",
+   "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou",
+   "display_name": "Klára Veselá (MOCK)",
+   "bio": "Pečení a cvičení 🍞💪 | IG @fit_peci_s_klarou",
+   "followers": 8800,
+   "following": 826,
+   "posts_count": 382,
+   "verified": false,
+   "private": false,
+   "is_business": null,
+   "business_category": null,
+   "external_urls": [
+    "https://fitpeceni.example",
+    "https://instagram.mock.invalid/fit_peci_s_klarou/"
+   ],
+   "related_handles": [],
+   "region": "CZ",
+   "is_under_18": false,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "tt:video:7486663073929492870",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7486663073929492870",
+     "author_handle": "fit_peci_s_klarou",
+     "created_at": "2026-10-07T09:00:00Z",
+     "caption": "Středeční trénink s kettlebellem byl náročný, ale parta byla skvělá. Kdo se přidá příště?\n\n#fitness #workout #brnofitness",
+     "hashtags": [
+      "fitness",
+      "workout",
+      "brnofitness"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 590,
+     "comments": 45,
+     "views": 8914,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7486663073929492870",
+      "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7486663073929492870",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7491339250686597708",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7491339250686597708",
+     "author_handle": "fit_peci_s_klarou",
+     "created_at": "2026-10-04T22:03:21Z",
+     "caption": "Trénink s vlastní vahou na hřišti u Brněnské přehrady: kliky na bradlech, shyby a výskoky. Hodina venku je nejlepší.\n\n#workout #posilovna #brnofitness",
+     "hashtags": [
+      "workout",
+      "posilovna",
+      "brnofitness"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 589,
+     "comments": 35,
+     "views": 10164,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7491339250686597708",
+      "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7491339250686597708",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7416621252553444351",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7416621252553444351",
+     "author_handle": "fit_peci_s_klarou",
+     "created_at": "2026-09-30T17:15:21Z",
+     "caption": "Můj kvásek má dneska narozeniny, takže jsem upekla kváskový chléb. Kůrka praská a celý byt krásně voní.\n\n#kvasek #pecemedoma #brnojidlo",
+     "hashtags": [
+      "kvasek",
+      "pecemedoma",
+      "brnojidlo"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 516,
+     "comments": 35,
+     "views": 7377,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7416621252553444351",
+      "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7416621252553444351",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7408182456815930288",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7408182456815930288",
+     "author_handle": "fit_peci_s_klarou",
+     "created_at": "2026-09-29T06:18:43Z",
+     "caption": "Pečení s kváskem krok za krokem: krmení, první kynutí, tvarování a pečení v litinovém hrnci. Ptejte se v komentářích.\n\n#recept #pecemedoma",
+     "hashtags": [
+      "recept",
+      "pecemedoma"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 651,
+     "comments": 51,
+     "views": 8772,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7408182456815930288",
+      "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7408182456815930288",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7452045103169280139",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7452045103169280139",
+     "author_handle": "fit_peci_s_klarou",
+     "created_at": "2026-09-26T04:17:45Z",
+     "caption": "Nejčastější chyba při pečení chleba? Málo trpělivosti. Dejte těstu čas a výsledek bude úplně jiný.\n\n#recepty #peceni #brnojidlo",
+     "hashtags": [
+      "recepty",
+      "peceni",
+      "brnojidlo"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 585,
+     "comments": 47,
+     "views": 6582,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7452045103169280139",
+      "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou/video/7452045103169280139",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "tt:profile:fit_peci_s_klarou",
+    "url": "https://tiktok.mock.invalid/@fit_peci_s_klarou",
+    "platform": "tiktok",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Pečení a cvičení 🍞💪 | IG @fit_peci_s_klarou"
+   }
+  }
+ ],
+ "tiktok:toman_ochutnava": [
+  {
+   "handle": "toman_ochutnava",
+   "platform": "instagram",
+   "url": "https://instagram.mock.invalid/toman_ochutnava/",
+   "display_name": "Ondřej Toman (MOCK)",
+   "bio": "Ochutnávám Brno 🍔 | víc na TikToku @toman_ochutnava",
+   "followers": 6100,
+   "following": 612,
+   "posts_count": 262,
+   "verified": false,
+   "private": false,
+   "is_business": false,
+   "business_category": null,
+   "external_urls": [
+    "https://tiktok.mock.invalid/@toman_ochutnava"
+   ],
+   "related_handles": [],
+   "region": null,
+   "is_under_18": null,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "ig:post:MOCKkYxpjWc",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKkYxpjWc/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-10-06T09:00:00Z",
+     "caption": "Ochutnávka sezónních dobrot na trhu u Špilberku. Dýňová polévka, pečené kaštany a teplý mošt, podzim jak má být.\n\n#foodie #jidlo #brnofood",
+     "hashtags": [
+      "foodie",
+      "jidlo",
+      "brnofood"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 295,
+     "comments": 25,
+     "views": 4531,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKkYxpjWc",
+      "url": "https://instagram.mock.invalid/p/MOCKkYxpjWc/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKqsV5mh4",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKqsV5mh4/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-10-03T04:13:26Z",
+     "caption": "Zkoušel jsem tři nové podniky v centru a tohle bistro vyhrálo. Polévka, domácí chleba a příjemná obsluha.\n\n#brunch #kafe #brnofood",
+     "hashtags": [
+      "brunch",
+      "kafe",
+      "brnofood"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "carousel",
+     "likes": 333,
+     "comments": 22,
+     "views": null,
+     "location_name": "Brno - Zelný trh",
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKqsV5mh4",
+      "url": "https://instagram.mock.invalid/p/MOCKqsV5mh4/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKBvX8j3x",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKBvX8j3x/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-09-30T17:21:07Z",
+     "caption": "Brunch, na který se vyplatí počkat: lívance s ovocem, vejce benedikt a čerstvě vymačkaný džus.\n\n#snidane #brunch #brnokavarny",
+     "hashtags": [
+      "snidane",
+      "brunch",
+      "brnokavarny"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 234,
+     "comments": 19,
+     "views": 2380,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKBvX8j3x",
+      "url": "https://instagram.mock.invalid/p/MOCKBvX8j3x/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKUsF53WO",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKUsF53WO/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-09-26T18:00:00Z",
+     "caption": "Kde najdete nejlepší tvarohový koláč v Brně? Zkusil jsem pět míst a tady je moje pořadí, poslední místo vás překvapí.\n\n#jidlo #mnam",
+     "hashtags": [
+      "jidlo",
+      "mnam"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "photo",
+     "likes": 319,
+     "comments": 23,
+     "views": null,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKUsF53WO",
+      "url": "https://instagram.mock.invalid/p/MOCKUsF53WO/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKk8fiXH3",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKk8fiXH3/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-09-25T01:37:55Z",
+     "caption": "Večeře s přáteli v novém bistru. Grilovaná zelenina, kuře s bylinkami a na závěr tvarohový dort.\n\n#mnam #foodblog #brnojidlo",
+     "hashtags": [
+      "mnam",
+      "foodblog",
+      "brnojidlo"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 300,
+     "comments": 17,
+     "views": 4401,
+     "location_name": "Brno - Moravské náměstí",
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKk8fiXH3",
+      "url": "https://instagram.mock.invalid/p/MOCKk8fiXH3/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKGZqrr3s",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKGZqrr3s/",
+     "author_handle": "toman_ochutnava",
+     "created_at": "2026-09-21T23:51:21Z",
+     "caption": "Sobotní snídaně v Brně: máslový croissant, pořádné kafe a čerstvé ovoce. Lepší start víkendu si neumím představit.\n\n#foodblog #mnam",
+     "hashtags": [
+      "foodblog",
+      "mnam"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "photo",
+     "likes": 246,
+     "comments": 17,
+     "views": null,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKGZqrr3s",
+      "url": "https://instagram.mock.invalid/p/MOCKGZqrr3s/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "ig:profile:toman_ochutnava",
+    "url": "https://instagram.mock.invalid/toman_ochutnava/",
+    "platform": "instagram",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Ochutnávám Brno 🍔 | víc na TikToku @toman_ochutnava"
+   }
+  }
+ ],
+ "tiktok:pavla_hybe_brnem": [
+  {
+   "handle": "pavla_hybe_brnem",
+   "platform": "instagram",
+   "url": "https://instagram.mock.invalid/pavla_hybe_brnem/",
+   "display_name": "Pavla Krejčí (MOCK)",
+   "bio": "Cvičení pro každého 💪 | Brno | TikTok @pavla_hybe_brnem",
+   "followers": 9800,
+   "following": 306,
+   "posts_count": 396,
+   "verified": false,
+   "private": false,
+   "is_business": false,
+   "business_category": null,
+   "external_urls": [
+    "https://tiktok.mock.invalid/@pavla_hybe_brnem"
+   ],
+   "related_handles": [],
+   "region": null,
+   "is_under_18": null,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "ig:post:MOCKNAWsvmT",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKNAWsvmT/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-10-06T21:00:00Z",
+     "caption": "Dnešní trénink nohou: dřepy, výpady a mrtvý tah. Čtyři série po deseti opakováních, odpočinek minutu a půl.\n\n#fitness #cviceni #brnofitness",
+     "hashtags": [
+      "fitness",
+      "cviceni",
+      "brnofitness"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "photo",
+     "likes": 507,
+     "comments": 27,
+     "views": null,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKNAWsvmT",
+      "url": "https://instagram.mock.invalid/p/MOCKNAWsvmT/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKa52huS1",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKa52huS1/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-10-03T23:47:02Z",
+     "caption": "Tréninkový plán na tento týden: tři silové tréninky, dva běhy a jeden den úplného volna.\n\n#fitness #cviceni #brnofitness",
+     "hashtags": [
+      "fitness",
+      "cviceni",
+      "brnofitness"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 510,
+     "comments": 32,
+     "views": 7430,
+     "location_name": "Brno - Zelný trh",
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKa52huS1",
+      "url": "https://instagram.mock.invalid/p/MOCKa52huS1/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKxfljNkq",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKxfljNkq/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-10-01T08:08:09Z",
+     "caption": "Středeční trénink s kettlebellem byl náročný, ale parta byla skvělá. Kdo se přidá příště?\n\n#fitness #cviceni #brnofitness",
+     "hashtags": [
+      "fitness",
+      "cviceni",
+      "brnofitness"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 516,
+     "comments": 32,
+     "views": 9029,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKxfljNkq",
+      "url": "https://instagram.mock.invalid/p/MOCKxfljNkq/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKHdOjEYq",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKHdOjEYq/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-09-28T17:42:43Z",
+     "caption": "Shyby jsem dlouho nezvládala ani jeden. Dneska jich dám deset v kuse. Trpělivost se vyplácí.\n\n#posilovna #trenink",
+     "hashtags": [
+      "posilovna",
+      "trenink"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "carousel",
+     "likes": 374,
+     "comments": 30,
+     "views": null,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKHdOjEYq",
+      "url": "https://instagram.mock.invalid/p/MOCKHdOjEYq/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCK45tt4pw",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCK45tt4pw/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-09-25T02:49:55Z",
+     "caption": "Úklid šatníku a pracovního stolu. Méně věcí znamená víc klidu v hlavě.\n\n#rutina #motivace #brno",
+     "hashtags": [
+      "rutina",
+      "motivace",
+      "brno"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "photo",
+     "likes": 480,
+     "comments": 29,
+     "views": null,
+     "location_name": "Brno - Moravské náměstí",
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCK45tt4pw",
+      "url": "https://instagram.mock.invalid/p/MOCK45tt4pw/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "ig:post:MOCKbJWGfxS",
+     "platform": "instagram",
+     "url": "https://instagram.mock.invalid/p/MOCKbJWGfxS/",
+     "author_handle": "pavla_hybe_brnem",
+     "created_at": "2026-09-22T10:04:48Z",
+     "caption": "Ráno bez telefonu už třetí týden. Překvapivě mi to dává víc času i lepší náladu.\n\n#lifestyle #rutina",
+     "hashtags": [
+      "lifestyle",
+      "rutina"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "reel",
+     "likes": 406,
+     "comments": 28,
+     "views": 4018,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": null,
+     "source": {
+      "id": "ig:post:MOCKbJWGfxS",
+      "url": "https://instagram.mock.invalid/p/MOCKbJWGfxS/",
+      "platform": "instagram",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "ig:profile:pavla_hybe_brnem",
+    "url": "https://instagram.mock.invalid/pavla_hybe_brnem/",
+    "platform": "instagram",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Cvičení pro každého 💪 | Brno | TikTok @pavla_hybe_brnem"
+   }
+  }
+ ],
+ "instagram:kalisthenika_brno_tom": [
+  {
+   "handle": "kalisthenika_brno_tom",
+   "platform": "youtube",
+   "url": "https://youtube.mock.invalid/@kalisthenika_brno_tom",
+   "display_name": "Tomáš Říha – kalisthenika (MOCK)",
+   "bio": "Tréninky s vlastní vahou z brněnských parků. Web: kalisthenika-brno.example",
+   "followers": 12400,
+   "following": 274,
+   "posts_count": 84,
+   "verified": false,
+   "private": false,
+   "is_business": null,
+   "business_category": null,
+   "external_urls": [
+    "https://kalisthenika-brno.example"
+   ],
+   "related_handles": [],
+   "region": null,
+   "is_under_18": null,
+   "former_handles": [],
+   "latest_posts": [],
+   "source": {
+    "id": "yt:channel:kalisthenika_brno_tom",
+    "url": "https://youtube.mock.invalid/@kalisthenika_brno_tom",
+    "platform": "youtube",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Tréninky s vlastní vahou z brněnských parků. Web: kalisthenika-brno.example"
+   }
+  }
+ ],
+ "instagram:kuba.jidlo.brno": [
+  {
+   "handle": "kuba_jidlo",
+   "platform": "tiktok",
+   "url": "https://tiktok.mock.invalid/@kuba_jidlo",
+   "display_name": "Kuba (MOCK)",
+   "bio": "Jedlo a cestovanie 🍜 | Bratislava",
+   "followers": 2900,
+   "following": 925,
+   "posts_count": 266,
+   "verified": false,
+   "private": false,
+   "is_business": null,
+   "business_category": null,
+   "external_urls": [],
+   "related_handles": [],
+   "region": "SK",
+   "is_under_18": false,
+   "former_handles": [],
+   "latest_posts": [
+    {
+     "id": "tt:video:7451049210398682405",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7451049210398682405",
+     "author_handle": "kuba_jidlo",
+     "created_at": "2026-10-06T09:00:00Z",
+     "caption": "Přinesl jsem domů tašku čerstvého pečiva. Cestou z pekárny polovina záhadně zmizela, nebudu zapírat.\n\n#mnam #pecivo",
+     "hashtags": [
+      "mnam",
+      "pecivo"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 116,
+     "comments": 9,
+     "views": 1834,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7451049210398682405",
+      "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7451049210398682405",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7462011179823257192",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7462011179823257192",
+     "author_handle": "kuba_jidlo",
+     "created_at": "2026-10-02T23:11:02Z",
+     "caption": "Zkoušel jsem nový podnik s domácími dobrotami. Porce jsou velké, ceny férové a obsluha příjemná.\n\n#dobrejidlo #mnam",
+     "hashtags": [
+      "dobrejidlo",
+      "mnam"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 119,
+     "comments": 10,
+     "views": 1828,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7462011179823257192",
+      "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7462011179823257192",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7467463368672176714",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7467463368672176714",
+     "author_handle": "kuba_jidlo",
+     "created_at": "2026-09-29T08:57:07Z",
+     "caption": "Dneska čistě sladká nálada: máslový croissant, horká čokoláda a dobrá kniha. Víkend si užívám po svém.\n\n#foodie #mnam",
+     "hashtags": [
+      "foodie",
+      "mnam"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 124,
+     "comments": 10,
+     "views": 2130,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7467463368672176714",
+      "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7467463368672176714",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    },
+    {
+     "id": "tt:video:7485153173066633427",
+     "platform": "tiktok",
+     "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7485153173066633427",
+     "author_handle": "kuba_jidlo",
+     "created_at": "2026-09-24T13:19:12Z",
+     "caption": "Kde najdete nejlepší ořechový věneček ve městě? Zkusil jsem pět míst a tady je moje pořadí, poslední místo vás překvapí.\n\n#foodblog #foodie",
+     "hashtags": [
+      "foodblog",
+      "foodie"
+     ],
+     "mentions": [],
+     "coauthors": [],
+     "tagged_users": [],
+     "media_type": "video",
+     "likes": 144,
+     "comments": 9,
+     "views": 2591,
+     "location_name": null,
+     "paid_partnership": false,
+     "language": "cs",
+     "source": {
+      "id": "tt:video:7485153173066633427",
+      "url": "https://tiktok.mock.invalid/@kuba_jidlo/video/7485153173066633427",
+      "platform": "tiktok",
+      "actor": "mock:fixtures",
+      "fetched_at": "2026-10-08T09:00:00Z",
+      "mode": "mock",
+      "quote": null
+     }
+    }
+   ],
+   "source": {
+    "id": "tt:profile:kuba_jidlo",
+    "url": "https://tiktok.mock.invalid/@kuba_jidlo",
+    "platform": "tiktok",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Jedlo a cestovanie 🍜 | Bratislava"
+   }
+  }
+ ]
+}

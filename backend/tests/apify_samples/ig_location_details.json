@@ -1,0 +1,84 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional places, accounts (sample_*) and invented values. Shaped like the live runs of 9. 10. 2026 (T4a/T4b, instagram-scraper with place URLs): a place URL returns ONE place item for resultsType details and posts alike (never post items), charged 1 result per place; keys as in search-scraper places (location_address, not address) plus inputUrl; nested posts carry user.username, taken_at and location.pk.",
+  "actor": "apify/instagram-scraper",
+  "input": {
+    "directUrls": [
+      "https://www.instagram.com/explore/locations/100000001/",
+      "https://www.instagram.com/explore/locations/100000003/"
+    ],
+    "resultsType": "details",
+    "resultsLimit": 1
+  },
+  "items": [
+    {
+      "inputUrl": "https://www.instagram.com/explore/locations/100000003/",
+      "location_id": "100000003",
+      "name": "Sample Café Praha",
+      "slug": "sample-cafe-praha",
+      "lat": 50.087,
+      "lng": 14.421,
+      "location_address": "Sample 2",
+      "location_city": "Praha",
+      "location_zip": "11000",
+      "category": "Coffee shop",
+      "phone": "",
+      "hours": {},
+      "media_count": 300,
+      "price_range": null,
+      "ig_business": {},
+      "posts": [
+        {
+          "code": "SAMPLEp9",
+          "taken_at": 1790000000,
+          "like_count": 12,
+          "comment_count": 1,
+          "media_type": 1,
+          "user": {
+            "username": "sample_prague_author"
+          },
+          "location": {
+            "pk": "100000003",
+            "name": "Sample Café Praha"
+          }
+        }
+      ]
+    },
+    {
+      "inputUrl": "https://www.instagram.com/explore/locations/100000001/",
+      "location_id": "100000001",
+      "name": "Sample Kavárna Zelný trh",
+      "slug": "sample-kavarna-zelny-trh",
+      "lat": 49.1925,
+      "lng": 16.6085,
+      "location_address": "Sample 1",
+      "location_city": "",
+      "location_zip": "",
+      "category": "Coffee shop",
+      "phone": "",
+      "hours": {},
+      "media_count": 1200,
+      "price_range": null,
+      "ig_business": {
+        "profile": {
+          "username": "sample_kavarna_business"
+        }
+      },
+      "posts": [
+        {
+          "code": "SAMPLEp1",
+          "taken_at": 1791000000,
+          "like_count": 40,
+          "comment_count": 2,
+          "media_type": 1,
+          "user": {
+            "username": "sample_place_author"
+          },
+          "location": {
+            "pk": "100000001",
+            "name": "Sample Kavárna Zelný trh"
+          }
+        }
+      ]
+    }
+  ]
+}

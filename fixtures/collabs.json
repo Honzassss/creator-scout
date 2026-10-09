@@ -1,0 +1,145 @@
+{
+ "instagram:kuba.jidlo.brno": [
+  {
+   "id": "collab:meta:10002806009869",
+   "brand": "Pekárna A",
+   "brand_handle": "pekarna_a",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-07-25T09:00:00Z",
+   "post_id": null,
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:10002806009869",
+    "url": "https://facebook.mock.invalid/ads/library/?id=10002806009869",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s Pekárna A (Meta Branded Content)"
+   }
+  },
+  {
+   "id": "collab:meta:9749412127745",
+   "brand": "Pekárna B",
+   "brand_handle": "pekarna_b",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-09-28T15:59:02Z",
+   "post_id": "ig:post:MOCKutx2ojU",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9749412127745",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9749412127745",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s Pekárna B (Meta Branded Content)"
+   }
+  }
+ ],
+ "instagram:brnenska_snidane": [
+  {
+   "id": "collab:meta:9826864219957",
+   "brand": "Pražírna Hrudka",
+   "brand_handle": "prazirna_hrudka",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-09-23T06:44:38Z",
+   "post_id": "ig:post:MOCKSdZeCgJ",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9826864219957",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9826864219957",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s Pražírna Hrudka (Meta Branded Content)"
+   }
+  }
+ ],
+ "instagram:fit_peci_s_klarou": [
+  {
+   "id": "collab:meta:9125208515206",
+   "brand": "ProteoMax",
+   "brand_handle": "proteomax",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-09-25T21:11:31Z",
+   "post_id": "ig:post:MOCKUj3wNzy",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9125208515206",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9125208515206",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s ProteoMax (Meta Branded Content)"
+   }
+  },
+  {
+   "id": "collab:meta:9873394440176",
+   "brand": "ProteoMax",
+   "brand_handle": "proteomax",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-07-16T08:00:57Z",
+   "post_id": "ig:post:MOCKHYdBeZG",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9873394440176",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9873394440176",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s ProteoMax (Meta Branded Content)"
+   }
+  }
+ ],
+ "instagram:trener_marek_brno": [
+  {
+   "id": "collab:meta:9140475418705",
+   "brand": "FitZone Brno",
+   "brand_handle": "fitzone_brno",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-08-01T15:43:12Z",
+   "post_id": "ig:post:MOCKAjuSiPh",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9140475418705",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9140475418705",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s FitZone Brno (Meta Branded Content)"
+   }
+  }
+ ],
+ "instagram:kalisthenika_brno_tom": [
+  {
+   "id": "collab:meta:9228869101371",
+   "brand": "Vrcholek Sport",
+   "brand_handle": "vrcholek_sport",
+   "kind": "meta_branded",
+   "disclosed": true,
+   "date": "2026-09-21T18:24:28Z",
+   "post_id": "ig:post:MOCK38RKanm",
+   "is_competitor": false,
+   "source": {
+    "id": "meta:ad:9228869101371",
+    "url": "https://facebook.mock.invalid/ads/library/?id=9228869101371",
+    "platform": "meta_branded",
+    "actor": "mock:fixtures",
+    "fetched_at": "2026-10-08T09:00:00Z",
+    "mode": "mock",
+    "quote": "Placené partnerství s Vrcholek Sport (Meta Branded Content)"
+   }
+  }
+ ]
+}

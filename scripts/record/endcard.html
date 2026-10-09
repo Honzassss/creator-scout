@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator Scout end card</title>
+<!-- Rendered by scripts/record-demo.sh at 1440x900 and screenshotted; {{COUNTS}}, {{GAPS}} and {{NOTE}} are filled in. -->
+<style>
+  :root { --bg: #11131a; --ink: #eceae4; --ink-2: #b9b6ad; --ink-3: #8a877f; --rule: #2a2d38; --accent: #8f9cff; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--ink); }
+  body { display: grid; place-items: center; font-family: "Iowan Old Style", "Palatino", Georgia, serif; }
+  main { width: 1040px; text-align: center; }
+  .mark { display: inline-grid; place-items: center; width: 64px; height: 64px; border: 2px solid var(--ink-2);
+    border-radius: 12px; margin-bottom: 28px; }
+  h1 { font-size: 84px; font-weight: 500; letter-spacing: -0.01em; }
+  .tag { margin-top: 18px; font-size: 32px; color: var(--ink-2); }
+  .tag b { color: var(--ink); font-weight: 500; }
+  .rule { height: 1px; background: var(--rule); margin: 56px auto 40px; width: 720px; }
+  .mono { font-family: "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: 0.02em; }
+  .label { font-size: 15px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .counts { font-size: 24px; color: var(--ink); }
+  .gaps { margin-top: 16px; font-size: 20px; color: var(--ink-3); }
+  .note { margin-top: 32px; font-size: 18px; color: var(--accent); }
+  .note:empty { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark" aria-hidden="true">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#eceae4" stroke-width="1.6" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>
+  </div>
+  <h1>Creator Scout</h1>
+  <p class="tag">public data · <b>no score</b> · the owner decides</p>
+  <div class="rule"></div>
+  <p class="label mono">Fetched objects by origin (subject run)</p>
+  <p class="counts mono">{{COUNTS}}</p>
+  <p class="gaps mono">{{GAPS}}</p>
+  <p class="note mono">{{NOTE}}</p>
+</main>
+</body>
+</html>

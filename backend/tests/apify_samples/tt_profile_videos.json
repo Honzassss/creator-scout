@@ -1,0 +1,168 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*), invented texts and values. Shaped like the live run of 9. 10. 2026 (T10, tiktok-profile-scraper): video items with the same keys and authorMeta as tiktok-scraper (no region, no isUnderAge18, no locationMeta unless a place is tagged). The PROFILE_EMPTY error item was NOT seen live; it follows the handoff and is kept to test the mapper.",
+  "actor": "clockworks/tiktok-profile-scraper",
+  "input": {
+    "profiles": [
+      "sample_cukrarka"
+    ],
+    "resultsPerPage": 12,
+    "excludePinnedPosts": true
+  },
+  "items": [
+    {
+      "id": "7400000000000000001",
+      "text": "Brněnské dorty #dortybrno @sample_brand",
+      "textLanguage": "cs",
+      "createTime": 0,
+      "createTimeISO": "2026-10-05T15:00:00.000Z",
+      "isAd": false,
+      "authorMeta": {
+        "id": "7000000000000000001",
+        "name": "sample_cukrarka",
+        "profileUrl": "https://www.tiktok.com/@sample_cukrarka",
+        "nickName": "Sample Cukrářka TT",
+        "verified": false,
+        "signature": "Dorty z Brna | IG @sample_cukrarka_brno",
+        "bioLink": "https://sample-cukrarka.example",
+        "avatar": "https://sample.example/a.jpg",
+        "commerceUserInfo": {
+          "commerceUser": false
+        },
+        "privateAccount": false,
+        "roomId": "",
+        "ttSeller": false,
+        "createTime": 1600000000,
+        "hasActiveStory": false,
+        "following": 180,
+        "friends": 40,
+        "fans": 12000,
+        "heart": 108000,
+        "video": 120,
+        "digg": 300,
+        "followDatasetUrl": null,
+        "originalAvatarUrl": "https://sample.example/a0.jpg"
+      },
+      "musicMeta": {
+        "musicName": "original sound",
+        "musicOriginal": true
+      },
+      "webVideoUrl": "https://www.tiktok.com/@sample_cukrarka/video/7400000000000000001",
+      "mediaUrls": [],
+      "videoMeta": {
+        "duration": 21
+      },
+      "diggCount": 500,
+      "shareCount": 4,
+      "playCount": 9000,
+      "collectCount": 9,
+      "commentCount": 20,
+      "repostCount": 0,
+      "mentions": [
+        "@sample_brand"
+      ],
+      "detailedMentions": [
+        {
+          "id": "1",
+          "name": "sample_brand",
+          "nickName": "Sample Brand",
+          "profileUrl": "https://www.tiktok.com/@sample_brand"
+        }
+      ],
+      "hashtags": [
+        {
+          "id": "1000",
+          "name": "dortybrno",
+          "title": "",
+          "cover": ""
+        }
+      ],
+      "effectStickers": [],
+      "isSlideshow": false,
+      "isPinned": false,
+      "isSponsored": false,
+      "isStory": false,
+      "hasTikTokShopProduct": false,
+      "commentsDatasetUrl": null,
+      "input": "sample_cukrarka"
+    },
+    {
+      "id": "7400000000000000004",
+      "text": "Brněnské dorty #dortybrno @sample_brand",
+      "textLanguage": "cs",
+      "createTime": 0,
+      "createTimeISO": "2026-09-01T15:00:00.000Z",
+      "isAd": false,
+      "authorMeta": {
+        "id": "7000000000000000001",
+        "name": "sample_cukrarka",
+        "profileUrl": "https://www.tiktok.com/@sample_cukrarka",
+        "nickName": "Sample Cukrářka TT",
+        "verified": false,
+        "signature": "Dorty z Brna | IG @sample_cukrarka_brno",
+        "bioLink": "https://sample-cukrarka.example",
+        "avatar": "https://sample.example/a.jpg",
+        "commerceUserInfo": {
+          "commerceUser": false
+        },
+        "privateAccount": false,
+        "roomId": "",
+        "ttSeller": false,
+        "createTime": 1600000000,
+        "hasActiveStory": false,
+        "following": 180,
+        "friends": 40,
+        "fans": 12000,
+        "heart": 108000,
+        "video": 120,
+        "digg": 300,
+        "followDatasetUrl": null,
+        "originalAvatarUrl": "https://sample.example/a0.jpg"
+      },
+      "musicMeta": {
+        "musicName": "original sound",
+        "musicOriginal": true
+      },
+      "webVideoUrl": "https://www.tiktok.com/@sample_cukrarka/video/7400000000000000004",
+      "mediaUrls": [],
+      "videoMeta": {
+        "duration": 21
+      },
+      "diggCount": 500,
+      "shareCount": 4,
+      "playCount": 9000,
+      "collectCount": 9,
+      "commentCount": 20,
+      "repostCount": 0,
+      "mentions": [
+        "@sample_brand"
+      ],
+      "detailedMentions": [
+        {
+          "id": "1",
+          "name": "sample_brand",
+          "nickName": "Sample Brand",
+          "profileUrl": "https://www.tiktok.com/@sample_brand"
+        }
+      ],
+      "hashtags": [
+        {
+          "id": "1000",
+          "name": "dortybrno",
+          "title": "",
+          "cover": ""
+        }
+      ],
+      "effectStickers": [],
+      "isSlideshow": false,
+      "isPinned": false,
+      "isSponsored": false,
+      "isStory": false,
+      "hasTikTokShopProduct": false,
+      "commentsDatasetUrl": null,
+      "input": "sample_cukrarka"
+    },
+    {
+      "errorCode": "PROFILE_EMPTY"
+    }
+  ]
+}

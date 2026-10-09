@@ -1,0 +1,13 @@
+{
+ "anchor": "2026-10-08T09:00:00+00:00",
+ "seed": "creator-scout-mock-v1",
+ "city": "Brno",
+ "mode": "mock",
+ "note": "MOCK dataset: fictional creators, brands, outlets and websites. Do not edit by hand; run fixtures/generate.py.",
+ "date_fields": [
+  "created_at",
+  "published_at",
+  "date",
+  "fetched_at"
+ ]
+}

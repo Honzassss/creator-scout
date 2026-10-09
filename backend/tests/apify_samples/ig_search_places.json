@@ -1,0 +1,120 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional places, accounts (sample_*) and invented values. Shaped like the live run of 9. 10. 2026 (T2, searchType place, non-live): place items {location_id, name, slug, lat, lng, category, location_address, location_city, location_zip, phone, hours, media_count, price_range, ig_business, posts}; `posts` is a list of raw IG media objects (author in user.username, time in taken_at epoch s, location.pk = the place) or missing; one charged 'city directory' item per query has no location_id.",
+  "actor": "apify/instagram-search-scraper",
+  "input": {
+    "search": "kavárna brno",
+    "searchType": "place",
+    "searchLimit": 30
+  },
+  "items": [
+    {
+      "location_id": "100000001",
+      "name": "Sample Kavárna Zelný trh",
+      "slug": "sample-kavarna-zelny-trh",
+      "lat": 49.1925,
+      "lng": 16.6085,
+      "category": "Coffee shop",
+      "location_address": "Sample 1",
+      "location_city": "",
+      "location_zip": "",
+      "phone": "",
+      "hours": {},
+      "media_count": 1200,
+      "price_range": null,
+      "ig_business": {
+        "profile": {
+          "username": "sample_kavarna_business"
+        }
+      },
+      "posts": [
+        {
+          "code": "SAMPLEp1",
+          "taken_at": 1791000000,
+          "like_count": 40,
+          "comment_count": 2,
+          "media_type": 1,
+          "product_type": "feed",
+          "is_paid_partnership": false,
+          "sponsor_tags": null,
+          "user": {
+            "username": "sample_place_author"
+          },
+          "location": {
+            "pk": "100000001",
+            "name": "Sample Kavárna Zelný trh"
+          }
+        },
+        {
+          "code": "SAMPLEp2",
+          "taken_at": 1791100000,
+          "like_count": 25,
+          "comment_count": 0,
+          "media_type": 8,
+          "product_type": "carousel_container",
+          "is_paid_partnership": false,
+          "sponsor_tags": null,
+          "user": {
+            "username": "sample_kavarna_business"
+          },
+          "location": {
+            "pk": "100000001",
+            "name": "Sample Kavárna Zelný trh"
+          }
+        },
+        {
+          "code": "SAMPLEp3",
+          "taken_at": 1600000000,
+          "like_count": 300,
+          "comment_count": 12,
+          "media_type": 2,
+          "product_type": "clips",
+          "is_paid_partnership": false,
+          "sponsor_tags": null,
+          "user": {
+            "username": "sample_stale_place_author"
+          },
+          "location": {
+            "pk": "100000001",
+            "name": "Sample Kavárna Zelný trh"
+          }
+        }
+      ]
+    },
+    {
+      "location_id": "100000002",
+      "name": "Sample Cakes Prague",
+      "slug": "sample-cakes-prague",
+      "lat": 35.7,
+      "lng": 51.4,
+      "category": "Bakery",
+      "location_address": "",
+      "location_city": "",
+      "location_zip": "",
+      "phone": "",
+      "hours": {},
+      "media_count": 80,
+      "price_range": null,
+      "ig_business": {}
+    },
+    {
+      "location_list": [
+        {
+          "id": "100000090",
+          "name": "Sample Brno-střed",
+          "slug": "sample-brno-stred"
+        }
+      ],
+      "city_info": {
+        "id": "c100000000",
+        "name": "Sample Brno",
+        "slug": "sample-brno"
+      },
+      "country_info": {
+        "id": "CZ",
+        "name": "Sample Czech Republic",
+        "slug": "sample-czech-republic"
+      },
+      "next_page": null
+    }
+  ]
+}

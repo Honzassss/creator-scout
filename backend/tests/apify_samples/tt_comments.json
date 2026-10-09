@@ -1,0 +1,31 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts, invented texts and values. The tiktok-comments-scraper was NOT run live on 9. 10. 2026; the shape follows the handoff table.",
+  "actor": "clockworks/tiktok-comments-scraper",
+  "input": {
+    "postURLs": [
+      "https://www.tiktok.com/@sample_cukrarka/video/7400000000000000001"
+    ],
+    "commentsPerPost": 15,
+    "maxRepliesPerComment": 0
+  },
+  "items": [
+    {
+      "text": "Chci ochutnat! @kamos_sample",
+      "createTimeISO": "2026-10-05T16:00:00.000Z",
+      "diggCount": 3,
+      "replyCommentTotal": 0,
+      "videoWebUrl": "https://www.tiktok.com/@sample_cukrarka/video/7400000000000000001",
+      "uid": "6800000000000000000",
+      "uniqueId": "real_commenter_should_vanish",
+      "avatarThumbnail": "https://x/a.jpg",
+      "mentions": [
+        "kamos_sample"
+      ],
+      "detailedMentions": [
+        {
+          "nickName": "Kamos"
+        }
+      ]
+    }
+  ]
+}

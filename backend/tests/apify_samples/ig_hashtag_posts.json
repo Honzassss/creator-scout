@@ -1,0 +1,128 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*) and invented values. Shaped like the live run of 9. 10. 2026 (T3, resultsType posts, keywordSearch false): type Image / Sidecar and productType feed / carousel_container (no reels in posts mode), ownerUsername / ownerId / ownerFullName, locationName + locationId together on about a third of the posts, never lat/lng, paidPartnership a bool (False on 35/36 live; one True kept to test the mapper), no sponsors key, latestComments [] and firstComment '' without keywordSearch.",
+  "actor": "apify/instagram-hashtag-scraper",
+  "input": {
+    "hashtags": [
+      "brnofood",
+      "spoluprace"
+    ],
+    "resultsType": "posts",
+    "resultsLimit": 50
+  },
+  "items": [
+    {
+      "inputUrl": "https://www.instagram.com/explore/tags/spoluprace",
+      "id": "3700000000000000101",
+      "type": "Sidecar",
+      "productType": "carousel_container",
+      "shortCode": "SAMPLEh1",
+      "url": "https://www.instagram.com/p/SAMPLEh1/",
+      "ownerUsername": "sample_foodie_brno",
+      "ownerId": "1",
+      "ownerFullName": "Sample Foodie",
+      "caption": "Nejlepší snídaně #brnofood #spoluprace @sample_brand",
+      "hashtags": [
+        "brnofood",
+        "spoluprace"
+      ],
+      "mentions": [],
+      "commentsCount": 4,
+      "likesCount": 120,
+      "timestamp": "2026-10-05T08:00:00.000Z",
+      "locationName": "Sample Kavárna Zelný trh",
+      "locationId": "100000001",
+      "coauthorProducers": [
+        {
+          "id": "9",
+          "username": "sample_brand",
+          "is_verified": false,
+          "profile_pic_url": "https://sample.example/brand.jpg"
+        }
+      ],
+      "taggedUsers": [],
+      "paidPartnership": true,
+      "musicInfo": null,
+      "latestComments": [],
+      "firstComment": ""
+    },
+    {
+      "inputUrl": "https://www.instagram.com/explore/tags/brnofood",
+      "id": "3700000000000000102",
+      "type": "Image",
+      "productType": "feed",
+      "shortCode": "SAMPLEh2",
+      "url": "https://www.instagram.com/p/SAMPLEh2/",
+      "ownerUsername": "sample_prague_eater",
+      "ownerId": "2",
+      "ownerFullName": "Sample Eater",
+      "caption": "Dort #brnofood",
+      "hashtags": [
+        "brnofood"
+      ],
+      "mentions": [],
+      "commentsCount": 1,
+      "likesCount": 30,
+      "timestamp": "2026-10-04T08:00:00.000Z",
+      "locationName": "Sample Café Praha",
+      "locationId": "100000003",
+      "paidPartnership": false,
+      "latestComments": [],
+      "firstComment": ""
+    },
+    {
+      "inputUrl": "https://www.instagram.com/explore/tags/brnofood",
+      "id": "3700000000000000103",
+      "type": "Image",
+      "productType": "feed",
+      "shortCode": "SAMPLEh3",
+      "url": "https://www.instagram.com/p/SAMPLEh3/",
+      "ownerUsername": "sample_no_location",
+      "ownerId": "3",
+      "ownerFullName": "Sample Cook",
+      "caption": "Rychlý recept #brnofood",
+      "hashtags": [
+        "brnofood"
+      ],
+      "mentions": [],
+      "commentsCount": 0,
+      "likesCount": 15,
+      "timestamp": "2026-10-03T08:00:00.000Z",
+      "taggedUsers": [
+        {
+          "username": "sample_friend",
+          "full_name": "Sample Friend Full Name",
+          "id": "77",
+          "is_verified": false,
+          "profile_pic_url": "https://sample.example/friend.jpg"
+        }
+      ],
+      "paidPartnership": false,
+      "latestComments": [],
+      "firstComment": ""
+    },
+    {
+      "inputUrl": "https://www.instagram.com/explore/tags/brnofood",
+      "id": "3700000000000000104",
+      "type": "Image",
+      "productType": "feed",
+      "shortCode": "SAMPLEh4",
+      "url": "https://www.instagram.com/p/SAMPLEh4/",
+      "ownerUsername": "sample_text_place",
+      "ownerId": "4",
+      "ownerFullName": "Sample Coffee Lover",
+      "caption": "Kafe",
+      "hashtags": [
+        "brnofood"
+      ],
+      "mentions": [],
+      "commentsCount": 2,
+      "likesCount": 44,
+      "timestamp": "2026-10-02T08:00:00.000Z",
+      "locationName": "Brno, Czech Republic",
+      "locationId": "100000004",
+      "paidPartnership": false,
+      "latestComments": [],
+      "firstComment": ""
+    }
+  ]
+}

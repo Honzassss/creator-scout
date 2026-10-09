@@ -1,0 +1,44 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional outlets, titles and URLs. Shaped like the live run of 9. 10. 2026 (T11, google-news-scraper-fast build 2.8.12, decodeUrls true, extractImages false): {title, url (publisher URL), source (plain string), publishedAt (ISO, day precision, time 07:00/08:00 UTC), publishedTimestamp (epoch ms), image null, metadata {scrapeTimestamp, keyword, sourceType, timeframe}}; no `description` key without extractDescriptions. The second item (Google URL, publishedAt null) was NOT seen live; it is kept to test the fallbacks.",
+  "actor": "data_xplorer/google-news-scraper-fast",
+  "input": {
+    "keywords": [
+      "cukrárna Brno"
+    ],
+    "region_language": "CZ:cs",
+    "timeframe": "1y",
+    "maxArticles": 10,
+    "decodeUrls": true,
+    "extractImages": false
+  },
+  "items": [
+    {
+      "title": "Sample: brněnská cukrárna otevřela druhou pobočku",
+      "url": "https://sample-denik.example/clanek-1",
+      "source": "Sample Deník",
+      "publishedAt": "2026-08-15T07:00:00+00:00",
+      "publishedTimestamp": 1786777200000,
+      "image": null,
+      "metadata": {
+        "scrapeTimestamp": 1791500000000,
+        "keyword": "cukrárna Brno",
+        "sourceType": "keyword",
+        "timeframe": "1y"
+      }
+    },
+    {
+      "title": "Sample: článek bez dekódované URL",
+      "url": "https://news.google.com/rss/articles/SAMPLE",
+      "source": "Sample Zprávy",
+      "publishedAt": null,
+      "publishedTimestamp": 1786777200000,
+      "image": null,
+      "metadata": {
+        "scrapeTimestamp": 1791500000000,
+        "keyword": "cukrárna Brno",
+        "sourceType": "keyword",
+        "timeframe": "1y"
+      }
+    }
+  ]
+}

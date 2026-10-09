@@ -1,0 +1,1074 @@
+[
+ {
+  "handle": "kuba.jidlo.brno",
+  "platform": "instagram",
+  "found_via": [
+   "search:brno food"
+  ],
+  "source": {
+   "id": "disc:ig:kuba.jidlo.brno:search:1d9df4",
+   "url": "https://instagram.mock.invalid/kuba.jidlo.brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno food"
+  }
+ },
+ {
+  "handle": "verca_pece",
+  "platform": "instagram",
+  "found_via": [
+   "search:pekárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:verca_pece:search:f7b890",
+   "url": "https://instagram.mock.invalid/verca_pece/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:pekárna brno"
+  }
+ },
+ {
+  "handle": "brnenska_snidane",
+  "platform": "instagram",
+  "found_via": [
+   "search:brno tipy"
+  ],
+  "source": {
+   "id": "disc:ig:brnenska_snidane:search:422b03",
+   "url": "https://instagram.mock.invalid/brnenska_snidane/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno tipy"
+  }
+ },
+ {
+  "handle": "toman_ochutnava",
+  "platform": "tiktok",
+  "found_via": [
+   "search:brno food"
+  ],
+  "source": {
+   "id": "disc:tt:toman_ochutnava:search:1d9df4",
+   "url": "https://tiktok.mock.invalid/search/user?q=brno%20food",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno food"
+  }
+ },
+ {
+  "handle": "trener_marek_brno",
+  "platform": "instagram",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:ig:trener_marek_brno:search:43fdb3",
+   "url": "https://instagram.mock.invalid/trener_marek_brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "pavla_hybe_brnem",
+  "platform": "tiktok",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:tt:pavla_hybe_brnem:search:43fdb3",
+   "url": "https://tiktok.mock.invalid/search/user?q=fitness%20brno",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "jogina_lucie",
+  "platform": "tiktok",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:tt:jogina_lucie:search:43fdb3",
+   "url": "https://tiktok.mock.invalid/search/user?q=fitness%20brno",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "michal_v_kuchyni",
+  "platform": "instagram",
+  "found_via": [
+   "search:brno tipy"
+  ],
+  "source": {
+   "id": "disc:ig:michal_v_kuchyni:search:422b03",
+   "url": "https://instagram.mock.invalid/michal_v_kuchyni/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno tipy"
+  }
+ },
+ {
+  "handle": "jidelni_listek_cz",
+  "platform": "instagram",
+  "found_via": [
+   "search:brno food"
+  ],
+  "source": {
+   "id": "disc:ig:jidelni_listek_cz:search:1d9df4",
+   "url": "https://instagram.mock.invalid/jidelni_listek_cz/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno food"
+  }
+ },
+ {
+  "handle": "pekarna_b",
+  "platform": "instagram",
+  "found_via": [
+   "search:pekárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:pekarna_b:search:f7b890",
+   "url": "https://instagram.mock.invalid/pekarna_b/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:pekárna brno"
+  }
+ },
+ {
+  "handle": "chlebarna_vlnka",
+  "platform": "instagram",
+  "found_via": [
+   "search:pekárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:chlebarna_vlnka:search:f7b890",
+   "url": "https://instagram.mock.invalid/chlebarna_vlnka/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:pekárna brno"
+  }
+ },
+ {
+  "handle": "fitzone_brno",
+  "platform": "instagram",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:ig:fitzone_brno:search:43fdb3",
+   "url": "https://instagram.mock.invalid/fitzone_brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "kafe_lipova_alej",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:kafe_lipova_alej:search:b6d043",
+   "url": "https://instagram.mock.invalid/kafe_lipova_alej/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "dobroty_od_babi",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:dobroty_od_babi:search:b6d043",
+   "url": "https://instagram.mock.invalid/dobroty_od_babi/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "mala_kucharka_ema",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:mala_kucharka_ema:search:b6d043",
+   "url": "https://instagram.mock.invalid/mala_kucharka_ema/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "crossfit_jana",
+  "platform": "instagram",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:ig:crossfit_jana:search:43fdb3",
+   "url": "https://instagram.mock.invalid/crossfit_jana/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "fitko_s_matejem",
+  "platform": "tiktok",
+  "found_via": [
+   "search:fitness brno"
+  ],
+  "source": {
+   "id": "disc:tt:fitko_s_matejem:search:43fdb3",
+   "url": "https://tiktok.mock.invalid/search/user?q=fitness%20brno",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:fitness brno"
+  }
+ },
+ {
+  "handle": "beatbox_vojta",
+  "platform": "tiktok",
+  "found_via": [
+   "search:brno tipy"
+  ],
+  "source": {
+   "id": "disc:tt:beatbox_vojta:search:422b03",
+   "url": "https://tiktok.mock.invalid/search/user?q=brno%20tipy",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno tipy"
+  }
+ },
+ {
+  "handle": "hraje_vitek",
+  "platform": "tiktok",
+  "found_via": [
+   "search:brno tipy"
+  ],
+  "source": {
+   "id": "disc:tt:hraje_vitek:search:422b03",
+   "url": "https://tiktok.mock.invalid/search/user?q=brno%20tipy",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno tipy"
+  }
+ },
+ {
+  "handle": "degustace_dominik",
+  "platform": "instagram",
+  "found_via": [
+   "search:brno food"
+  ],
+  "source": {
+   "id": "disc:ig:degustace_dominik:search:1d9df4",
+   "url": "https://instagram.mock.invalid/degustace_dominik/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno food"
+  }
+ },
+ {
+  "handle": "obcas_upeku",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:obcas_upeku:search:b6d043",
+   "url": "https://instagram.mock.invalid/obcas_upeku/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "vtipny_kamil",
+  "platform": "tiktok",
+  "found_via": [
+   "search:brno tipy"
+  ],
+  "source": {
+   "id": "disc:tt:vtipny_kamil:search:422b03",
+   "url": "https://tiktok.mock.invalid/search/user?q=brno%20tipy",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno tipy"
+  }
+ },
+ {
+  "handle": "kolacky_od_hanky",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:kolacky_od_hanky:search:b6d043",
+   "url": "https://instagram.mock.invalid/kolacky_od_hanky/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "srdicka_a_dorty",
+  "platform": "instagram",
+  "found_via": [
+   "search:cukrárna brno"
+  ],
+  "source": {
+   "id": "disc:ig:srdicka_a_dorty:search:b6d043",
+   "url": "https://instagram.mock.invalid/srdicka_a_dorty/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:cukrárna brno"
+  }
+ },
+ {
+  "handle": "mlsny_jirka",
+  "platform": "tiktok",
+  "found_via": [
+   "search:brno food"
+  ],
+  "source": {
+   "id": "disc:tt:mlsny_jirka:search:1d9df4",
+   "url": "https://tiktok.mock.invalid/search/user?q=brno%20food",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "search:brno food"
+  }
+ },
+ {
+  "handle": "kuba.jidlo.brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:kuba.jidlo.brno:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "verca_pece",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:verca_pece:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "brnenska_snidane",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:brnenska_snidane:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "fit_peci_s_klarou",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:fit_peci_s_klarou:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "fit_peci_s_klarou",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:fit_peci_s_klarou:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "trener_marek_brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:trener_marek_brno:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "kalisthenika_brno_tom",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:kalisthenika_brno_tom:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "anicka_doma",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:anicka_doma:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "jidelni_listek_cz",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:jidelni_listek_cz:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "fit_nela_official",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:fit_nela_official:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "fitzone_brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:fitzone_brno:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "honza_jedlik",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:honza_jedlik:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "sportovni_zuzka",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:sportovni_zuzka:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "brno_eats_with_sam",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:foodbrno"
+  ],
+  "source": {
+   "id": "disc:ig:brno_eats_with_sam:hashtag:4d74ef",
+   "url": "https://instagram.mock.invalid/explore/tags/foodbrno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:foodbrno"
+  }
+ },
+ {
+  "handle": "lift_with_dan_cz",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:lift_with_dan_cz:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "gurmanka_lenka",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:gurmanka_lenka:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "suplement_sara",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:suplement_sara:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "behame_s_petrem",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brno"
+  ],
+  "source": {
+   "id": "disc:ig:behame_s_petrem:hashtag:d56691",
+   "url": "https://instagram.mock.invalid/explore/tags/brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brno"
+  }
+ },
+ {
+  "handle": "gym_bro_brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:gym_bro_brno:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "fit_mama_eliska",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofitness"
+  ],
+  "source": {
+   "id": "disc:ig:fit_mama_eliska:hashtag:23dd03",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofitness/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofitness"
+  }
+ },
+ {
+  "handle": "cestovatelka_iva",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brno"
+  ],
+  "source": {
+   "id": "disc:ig:cestovatelka_iva:hashtag:d56691",
+   "url": "https://instagram.mock.invalid/explore/tags/brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brno"
+  }
+ },
+ {
+  "handle": "outfity_od_adely",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brno"
+  ],
+  "source": {
+   "id": "disc:ig:outfity_od_adely:hashtag:d56691",
+   "url": "https://instagram.mock.invalid/explore/tags/brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brno"
+  }
+ },
+ {
+  "handle": "rodinka_novakovi",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:rodinka_novakovi:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "degustace_dominik",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:degustace_dominik:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "fotim_jidlo_brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:foodbrno"
+  ],
+  "source": {
+   "id": "disc:ig:fotim_jidlo_brno:hashtag:4d74ef",
+   "url": "https://instagram.mock.invalid/explore/tags/foodbrno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:foodbrno"
+  }
+ },
+ {
+  "handle": "krasa_s_kristynou",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brno"
+  ],
+  "source": {
+   "id": "disc:ig:krasa_s_kristynou:hashtag:d56691",
+   "url": "https://instagram.mock.invalid/explore/tags/brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brno"
+  }
+ },
+ {
+  "handle": "maly_gurman_brno",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnofood"
+  ],
+  "source": {
+   "id": "disc:ig:maly_gurman_brno:hashtag:9f4b98",
+   "url": "https://instagram.mock.invalid/explore/tags/brnofood/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnofood"
+  }
+ },
+ {
+  "handle": "kolacky_od_hanky",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:kolacky_od_hanky:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "zuzka_vari_v_brne",
+  "platform": "instagram",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:ig:zuzka_vari_v_brne:hashtag:cc5299",
+   "url": "https://instagram.mock.invalid/explore/tags/brnojidlo/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "nikolka_pece",
+  "platform": "tiktok",
+  "found_via": [
+   "hashtag:brnojidlo"
+  ],
+  "source": {
+   "id": "disc:tt:nikolka_pece:hashtag:cc5299",
+   "url": "https://tiktok.mock.invalid/tag/brnojidlo",
+   "platform": "tiktok",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "hashtag:brnojidlo"
+  }
+ },
+ {
+  "handle": "kuba.jidlo.brno",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Zelný trh"
+  ],
+  "source": {
+   "id": "disc:ig:kuba.jidlo.brno:place:34d246",
+   "url": "https://instagram.mock.invalid/kuba.jidlo.brno/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Zelný trh"
+  }
+ },
+ {
+  "handle": "brnenska_snidane",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Moravské náměstí"
+  ],
+  "source": {
+   "id": "disc:ig:brnenska_snidane:place:863d64",
+   "url": "https://instagram.mock.invalid/brnenska_snidane/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Moravské náměstí"
+  }
+ },
+ {
+  "handle": "kalisthenika_brno_tom",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Lužánky"
+  ],
+  "source": {
+   "id": "disc:ig:kalisthenika_brno_tom:place:293b8d",
+   "url": "https://instagram.mock.invalid/kalisthenika_brno_tom/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Lužánky"
+  }
+ },
+ {
+  "handle": "pekarna_b",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Zelný trh"
+  ],
+  "source": {
+   "id": "disc:ig:pekarna_b:place:34d246",
+   "url": "https://instagram.mock.invalid/pekarna_b/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Zelný trh"
+  }
+ },
+ {
+  "handle": "kafe_lipova_alej",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Moravské náměstí"
+  ],
+  "source": {
+   "id": "disc:ig:kafe_lipova_alej:place:863d64",
+   "url": "https://instagram.mock.invalid/kafe_lipova_alej/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Moravské náměstí"
+  }
+ },
+ {
+  "handle": "outfity_od_adely",
+  "platform": "instagram",
+  "found_via": [
+   "place:Brno - Náměstí Svobody"
+  ],
+  "source": {
+   "id": "disc:ig:outfity_od_adely:place:faad99",
+   "url": "https://instagram.mock.invalid/outfity_od_adely/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "place:Brno - Náměstí Svobody"
+  }
+ },
+ {
+  "handle": "proteomax",
+  "platform": "instagram",
+  "found_via": [
+   "related:@fit_peci_s_klarou"
+  ],
+  "source": {
+   "id": "disc:ig:proteomax:related:cc7fec",
+   "url": "https://instagram.mock.invalid/proteomax/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@fit_peci_s_klarou"
+  }
+ },
+ {
+  "handle": "gurmanka_lenka",
+  "platform": "instagram",
+  "found_via": [
+   "related:@kuba.jidlo.brno"
+  ],
+  "source": {
+   "id": "disc:ig:gurmanka_lenka:related:9d4acf",
+   "url": "https://instagram.mock.invalid/gurmanka_lenka/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@kuba.jidlo.brno"
+  }
+ },
+ {
+  "handle": "fit_mama_eliska",
+  "platform": "instagram",
+  "found_via": [
+   "related:@trener_marek_brno"
+  ],
+  "source": {
+   "id": "disc:ig:fit_mama_eliska:related:c2e806",
+   "url": "https://instagram.mock.invalid/fit_mama_eliska/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@trener_marek_brno"
+  }
+ },
+ {
+  "handle": "silova_ostrava",
+  "platform": "instagram",
+  "found_via": [
+   "related:@trener_marek_brno"
+  ],
+  "source": {
+   "id": "disc:ig:silova_ostrava:related:c2e806",
+   "url": "https://instagram.mock.invalid/silova_ostrava/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@trener_marek_brno"
+  }
+ },
+ {
+  "handle": "srdicka_a_dorty",
+  "platform": "instagram",
+  "found_via": [
+   "related:@brnenska_snidane"
+  ],
+  "source": {
+   "id": "disc:ig:srdicka_a_dorty:related:ff3f2e",
+   "url": "https://instagram.mock.invalid/srdicka_a_dorty/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@brnenska_snidane"
+  }
+ },
+ {
+  "handle": "praha_na_talire",
+  "platform": "instagram",
+  "found_via": [
+   "related:@brnenska_snidane"
+  ],
+  "source": {
+   "id": "disc:ig:praha_na_talire:related:ff3f2e",
+   "url": "https://instagram.mock.invalid/praha_na_talire/",
+   "platform": "instagram",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "related:@brnenska_snidane"
+  }
+ }
+]

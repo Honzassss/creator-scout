@@ -1,0 +1,68 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*) and invented values. Shaped like the live runs of 9. 10. 2026 (T8, brand-collaboration-scraper build 0.0.118): rows {id (numeric IG media id), dateCreated YYYY-MM-DD, creator{name, link}, brandPartners[{name, link}], type, link (post/reel URL), platform 'Instagram'}; creator.name and brandPartners[].name are IG HANDLES and links are instagram.com/_u/<handle>; an account with nothing in the library gives one CHARGED error item {error no_items, errorDescription}.",
+  "actor": "apify/brand-collaboration-scraper",
+  "input": {
+    "startUrls": [
+      "https://www.instagram.com/sample_cukrarka_brno/"
+    ],
+    "resultsLimit": 20,
+    "onlyPostsNewerThan": "12 months"
+  },
+  "items": [
+    {
+      "id": "3700000000000000401",
+      "dateCreated": "2026-07-25",
+      "creator": {
+        "name": "sample_cukrarka_brno",
+        "link": "https://www.instagram.com/_u/sample_cukrarka_brno"
+      },
+      "brandPartners": [
+        {
+          "name": "sample_brand",
+          "link": "https://www.instagram.com/_u/sample_brand"
+        }
+      ],
+      "type": "reel",
+      "link": "https://www.instagram.com/reel/SAMPLEbc1/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "3700000000000000402",
+      "dateCreated": "2026-06-01",
+      "creator": {
+        "name": "sample_other_creator",
+        "link": "https://www.instagram.com/_u/sample_other_creator"
+      },
+      "brandPartners": [
+        {
+          "name": "sample_cukrarka_brno",
+          "link": "https://www.instagram.com/_u/sample_cukrarka_brno"
+        }
+      ],
+      "type": "reel",
+      "link": "https://www.instagram.com/reel/SAMPLEbc2/",
+      "platform": "Instagram"
+    },
+    {
+      "id": "3700000000000000403",
+      "dateCreated": "2026-05-10",
+      "creator": {
+        "name": "sample_other_creator",
+        "link": "https://www.instagram.com/_u/sample_other_creator"
+      },
+      "brandPartners": [
+        {
+          "name": "sample_other_brand",
+          "link": "https://www.instagram.com/_u/sample_other_brand"
+        }
+      ],
+      "type": "post",
+      "link": "https://www.instagram.com/p/SAMPLEbc3/",
+      "platform": "Instagram"
+    },
+    {
+      "error": "no_items",
+      "errorDescription": "Empty or private data for provided input"
+    }
+  ]
+}

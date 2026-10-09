@@ -1,0 +1,138 @@
+[
+ {
+  "id": "news:e5b661b1e0",
+  "title": "Zlínský podnikatel Ondřej Toman podle subdodavatelů dluží za stavbu školky",
+  "outlet": "Zlínský kurýr",
+  "url": "https://zlinsky-kuryr.example/zpravy/podnikatel-a-subdodavatele",
+  "published_at": "2026-09-15T09:00:00Z",
+  "snippet": "Tři subdodavatelé tvrdí, že stavební firma Ondřeje Tomana jim dluží přes dva miliony korun. Toman uvedl, že faktury rozporuje a věc chce vyřešit dohodou.",
+  "source": {
+   "id": "news:e5b661b1e0",
+   "url": "https://zlinsky-kuryr.example/zpravy/podnikatel-a-subdodavatele",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Zlínský podnikatel Ondřej Toman podle subdodavatelů dluží za stavbu školky"
+  }
+ },
+ {
+  "id": "news:6557e0d4c1",
+  "title": "Brněnský tiktoker otestoval dvacet trdelníků, vítěz překvapil",
+  "outlet": "Jihomoravský kurýr",
+  "url": "https://jihomoravsky-kuryr.example/brno/dvacet-trdelniku",
+  "published_at": "2026-09-04T09:00:00Z",
+  "snippet": "Ondřej Toman, na TikToku @toman_ochutnava, prošel za víkend dvacet stánků v centru Brna. Nejvíc ho nadchl malý stánek u Zelného trhu.",
+  "source": {
+   "id": "news:6557e0d4c1",
+   "url": "https://jihomoravsky-kuryr.example/brno/dvacet-trdelniku",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Brněnský tiktoker otestoval dvacet trdelníků, vítěz překvapil"
+  }
+ },
+ {
+  "id": "news:fad914c7dd",
+  "title": "Policie obvinila muže z krádeže jízdních kol, jde o Jakuba Horáka z Olomouce",
+  "outlet": "Olomoucký kurýr",
+  "url": "https://olomoucky-kuryr.example/zpravy/kradeze-kol",
+  "published_at": "2026-09-23T09:00:00Z",
+  "snippet": "Jakub Horák podle policie ukradl během léta sedm kol ze sklepů v Olomouci.",
+  "source": {
+   "id": "news:fad914c7dd",
+   "url": "https://olomoucky-kuryr.example/zpravy/kradeze-kol",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Policie obvinila muže z krádeže jízdních kol, jde o Jakuba Horáka z Olomouce"
+  }
+ },
+ {
+  "id": "news:ccb2949468",
+  "title": "Pekárna A představila nové tváře své kampaně",
+  "outlet": "Jihomoravský kurýr",
+  "url": "https://jihomoravsky-kuryr.example/byznys/pekarna-a-nove-tvare",
+  "published_at": "2026-07-30T09:00:00Z",
+  "snippet": "Mezi ambasadory je i brněnský food tvůrce Jakub Horák (@kuba.jidlo.brno), který bude pekárnu podle majitelky zastupovat celý rok.",
+  "source": {
+   "id": "news:ccb2949468",
+   "url": "https://jihomoravsky-kuryr.example/byznys/pekarna-a-nove-tvare",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Pekárna A představila nové tváře své kampaně"
+  }
+ },
+ {
+  "id": "news:5e933ca012",
+  "title": "FitZone Brno rozšiřuje tým trenérů",
+  "outlet": "Jihomoravský kurýr",
+  "url": "https://jihomoravsky-kuryr.example/sport/fitzone-rozsiruje-tym",
+  "published_at": "2026-08-29T09:00:00Z",
+  "snippet": "Nově vede ranní tréninky Marek Šimek (@trener_marek_brno), který se specializuje na silový trénink a techniku.",
+  "source": {
+   "id": "news:5e933ca012",
+   "url": "https://jihomoravsky-kuryr.example/sport/fitzone-rozsiruje-tym",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "FitZone Brno rozšiřuje tým trenérů"
+  }
+ },
+ {
+  "id": "news:93305ab12d",
+  "title": "Sledující si stěžují na neoznačené slevové kódy u fitness tvůrců",
+  "outlet": "Spotřebitelský týdeník",
+  "url": "https://spotrebitelsky-tydenik.example/clanky/slevove-kody-bez-oznaceni",
+  "published_at": "2026-09-26T09:00:00Z",
+  "snippet": "Podle stížností sledujících kódy bez označení reklamy údajně používá i brněnská tvůrkyně Pavla Krejčí (@pavla_hybe_brnem). Ta na dotaz redakce do uzávěrky nereagovala.",
+  "source": {
+   "id": "news:93305ab12d",
+   "url": "https://spotrebitelsky-tydenik.example/clanky/slevove-kody-bez-oznaceni",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Sledující si stěžují na neoznačené slevové kódy u fitness tvůrců"
+  }
+ },
+ {
+  "id": "news:c929ced31e",
+  "title": "Brněnská blogerka vydává knihu receptů na domácí pečení",
+  "outlet": "Jihomoravský kurýr",
+  "url": "https://jihomoravsky-kuryr.example/kultura/kniha-domaciho-peceni",
+  "published_at": "2026-08-19T09:00:00Z",
+  "snippet": "Klára Veselá (@fit_peci_s_klarou) v knize spojuje kváskové pečení s tréninkem pro začátečníky.",
+  "source": {
+   "id": "news:c929ced31e",
+   "url": "https://jihomoravsky-kuryr.example/kultura/kniha-domaciho-peceni",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Brněnská blogerka vydává knihu receptů na domácí pečení"
+  }
+ },
+ {
+  "id": "news:93ca8f25c2",
+  "title": "Útočník Tomáš Říha prodloužil smlouvu v Třinci o dva roky",
+  "outlet": "Hokejový zpravodaj",
+  "url": "https://hokejovy-zpravodaj.example/extraliga/riha-prodlouzil",
+  "published_at": "2026-09-29T09:00:00Z",
+  "snippet": "Třiadvacetiletý hokejista Tomáš Říha bude za Třinec hrát i další dvě sezony.",
+  "source": {
+   "id": "news:93ca8f25c2",
+   "url": "https://hokejovy-zpravodaj.example/extraliga/riha-prodlouzil",
+   "platform": "news",
+   "actor": "mock:fixtures",
+   "fetched_at": "2026-10-08T09:00:00Z",
+   "mode": "mock",
+   "quote": "Útočník Tomáš Říha prodloužil smlouvu v Třinci o dva roky"
+  }
+ }
+]

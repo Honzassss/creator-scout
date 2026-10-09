@@ -1,0 +1,167 @@
+{
+  "_note": "HAND-MADE sample, NOT real data: fictional accounts (sample_*) and invented values. Shaped like the live run of 9. 10. 2026 (T5, profile-scraper, includeAboutSection false): username and fullName ARE present (error items too), isRestrictedProfile never appears, relatedProfiles is [] on local accounts, a missing account is a charged error item {username, url, error not_found, errorDescription}. latestPosts: isPinned only when true, videoViewCount on reels, locationName + locationId, taggedUsers {username, full_name, id, is_verified, profile_pic_url}, no paidPartnership and no coauthorProducers; a collab post owned by the partner can sit in the grid. `about` is a paid-plan field (includeAboutSection), kept only to test former_handles_count.",
+  "actor": "apify/instagram-profile-scraper",
+  "input": {
+    "usernames": [
+      "sample_cukrarka_brno",
+      "sample_missing",
+      "sample_teen_profile"
+    ],
+    "includeAboutSection": false
+  },
+  "items": [
+    {
+      "inputUrl": "https://www.instagram.com/sample_cukrarka_brno",
+      "id": "900000101",
+      "username": "sample_cukrarka_brno",
+      "url": "https://www.instagram.com/sample_cukrarka_brno",
+      "fullName": "Sample Cukrářka",
+      "biography": "Peču dorty v Brně 🎂 | TikTok: tiktok.com/@sample_cukrarka",
+      "followersCount": 8200,
+      "followsCount": 410,
+      "postsCount": 230,
+      "highlightReelCount": 3,
+      "igtvVideoCount": 0,
+      "verified": false,
+      "private": false,
+      "joinedRecently": false,
+      "isBusinessAccount": true,
+      "businessCategoryName": "Candy Store",
+      "fbid": "17841400000000000",
+      "externalUrls": [
+        {
+          "url": "https://sample-cukrarka.example",
+          "title": "web",
+          "lynx_url": "https://l.instagram.com/?u=x",
+          "link_type": "external"
+        },
+        {
+          "url": "https://www.youtube.com/@samplecukrarka",
+          "title": "YT",
+          "lynx_url": "https://l.instagram.com/?u=y",
+          "link_type": "external"
+        }
+      ],
+      "relatedProfiles": [],
+      "latestIgtvVideos": [],
+      "about": {
+        "country": "Czech Republic",
+        "date_joined": "2019-03-01",
+        "former_usernames": 2
+      },
+      "latestPosts": [
+        {
+          "id": "3700000000000000201",
+          "type": "Image",
+          "shortCode": "SAMPLEpin",
+          "url": "https://www.instagram.com/p/SAMPLEpin/",
+          "caption": "Připnutý starý post",
+          "hashtags": [],
+          "mentions": [],
+          "commentsCount": 40,
+          "likesCount": 900,
+          "timestamp": "2025-01-10T09:00:00.000Z",
+          "isPinned": true,
+          "ownerUsername": "sample_cukrarka_brno",
+          "ownerId": "900000101"
+        },
+        {
+          "id": "3700000000000000202",
+          "type": "Video",
+          "productType": "clips",
+          "shortCode": "SAMPLEr1",
+          "url": "https://www.instagram.com/p/SAMPLEr1/",
+          "caption": "Reel s dortem #brnofood @sample_brand",
+          "hashtags": [
+            "brnofood"
+          ],
+          "mentions": [
+            "sample_brand"
+          ],
+          "commentsCount": 15,
+          "likesCount": 640,
+          "videoViewCount": 5400,
+          "timestamp": "2026-10-06T09:00:00.000Z",
+          "ownerUsername": "sample_cukrarka_brno",
+          "ownerId": "900000101",
+          "locationName": "Sample Kavárna Zelný trh",
+          "locationId": "100000001",
+          "taggedUsers": [
+            {
+              "username": "sample_friend",
+              "full_name": "Sample Friend Full Name",
+              "id": "77",
+              "is_verified": false,
+              "profile_pic_url": "https://sample.example/friend.jpg"
+            }
+          ],
+          "musicInfo": {
+            "artist_name": "sample_cukrarka_brno",
+            "song_name": "Original audio",
+            "uses_original_audio": true,
+            "should_mute_audio": false,
+            "should_mute_audio_reason": "",
+            "audio_id": "1"
+          }
+        },
+        {
+          "id": "3700000000000000203",
+          "type": "Video",
+          "productType": "clips",
+          "shortCode": "SAMPLEcollab",
+          "url": "https://www.instagram.com/p/SAMPLEcollab/",
+          "caption": "Společně ochutnáváme #brnofood",
+          "hashtags": [
+            "brnofood"
+          ],
+          "mentions": [],
+          "commentsCount": 30,
+          "likesCount": 1500,
+          "videoViewCount": 21000,
+          "timestamp": "2026-10-03T09:00:00.000Z",
+          "ownerUsername": "sample_partner_creator",
+          "ownerId": "900000199"
+        }
+      ]
+    },
+    {
+      "url": "https://www.instagram.com/sample_missing",
+      "username": "sample_missing",
+      "error": "not_found",
+      "errorDescription": "Profile does not exist"
+    },
+    {
+      "inputUrl": "https://www.instagram.com/sample_teen_profile",
+      "id": "900000102",
+      "username": "sample_teen_profile",
+      "url": "https://www.instagram.com/sample_teen_profile",
+      "fullName": "",
+      "biography": "je mi 16 | pečení",
+      "followersCount": 1200,
+      "followsCount": 300,
+      "postsCount": 40,
+      "verified": false,
+      "private": false,
+      "isBusinessAccount": false,
+      "businessCategoryName": null,
+      "externalUrls": [],
+      "relatedProfiles": [],
+      "latestPosts": [
+        {
+          "id": "3700000000000000204",
+          "type": "Image",
+          "shortCode": "SAMPLEteen1",
+          "url": "https://www.instagram.com/p/SAMPLEteen1/",
+          "caption": "Bábovka",
+          "hashtags": [],
+          "mentions": [],
+          "commentsCount": 2,
+          "likesCount": 30,
+          "timestamp": "2026-10-01T09:00:00.000Z",
+          "ownerUsername": "sample_teen_profile",
+          "ownerId": "900000102"
+        }
+      ]
+    }
+  ]
+}

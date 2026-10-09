@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic>=2.12   # Field(exclude_if=...) in models.py
+anthropic
+httpx
+python-dotenv
+lingua-language-detector
+pytest
+pytest-asyncio
+apify-client
