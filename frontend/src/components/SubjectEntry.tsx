@@ -17,6 +17,12 @@ const compLabel = (c: Competitor) =>
 /** "city Brno" -> "Brno": the anchor field's own text for a stored anchor. */
 const anchorField = (a: Anchor | null | undefined) => a?.city ?? a?.website ?? a?.company_id ?? ''
 
+// same system as the guide composer: 13 px labels, 44 px fields with a clear --field outline, petrol primary
+const LABEL = 'block mb-1 text-[13px] leading-[18px] font-semibold text-(--text)'
+const FIELD =
+  'block w-full min-h-11 rounded-(--r-control) border border-(--field) bg-(--surface) px-3 py-2.5 text-[15px] leading-[22px] text-(--text) placeholder:text-(--text-3) hover:border-(--text-2) focus:outline-2 focus:outline-offset-2 focus:outline-(--accent) focus:border-(--field) aria-[invalid=true]:border-2 aria-[invalid=true]:border-dashed aria-[invalid=true]:border-(--bad)'
+const HINT = 'block mt-1 text-[13px] leading-[18px] text-(--text-2)'
+
 /** initialSubject / initialAnchor: the not-found panel offers the same form, prefilled, to try another handle. */
 export function SubjectEntry({ initialSubject, initialAnchor, title }: { initialSubject?: string; initialAnchor?: Anchor | null; title?: string } = {}) {
   const { t, actions, composeChat, reveal, state } = useApp()
@@ -71,7 +77,8 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
   return (
     <form
       data-testid="subject-form"
-      className="subject-entry"
+      // subject-entry: a hook only (Funnel's "Check one creator" focuses this form's subject field); the look is the utilities
+      className="subject-entry rounded-(--r-panel) border border-(--line) bg-(--surface) p-4 shadow-[0_1px_2px_rgba(24,44,54,0.06)]"
       aria-labelledby={`${uid}-t`}
       noValidate
       onSubmit={(e) => {
@@ -79,13 +86,13 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
         void submit()
       }}
     >
-      <h3 id={`${uid}-t`} className="font-display text-md font-semibold">
+      <h3 id={`${uid}-t`} className="text-[16px] leading-[22px] font-semibold text-(--text)">
         {title ?? t('subject.entry.title')}
       </h3>
-      {!title && <p className="text-sm text-ink-2 mt-1">{t('subject.entry.body')}</p>}
+      {!title && <p className="mt-1 text-[13px] leading-[18px] text-(--text-2)">{t('subject.entry.body')}</p>}
 
-      <div className="mt-3">
-        <label htmlFor={`${uid}-s`} className="label">
+      <div className="mt-4">
+        <label htmlFor={`${uid}-s`} className={LABEL}>
           {t('subject.field.subject')}
         </label>
         <input
@@ -94,7 +101,7 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
           name="subject"
           autoComplete="off"
           spellCheck={false}
-          className="field"
+          className={FIELD}
           placeholder="@kuba.jidlo.brno"
           value={subject}
           aria-invalid={error ? true : undefined}
@@ -104,18 +111,26 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
             setError(null)
           }}
         />
-        <span id={`${uid}-sh`} className="block text-xs text-ink-2 mt-1">
+        <span id={`${uid}-sh`} className={HINT}>
           {t('subject.field.subject.hint')}
         </span>
         {error && (
-          <span id={`${uid}-err`} role="alert" className="block text-sm text-ink mt-1 border-l-2 border-ink pl-2">
+          // icon + text, not only the red edge
+          <span
+            id={`${uid}-err`}
+            role="alert"
+            className="mt-2 flex items-start gap-2 rounded-(--r-tag) border-l-2 border-(--bad) bg-(--bad-tint) px-2 py-1.5 text-[13px] leading-[18px] font-semibold text-(--bad)"
+          >
+            <span aria-hidden className="mt-px inline-flex size-4 shrink-0 items-center justify-center rounded-full border border-current text-[11px] leading-none">
+              !
+            </span>
             {t(error)}
           </span>
         )}
       </div>
 
-      <div className="mt-3">
-        <label htmlFor={`${uid}-a`} className="label">
+      <div className="mt-4">
+        <label htmlFor={`${uid}-a`} className={LABEL}>
           {t('subject.field.anchor')}
         </label>
         <input
@@ -123,37 +138,45 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
           data-testid="subject-anchor"
           name="anchor"
           autoComplete="off"
-          className="field"
+          className={FIELD}
           placeholder="Brno"
           value={anchorRaw}
           aria-describedby={`${uid}-ah`}
           onChange={(e) => setAnchorRaw(e.target.value)}
         />
-        <span id={`${uid}-ah`} className="block text-xs text-ink-2 mt-1">
+        <span id={`${uid}-ah`} className={HINT}>
           {/* no aria-live: it announced every keystroke ("Read as a city: B", "Br", …); the hint is in aria-describedby */}
-          <span className="block font-medium text-ink">
+          <span className="block font-semibold text-(--text)">
             {anchor ? t(`subject.anchorAs.${anchor.kind}` as I18nKey, { v: anchor.value }) : t('subject.anchor.none')}
           </span>
           {t('subject.field.anchor.hint')}
         </span>
       </div>
 
-      <fieldset className="mt-3">
-        <legend className="label">{t('subject.field.goal')}</legend>
+      <fieldset className="mt-4">
+        <legend className={LABEL}>{t('subject.field.goal')}</legend>
         <div className="flex flex-wrap gap-2">
-          {goals.map((g) => (
-            <label key={g.k} className={`chip relative !min-h-8 cursor-pointer ${goal === g.k ? '!border-ink !bg-paper-3 font-medium' : ''}`}>
-              <input type="radio" data-testid={`subject-goal-${g.k}`} name={`${uid}-goal`} value={g.k} checked={goal === g.k} onChange={() => setGoal(g.k)} className="sr-only" />
-              {goal === g.k && <span aria-hidden>✓</span>}
-              {t(g.label)}
-            </label>
-          ))}
+          {goals.map((g) => {
+            const on = goal === g.k
+            return (
+              <label
+                key={g.k}
+                className={`relative inline-flex items-center gap-1.5 min-h-11 md:min-h-9 px-3 rounded-(--r-control) border text-[14px] leading-5 cursor-pointer transition-colors duration-(--dur-1) has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-(--accent) ${
+                  on ? 'border-(--accent) bg-(--accent-tint) text-(--accent-press) font-semibold' : 'border-(--field) bg-(--surface) text-(--text) hover:border-(--accent) hover:bg-(--accent-tint)'
+                }`}
+              >
+                <input type="radio" data-testid={`subject-goal-${g.k}`} name={`${uid}-goal`} value={g.k} checked={on} onChange={() => setGoal(g.k)} className="sr-only" />
+                {on && <span aria-hidden>✓</span>}
+                {t(g.label)}
+              </label>
+            )
+          })}
         </div>
       </fieldset>
 
       {!state.demo && goal !== 'chat' && (
-        <div className="mt-3">
-          <label htmlFor={`${uid}-c`} className="label">
+        <div className="mt-4">
+          <label htmlFor={`${uid}-c`} className={LABEL}>
             {t('subject.field.competitors')}
           </label>
           <input
@@ -162,15 +185,15 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
             name="competitors"
             autoComplete="off"
             spellCheck={false}
-            className="field"
+            className={FIELD}
             placeholder={t('subject.field.competitors.ph')}
             value={compRaw}
             aria-describedby={`${uid}-ch`}
             onChange={(e) => setCompRaw(e.target.value)}
           />
-          <span id={`${uid}-ch`} className="block text-xs text-ink-2 mt-1">
+          <span id={`${uid}-ch`} className={HINT}>
             {competitors.length > 0 && (
-              <span className="block font-medium text-ink">
+              <span className="block font-semibold text-(--text)">
                 {t('subject.competitorsAs', { v: competitors.map(compLabel).join(', ') })}
               </span>
             )}
@@ -179,12 +202,22 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
         </div>
       )}
 
-      <div className="mt-4 flex items-center gap-3">
-        <button type="submit" data-testid="subject-submit" className={`btn ${goal === 'chat' ? '' : 'btn-primary'} min-h-[40px]`} aria-disabled={busy || undefined}>
-          {busy ? t('subject.submitting') : goal === 'chat' ? t('subject.submit.chat') : t('subject.submit')}
-          {!busy && <span aria-hidden>→</span>}
-        </button>
-      </div>
+      {/* full width: the busy label may be longer or shorter, nothing around it moves */}
+      <button
+        type="submit"
+        data-testid="subject-submit"
+        className={`mt-6 w-full inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-(--r-control) border text-[15px] leading-[22px] font-semibold transition-colors duration-(--dur-1) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) ${
+          busy
+            ? 'bg-(--accent-tint) text-(--accent-press) border-(--accent) cursor-progress'
+            : 'bg-(--accent) text-white border-(--accent) hover:bg-(--accent-hover) hover:border-(--accent-hover) active:bg-(--accent-press) active:border-(--accent-press)'
+        }`}
+        aria-disabled={busy || undefined}
+        aria-busy={busy || undefined}
+      >
+        {busy && <span aria-hidden className="inline-block size-4 shrink-0 rounded-full border-2 border-current border-t-transparent animate-spin motion-reduce:animate-none" />}
+        {busy ? t('subject.submitting') : goal === 'chat' ? t('subject.submit.chat') : t('subject.submit')}
+        {!busy && <span aria-hidden>→</span>}
+      </button>
     </form>
   )
 }

@@ -65,7 +65,10 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
   return (
     <>
       <div className="scrim !z-50" onClick={guard.request} />
-      <div ref={ref} className="modal" role="dialog" aria-modal="true" aria-labelledby={`${uid}-t`} tabIndex={-1}>
+      <div
+        ref={ref}
+        className="modal !bg-[color:var(--surface)] !border-[color:var(--line)] !rounded-[12px] !shadow-[0_1px_2px_rgba(24,44,54,.06),0_16px_40px_-16px_rgba(24,44,54,.28)]"
+        role="dialog" aria-modal="true" aria-labelledby={`${uid}-t`} tabIndex={-1}>
       <form
         noValidate
         onSubmit={(e) => {
@@ -84,23 +87,23 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
           onClose()
         }}
       >
-        <div className="px-6 pt-6 pb-4 border-b border-rule">
-          <h2 id={`${uid}-t`} className="font-display text-xl font-semibold">
+        <div className="px-4 sm:px-6 pt-5 sm:pt-6 pb-4 border-b border-[color:var(--line)]">
+          <h2 id={`${uid}-t`} className="text-[20px] leading-[28px] font-semibold text-[color:var(--text)]">
             {t('goal.title')}
           </h2>
           {current && (
-            <p className="text-base mt-2">
-              <span className="smallcaps mr-2">{t('goal.now')}</span>
+            <p className="text-[15px] leading-[22px] mt-2 text-[color:var(--text)]">
+              <span className="text-[13px] leading-[18px] font-semibold text-[color:var(--text-2)] mr-2">{t('goal.now')}</span>
               {typo([current.business_type, current.city, current.goal].filter(Boolean).join(' · '))}
             </p>
           )}
-          <p className="text-sm text-ink-2 mt-2">{t('goal.body')}</p>
+          <p className="text-[13px] leading-[18px] text-[color:var(--text-2)] mt-2">{t('goal.body')}</p>
         </div>
 
         {step === 'edit' ? (
-          <div className="px-6 py-4 flex flex-col gap-4">
+          <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-4">
             <div className="flex items-center gap-2 flex-wrap" role="group" aria-labelledby={`${uid}-p`}>
-              <span id={`${uid}-p`} className="text-sm text-ink-2 mr-1">
+              <span id={`${uid}-p`} className="text-[13px] leading-[18px] text-[color:var(--text-2)] mr-1">
                 {t('goal.presets')}:
               </span>
               {(['fitness', 'bakery'] as const).map((k) => {
@@ -109,7 +112,7 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
                   <button
                     key={k}
                     type="button"
-                    className="btn btn-sm"
+                    className="btn btn-sm max-sm:min-h-11 aria-pressed:!bg-[color:var(--accent-tint)] aria-pressed:!border-[color:var(--accent)] aria-pressed:!text-[color:var(--accent)]"
                     aria-pressed={presetActive(p)}
                     onClick={() => {
                       setB({ ...EMPTY, ...p })
@@ -143,7 +146,7 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
                     required={f.required}
                   />
                   {f.k === 'audience' && (
-                    <span id={`${uid}-an`} className="block text-sm text-ink-2 mt-1 italic">
+                    <span id={`${uid}-an`} className="block text-[13px] leading-[18px] text-[color:var(--text-2)] mt-1">
                       {t('goal.audienceNote')}
                     </span>
                   )}
@@ -168,19 +171,23 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
               </div>
             </div>
             {error && (
-              <p id={`${uid}-err`} role="alert" className="text-sm text-ink border border-dashed border-ink-2 rounded-sm px-3 py-2">
+              <p id={`${uid}-err`} role="alert" className="text-[13px] leading-[18px] text-[color:var(--bad)] bg-[color:var(--bad-tint)] border border-[color:color-mix(in_oklab,var(--bad)_35%,transparent)] rounded-[8px] px-3 py-2">
+                <span aria-hidden className="font-semibold mr-1">!</span>
                 {t('goal.unchanged')}
               </p>
             )}
-            {!canSubmit && <p className="text-sm text-ink-2 border border-dashed border-rule-strong px-3 py-2 rounded-sm">{t('goal.noRun')}</p>}
+            {!canSubmit && <p className="text-[13px] leading-[18px] text-[color:var(--text-2)] border border-dashed border-[color:var(--field)] px-3 py-2 rounded-[8px] bg-[color:var(--bg)]">{t('goal.noRun')}</p>}
           </div>
         ) : (
-          <div className="px-6 py-4">
-            <h3 data-review-h tabIndex={-1} className="text-md font-semibold">
+          <div className="px-4 sm:px-6 py-4 sm:py-5">
+            <h3 data-review-h tabIndex={-1} className="text-[18px] leading-[26px] font-semibold text-[color:var(--text)]">
               {t('goal.review')}
             </h3>
-            <p className="text-base text-ink-2 mt-1">{t(rerenders ? 'goal.review.bodyRender' : 'goal.review.body')}</p>
-            <table className="ctable mt-3 !text-sm">
+            <p className="text-[15px] leading-[22px] text-[color:var(--text-2)] mt-1">{t(rerenders ? 'goal.review.bodyRender' : 'goal.review.body')}</p>
+            {/* a small before/after table, not the comparison grid: no min widths; under 640 px each row stacks
+                (field on top, before | now under it, each with its own label) so nothing scrolls sideways */}
+            <div className="mt-3 rounded-[8px] border border-[color:var(--line)] overflow-hidden">
+            <table className="ctable !text-[14px] w-full [&_th]:!min-w-0 [&_td]:!min-w-0 [&_th]:!w-auto [&_th]:!h-auto [&_td]:!h-auto [&_th]:!px-3 [&_td]:!px-3 [&_tbody_tr:last-child>*]:!border-b-0 max-sm:[&_thead]:sr-only max-sm:[&_tbody_tr]:grid max-sm:[&_tbody_tr]:grid-cols-2 max-sm:[&_tbody_tr]:border-b max-sm:[&_tbody_tr]:border-[color:var(--line)] max-sm:[&_tbody_tr:last-child]:border-b-0 max-sm:[&_tbody_th]:col-span-2 max-sm:[&_tbody_th]:!pb-0 max-sm:[&_tbody_th]:!shadow-none max-sm:[&_tbody_th]:!border-b-0 max-sm:[&_td]:!border-b-0 max-sm:[&_td]:before:content-[attr(data-label)] max-sm:[&_td]:before:block max-sm:[&_td]:before:text-[12px] max-sm:[&_td]:before:leading-4 max-sm:[&_td]:before:font-normal max-sm:[&_td]:before:text-[color:var(--text-3)] max-sm:[&_td]:before:mb-1">
               <thead>
                 <tr>
                   <th scope="col">{t('goal.review.field')}</th>
@@ -191,42 +198,47 @@ function GoalDialog({ onClose }: { onClose: () => void }) {
               <tbody>
                 {rows.map(({ f, old, now }) => (
                   <tr key={f.k}>
-                    <th scope="row" className="!static !bg-transparent font-normal text-ink-2">
+                    <th scope="row" className="!static !bg-transparent font-normal text-[color:var(--text-2)]">
                       {t(f.label)}
                     </th>
-                    <td>
-                      <s className="text-ink-2">{typo(old) || <NoValue />}</s>
+                    <td data-label={t('goal.review.old')}>
+                      <s className="text-[color:var(--text-2)]">{typo(old) || <NoValue />}</s>
                     </td>
-                    <td className="font-medium">{typo(now) || <NoValue />}</td>
+                    <td data-label={t('goal.review.new')} className="font-medium">
+                      {typo(now) || <NoValue />}
+                    </td>
                   </tr>
                 ))}
                 {compChanged && (
                   <tr>
-                    <th scope="row" className="!static !bg-transparent font-normal text-ink-2">
+                    <th scope="row" className="!static !bg-transparent font-normal text-[color:var(--text-2)]">
                       {t('goal.competitors')}
                     </th>
-                    <td className="whitespace-pre-line">
-                      <s className="text-ink-2">{compOld || <NoValue />}</s>
+                    <td data-label={t('goal.review.old')} className="whitespace-pre-line [overflow-wrap:anywhere]">
+                      <s className="text-[color:var(--text-2)]">{compOld || <NoValue />}</s>
                     </td>
-                    <td className="font-medium whitespace-pre-line">{comp || <NoValue />}</td>
+                    <td data-label={t('goal.review.new')} className="font-medium whitespace-pre-line [overflow-wrap:anywhere]">
+                      {comp || <NoValue />}
+                    </td>
                   </tr>
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         )}
 
         <DiscardBar guard={guard} />
-        <div className="px-6 py-3 border-t border-rule flex flex-wrap justify-end gap-2 bg-paper-2/60" hidden={guard.asking}>
+        <div className="px-4 sm:px-6 py-3 border-t border-[color:var(--line)] flex justify-end gap-2 flex-wrap bg-[color:var(--bg)] rounded-b-[12px]" hidden={guard.asking}>
           {step === 'review' ? (
-            <button type="button" className="btn mr-auto" onClick={() => setStep('edit')}>
+            <button type="button" className="btn mr-auto max-sm:min-h-11" onClick={() => setStep('edit')}>
               <span aria-hidden>←</span> {t('goal.back')}
             </button>
           ) : null}
-          <button type="button" className="btn" onClick={onClose}>
+          <button type="button" className="btn max-sm:min-h-11" onClick={onClose}>
             {t('goal.cancel')}
           </button>
-          <button type="submit" className="btn btn-primary" aria-disabled={(step === 'review' && !canSubmit) || undefined}>
+          <button type="submit" className="btn btn-primary max-sm:min-h-11" aria-disabled={(step === 'review' && !canSubmit) || undefined}>
             {step === 'edit' ? t('goal.next') : t('goal.submit')}
           </button>
         </div>

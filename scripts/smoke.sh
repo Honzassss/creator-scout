@@ -92,7 +92,7 @@ wait_js '!!document.querySelector("[data-testid=subject-board] [data-testid=outr
 SUBJECT_RUN="$(js 'new URLSearchParams(location.search).get("run")' | unq)"
 v="$(js 'document.querySelector("[data-testid=subject-board] [data-testid=identity-verdict]")?.dataset.status || ""' | unq)"
 [ -n "$v" ]; check "subject: identity verdict shown" $? "$v"
-n="$(js '[...document.querySelectorAll("[data-testid=subject-board] [data-testid=finding][data-kind=fact]")].filter(f => f.querySelector(".src-chip:not(.is-none), button.sourced")).length')"
+n="$(js '[...document.querySelectorAll("[data-testid=subject-board] [data-testid=finding][data-kind=fact]")].filter(f => f.querySelector(".src-chip:not(.is-none), button.sourced, [data-testid=source-chip], [data-testid=sourced]")).length')"
 [ "${n:-0}" -ge 1 ] 2>/dev/null; check "subject: >=1 fact with a clickable source" $? "$n"
 n="$(js 'document.querySelectorAll("[data-testid=subject-board] [data-testid=finding][data-kind=gap], [data-testid=subject-board] .finding-gap").length')"
 [ "${n:-0}" -ge 1 ] 2>/dev/null; check "subject: >=1 gap stated" $? "$n"

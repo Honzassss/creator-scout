@@ -10,8 +10,9 @@ import { anchorText } from '../lib/subject'
 import { PRESET_NAMES, presetOf, type PresetName } from '../lib/presets'
 import type { Candidate, Criterion, CriterionResult, Finding, I18nText, Report, ResultStatus } from '../types'
 import { CardBody, NewsList, Outreach } from './CandidateDrawer'
-import { CritIcon, MockTag, ModeBadge, RichText, SourceChip, SourceChips, initialOf, platformLabel, platformLong } from './primitives'
-import { ConfidenceTag, MethodPanel, RankedFindings, SummaryLine, VerdictBlock, goalLabel, itemDomId, jumpToItem } from './Report'
+import { MockTag, StatusTag, ModeBadge, RichText, SourceChip, SourceChips, initialOf, platformLabel, platformLong } from './primitives'
+import { flash, motionInstant } from '../lib/motion'
+import { ConfidenceTag, KindLabel, MethodPanel, RankedFindings, SummaryLine, VerdictBlock, goalLabel, itemDomId, jumpToItem } from './Report'
 import { SubjectEntry } from './SubjectEntry'
 import { useCriteriaMap } from './Funnel'
 
@@ -47,6 +48,8 @@ function useSubjectProgress() {
   else if (vetStep) status = t('subject.status.vetting', { step: vetStepLabel(vetStep, lang) })
   else if (!vetDone && checksDone) status = t('subject.status.vettingStart')
   else if (vetDone) status = t('subject.status.ready')
+  // between two check rounds: keep naming the checks (the next round), not the profile lookup
+  else if (rounds.size) status = t('subject.status.checks', { n: Math.min(3, Math.max(...rounds) + 1) })
   else status = t('subject.status.pending')
   return { states, running, status, vetDone }
 }
@@ -58,8 +61,9 @@ function Steps({ states, running }: { states: StepState[]; running: boolean }) {
     <ol className="stepper" aria-label={t('subject.steps')}>
       {states.map((st, i) => (
         <li key={i} className={`is-${st} ${running && st === 'current' ? 'is-running' : ''}`} aria-current={st === 'current' || st === 'stopped' ? 'step' : undefined}>
+          {/* done is a filled dot (no glyph); a step that ended without a result shows ✕ */}
           <span className="step-dot" aria-hidden>
-            {st === 'done' ? '✓' : st === 'stopped' ? '✕' : ''}
+            {st === 'stopped' ? '✕' : null}
           </span>
           <span className="step-label">
             {t(labels[i])}
@@ -84,7 +88,7 @@ function SubjectHeader({ c }: { c: Candidate | null }) {
   const fetched = p?.source?.fetched_at
   const anchor = anchorText(state.subject?.anchor, lang)
   return (
-    <div className="px-4 pt-4 pb-3 border-b border-rule">
+    <div className="px-4 pt-4 pb-4 md:px-6 md:pt-6 border-b border-line">
       <div className="flex items-start gap-4 flex-wrap">
         <span className="avatar avatar-lg" aria-hidden>
           {initialOf(handle, p?.display_name)}
@@ -92,13 +96,13 @@ function SubjectHeader({ c }: { c: Candidate | null }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-x-3 gap-y-1 flex-wrap">
             <span className="smallcaps">{t('subject.title')}</span>
-            {mode === 'mock' && <span className="mock-stamp">MOCK</span>}
+            {mode === 'mock' && <MockTag />}
             {mode === 'cache' && <span className="cache-stamp">{t('cache.tag')}</span>}
           </div>
-          <h2 id="subject-h" tabIndex={-1} className="text-xl font-semibold tracking-tight [overflow-wrap:anywhere]" translate="no">
+          <h2 id="subject-h" tabIndex={-1} className="text-xl font-semibold mt-0.5 [overflow-wrap:anywhere]" translate="no">
             @{handle}
           </h2>
-          <div className="mt-1 flex items-center gap-x-2 gap-y-1 flex-wrap text-base text-ink-2">
+          <div className="mt-1 flex items-center gap-x-2 gap-y-1 flex-wrap text-dense text-text-2">
             {p?.display_name && <span translate="no">{p.display_name}</span>}
             {platform && (
               <>
@@ -121,18 +125,21 @@ function SubjectHeader({ c }: { c: Candidate | null }) {
             {p?.source && <SourceChip src={p.source} />}
             {mode && mode !== 'mock' && <ModeBadge mode={mode} />}
           </div>
-          <p className="mt-1 text-sm">
+          <p className="mt-2 text-sm">
             <span className="smallcaps mr-2">{t('subject.anchor')}</span>
-            <span className={anchor ? 'text-ink' : 'text-ink-2 italic'}>{anchor || t('subject.anchor.missing')}</span>
+            <span className={anchor ? 'text-text' : 'text-text-2 italic'}>{anchor || t('subject.anchor.missing')}</span>
           </p>
         </div>
       </div>
       <div className="mt-3">
         <Steps states={states} running={running} />
       </div>
-      <p className="mt-2 text-base text-ink-2 flex items-center gap-2 min-h-[21px]" role="status" aria-live="polite">
+      <p className="mt-2 text-base text-text-2 flex items-center gap-2 min-h-[22px]" role="status" aria-live="polite">
         {(running || state.recomputing) && <span className="work-dot" aria-hidden />}
-        {status}
+        {/* a new status replaces the old one in place (keyed), never on top of it */}
+        <span key={status} className="m-swap">
+          {status}
+        </span>
       </p>
       {(running || state.recomputing) && <div className="running-bar mt-2 max-w-[420px]" aria-hidden />}
     </div>
@@ -148,12 +155,12 @@ function GoalBar({ report }: { report: Report | null | undefined }) {
   const busy = state.recomputing || state.runStatus === 'running' || !report
   const hintId = 'subj-goal-hint'
   return (
-    <div className="px-4 py-3 border-b border-rule bg-paper-2/50 flex items-center gap-x-4 gap-y-2 flex-wrap">
-      <h3 id="subj-goal-h" tabIndex={-1} className="font-display text-lg font-semibold mr-auto">
+    <div className="px-4 md:px-6 py-4 border-b border-line bg-bg flex items-center gap-x-4 gap-y-2 flex-wrap">
+      <h3 id="subj-goal-h" tabIndex={-1} className="text-sec font-semibold mr-auto">
         {t('report.for', { goal: goalLabel(report, brief, t) })}
       </h3>
       {!state.demo && brief?.lang && brief.lang !== lang && (
-        <p className="text-sm text-ink-2 w-full order-last" data-testid="report-lang-note">
+        <p className="text-sm text-text-2 w-full order-last" data-testid="report-lang-note">
           {t(brief.lang === 'cs' ? 'report.langNote.cs' : 'report.langNote.en')}
         </p>
       )}
@@ -180,7 +187,7 @@ function GoalBar({ report }: { report: Report | null | undefined }) {
           {t('report.goal.other')} <span aria-hidden>→</span>
         </button>
       </div>
-      <p id={hintId} className="basis-full text-sm text-ink-2">
+      <p id={hintId} className="basis-full text-sm text-text-2">
         {busy ? t(state.recomputing ? 'subject.status.recomputing' : 'report.goal.busy') : t('report.goal.hint')}
       </p>
       {report && <ReportLegend />}
@@ -194,13 +201,13 @@ function ReportLegend() {
   return (
     <p className="basis-full text-sm flex flex-wrap items-baseline gap-x-4 gap-y-1">
       <span>
-        <span className="kind-label kind-fact">{t('drawer.legend.fact')}</span> <span className="text-ink-2">{t('report.legend.fact')}</span>
+        <KindLabel kind="fact" /> <span className="text-text-2">{t('report.legend.fact')}</span>
       </span>
       <span>
-        <span className="kind-label kind-inference">{t('drawer.legend.inference')}</span> <span className="text-ink-2">{t('report.legend.inference')}</span>
+        <KindLabel kind="inference" /> <span className="text-text-2">{t('report.legend.inference')}</span>
       </span>
       <span>
-        <span className="kind-label kind-gap">{t('drawer.legend.gap')}</span> <span className="text-ink-2">{t('report.legend.gap')}</span>
+        <KindLabel kind="gap" /> <span className="text-text-2">{t('report.legend.gap')}</span>
       </span>
       <a
         href="#subj-method"
@@ -228,11 +235,11 @@ function ChangeGroup({ title, mark, children, n }: { title: string; mark: string
   return (
     <div className="min-w-0">
       <h4 className="flex items-baseline gap-2">
-        <span className="num text-md text-ink-2 w-4 text-center" aria-hidden>
+        <span className="m-num text-md text-text-2 w-4 text-center" aria-hidden>
           {mark}
         </span>
         <span className="text-base font-semibold">{title}</span>
-        <span className="tnum text-ink-2">{n}</span>
+        <span className="m-num text-text-2">{n}</span>
       </h4>
       <ul role="list" className="mt-1 ml-6 flex flex-col gap-2">
         {children}
@@ -249,7 +256,11 @@ function WhatChanged({ c }: { c: Candidate }) {
   const report = c.report
   // after a goal switch, bring the panel into view (it sits right under the goal bar)
   useEffect(() => {
-    if (rd && !rd.hidden) ref.current?.scrollIntoView({ block: 'nearest', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    if (!rd || rd.hidden) return
+    ref.current?.scrollIntoView({ block: 'nearest', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    // one soft pulse once the scroll has brought it into view
+    const tm = window.setTimeout(() => flash(ref.current), 320)
+    return () => window.clearTimeout(tm)
   }, [rd?.at]) // eslint-disable-line react-hooks/exhaustive-deps
   if (!rd || rd.candidateId !== c.id || rd.hidden) return null
   const d = rd.diff
@@ -269,7 +280,7 @@ function WhatChanged({ c }: { c: Candidate }) {
   const ItemRow = ({ id, from, extra, show = true }: { id: string; from: 'now' | 'before'; extra?: ReactNode; show?: boolean }) => (
     <li className="text-sm">
       <RichText text={text(id, from)} />
-      {extra && <span className="text-ink-2"> · {extra}</span>}
+      {extra && <span className="text-text-2"> · {extra}</span>}
       {show && (now.has(id) || claimNow.has(id)) && (
         <>
           {' '}
@@ -289,14 +300,14 @@ function WhatChanged({ c }: { c: Candidate }) {
   const qa = d.questions_added ?? []
   const qr = d.questions_removed ?? []
   return (
-    <section ref={ref} id="what-changed" className="changed mx-4 mt-4" aria-labelledby="changed-h" data-testid="what-changed">
+    <section ref={ref} id="what-changed" className="changed m-enter mx-4 md:mx-6 mt-6" aria-labelledby="changed-h" data-testid="what-changed">
       <div className="flex items-start gap-3 flex-wrap">
         <div className="flex-1 min-w-[220px]">
-          <h3 id="changed-h" className="font-display text-lg font-semibold">
+          <h3 id="changed-h" className="text-sec font-semibold">
             {t('changed.title')}
             <span className="sr-only">: {t('changed.fromTo', { a: goalWord(d.from_goal), b: goalWord(d.to_goal) })}</span>
             <span aria-hidden>
-              : <s className="text-ink-2 decoration-1">{goalWord(d.from_goal)}</s> → {goalWord(d.to_goal)}
+              : <s className="text-text-2 decoration-1">{goalWord(d.from_goal)}</s> → {goalWord(d.to_goal)}
             </span>
           </h3>
           <p className="text-base mt-1">
@@ -315,7 +326,7 @@ function WhatChanged({ c }: { c: Candidate }) {
           {t('changed.dismiss')}
         </button>
       </div>
-      <div className="grid gap-4 mt-3 md:grid-cols-2">
+      <div className="grid gap-4 mt-3 md:grid-cols-2 m-stagger">
         <ChangeGroup title={t('changed.movedUp')} mark="↑" n={movedUp.length}>
           {movedUp.map((id) => (
             <ItemRow key={id} id={id} from="now" extra={`${tierWord(tierOf(before, id))} → ${tierWord(tierOf(now, id))}`} />
@@ -347,7 +358,7 @@ function WhatChanged({ c }: { c: Candidate }) {
             return (
               <li key={ch.id} className="text-sm">
                 <RichText text={text(ch.id, 'now')} />
-                <span className="block text-ink-2">
+                <span className="block text-text-2">
                   {ch.tier && ch.tier[0] !== ch.tier[1] && <>{t('changed.claim.tier', { a: tierWord(ch.tier[0]), b: tierWord(ch.tier[1]) })} · </>}
                   {sameStatus ? t('changed.claim.sameStatus') : t('changed.claim.status', { a: statusWord(ch.status![0]), b: statusWord(ch.status![1]) })}
                 </span>
@@ -364,7 +375,7 @@ function WhatChanged({ c }: { c: Candidate }) {
           {(d.checks_changed ?? []).map((ch) => (
             <li key={ch.criterion_id} className="text-sm">
               <span className="font-medium">{crit[ch.criterion_id] ? pick(crit[ch.criterion_id].label, lang) : ch.criterion_id}</span>
-              <span className="text-ink-2">
+              <span className="text-text-2">
                 {' '}
                 {checkWord(ch.status[0])} → {checkWord(ch.status[1])}
               </span>
@@ -374,7 +385,7 @@ function WhatChanged({ c }: { c: Candidate }) {
         <ChangeGroup title={t('changed.questions')} mark="?" n={qa.length + qr.length}>
           {qa.map((q, i) => (
             <li key={`a${i}`} className="text-sm">
-              <span className="num text-ink-2 mr-1" aria-hidden>
+              <span className="m-num text-text-2 mr-1" aria-hidden>
                 +
               </span>
               <span className="sr-only">{t('changed.addedSr')} </span>
@@ -382,8 +393,8 @@ function WhatChanged({ c }: { c: Candidate }) {
             </li>
           ))}
           {qr.map((q, i) => (
-            <li key={`r${i}`} className="text-sm text-ink-2">
-              <span className="num mr-1" aria-hidden>
+            <li key={`r${i}`} className="text-sm text-text-2">
+              <span className="m-num mr-1" aria-hidden>
                 −
               </span>
               <span className="sr-only">{t('changed.removedSr')} </span>
@@ -403,7 +414,7 @@ function WhatChanged({ c }: { c: Candidate }) {
             onClick={(e) => {
               e.preventDefault()
               const el = document.getElementById('subj-outreach')
-              el?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+              el?.scrollIntoView({ block: 'start', behavior: motionInstant() ? 'auto' : 'smooth' })
               el?.focus({ preventScroll: true })
             }}
           >
@@ -411,7 +422,7 @@ function WhatChanged({ c }: { c: Candidate }) {
           </a>
         </p>
       )}
-      <p className="mt-3 text-sm text-ink-2 italic">{t('changed.noFetch')}</p>
+      <p className="mt-3 text-sm text-text-2 italic">{t('changed.noFetch')}</p>
     </section>
   )
 }
@@ -446,19 +457,19 @@ function ChecksList({ c, report }: { c: Candidate | null; report: Report | null 
   const anchorFor = (f?: Finding) => (f && !anchored.has(f.id) ? (anchored.add(f.id), true) : false)
   return (
     <section className="checks" aria-labelledby="checks-h">
-      <h3 id="checks-h" className="font-display text-lg font-semibold">
+      <h3 id="checks-h" className="text-sec font-semibold">
         {t('subject.checks.title')}
       </h3>
-      {results.length > 0 && <p className="text-sm text-ink-2 mt-1 tnum">{t('subject.checks.counts', { pass: counts.pass, fail: counts.fail, unknown: counts.unknown })}</p>}
-      <p className="text-sm text-ink-2 italic mt-1">{t('subject.noElim')}</p>
-      {results.length === 0 && <p className="text-base text-ink-2 mt-3">{t('subject.checks.wait')}</p>}
+      {results.length > 0 && <p className="text-sm text-text-2 mt-1 m-num">{t('subject.checks.counts', { pass: counts.pass, fail: counts.fail, unknown: counts.unknown })}</p>}
+      <p className="text-sm text-text-2 italic mt-1">{t('subject.noElim')}</p>
+      {results.length === 0 && <p className="text-base text-text-2 mt-3">{t('subject.checks.wait')}</p>}
       {rounds.map((round) => {
         const rs = byRound.get(round) ?? []
         const pending = enabled.filter((x) => x.round === round && !rs.some((r) => r.criterion_id === x.id))
         if (!rs.length && !pending.length) return null
         return (
           <div key={round} className="mt-3">
-            <h4 className="smallcaps !text-ink-2">
+            <h4 className="smallcaps">
               {t('criteria.round', { n: round })} · {t(`round.${round}` as I18nKey)}
             </h4>
             <ul role="list" className="mt-1">
@@ -467,15 +478,13 @@ function ChecksList({ c, report }: { c: Candidate | null; report: Report | null 
               ))}
               {results.length > 0 &&
                 pending.map((x) => (
-                  <li key={x.id} className="check-row text-ink-3">
-                    <span className="crit-mark" aria-hidden>
-                      ·
+                  <li key={x.id} className="check-row !grid-cols-[minmax(0,1fr)] text-text-2">
+                    <span className="text-base leading-snug flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                      <span className="flex-none self-start inline-flex items-center rounded-[4px] border border-dashed border-[color:var(--field)] px-1.5 py-0.5 text-[13px] leading-[18px] font-medium text-text-2">
+                        {t('subject.checks.pending')}
+                      </span>
+                      <span className="min-w-0">{pick(x.label, lang)}</span>
                     </span>
-                    <span className="text-sm">
-                      {pick(x.label, lang)}
-                      <span className="sr-only">: {t('subject.checks.pending')}</span>
-                    </span>
-                    <span />
                   </li>
                 ))}
             </ul>
@@ -497,17 +506,17 @@ function CheckRow({ r, cr, change, f, anchor }: { r: CriterionResult; cr?: Crite
   const showValue = !!value && !same(value, label)
   const showThreshold = !!threshold && !same(threshold, value)
   return (
-    <li id={f && anchor ? itemDomId('subj', f.id) : undefined} tabIndex={f && anchor ? -1 : undefined} className={`check-row scroll-mt-16 ${change ? 'is-changed' : ''}`}>
-      <CritIcon status={r.status} waived={r.waived} label={label} />
+    <li id={f && anchor ? itemDomId('subj', f.id) : undefined} tabIndex={f && anchor ? -1 : undefined} className={`check-row scroll-mt-16 !grid-cols-[minmax(0,1fr)_auto] ${change ? 'is-changed' : ''}`}>
       <div className="min-w-0">
-        <div className="text-base leading-snug">
-          {label}
+        <div className="text-base leading-snug flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <StatusTag status={r.status} waived={r.waived} label={label} className="flex-none self-start" />
+          <span className="min-w-0">{label}</span>
           {change && (
             <>
               <span className="changed-tag" title={t('subject.checks.changedTitle', { a: word(change[0]), b: word(change[1]) })}>
                 {t('subject.checks.changed')}
               </span>
-              <span className="text-sm text-ink-2 ml-1">
+              <span className="text-sm text-text-2 ml-1">
                 <span className="sr-only">: </span>
                 {word(change[0])} → {word(change[1])}
               </span>
@@ -515,10 +524,10 @@ function CheckRow({ r, cr, change, f, anchor }: { r: CriterionResult; cr?: Crite
           )}
         </div>
         {(showValue || showThreshold) && (
-          <div className="text-sm text-ink-2">
+          <div className="text-sm text-text-2">
             {showValue && <RichText text={value} />}
             {showThreshold && (
-              <span className="text-ink-3">
+              <span className="text-text-3">
                 {showValue && ' · '}
                 {t('card.threshold')}: {threshold}
               </span>
@@ -558,7 +567,7 @@ function NotFound() {
       ? t('subject.notFound.offlineBody', { h })
       : t('subject.notFound.body', { h, tried })
   return (
-    <div className="px-4 py-5" data-testid="subject-not-found">
+    <div className="px-4 md:px-6 py-5" data-testid="subject-not-found">
       {/* the stepper status line above already says "Profile not found": here what was tried and what next */}
       <p className="text-base">{body}</p>
       <div className="mt-4 max-w-[520px]">
@@ -576,7 +585,7 @@ function Interrupted() {
   if (!subj) return null
   const preset = presetOf(state.criteria?.brief) ?? 'bakery'
   return (
-    <div className="mx-4 mt-4 border border-dashed border-ink-2 rounded-sm px-4 py-3" role="alert">
+    <div className="mx-4 md:mx-6 mt-4 border border-dashed border-[var(--field)] rounded-[var(--r-control)] bg-[var(--surface)] px-4 py-3" role="alert">
       <p className="text-base">{t('subject.interrupted.body')}</p>
       <button
         type="button"
@@ -610,7 +619,7 @@ export function SubjectBoard() {
   const report = c?.report ?? null
   const notFound = state.subject?.status === 'not_found'
   return (
-    <section id="subject" className="panel subject-wrap" aria-labelledby="subject-h" data-testid="subject-board">
+    <section id="subject" className="panel panel-flush subject-wrap" aria-labelledby="subject-h" data-testid="subject-board">
       <SubjectHeader c={c} />
       {notFound ? (
         <NotFound />
@@ -619,7 +628,7 @@ export function SubjectBoard() {
           {state.interrupted && !report && <Interrupted />}
           <GoalBar report={report} />
           {c && <WhatChanged c={c} />}
-          <div className="subject-grid px-4 pt-4 pb-6">
+          <div className="subject-grid px-4 md:px-6 pt-6 pb-8">
             <div className="[grid-area:verdict] min-w-0 flex flex-col gap-4">
               {report ? (
                 <>
@@ -627,7 +636,7 @@ export function SubjectBoard() {
                   <SummaryLine report={report} />
                 </>
               ) : (
-                <p className="text-base text-ink-2 italic">{t('subject.reportWait')}</p>
+                <p className="text-base text-text-2 italic">{t('subject.reportWait')}</p>
               )}
             </div>
             <div className="checks-col [grid-area:checks] min-w-0">
@@ -644,7 +653,7 @@ export function SubjectBoard() {
               </div>
             </div>
             {report && (
-              <div className="[grid-area:report] min-w-0 flex flex-col gap-8">
+              <div className="[grid-area:report] min-w-0 flex flex-col gap-8 m-enter">
                 <div>
                   <h3 className="dossier-h mb-3">{t('report.ranked')}</h3>
                   <RankedFindings report={report} skipGoal idPrefix="subj" />
@@ -661,7 +670,7 @@ export function SubjectBoard() {
                     <ol role="list" className="flex flex-col gap-2 list-none p-0 m-0" data-testid="questions">
                       {report.questions.map((q, i) => (
                         <li key={i} className="grid grid-cols-[28px_1fr] gap-2 text-base">
-                          <span className="font-display italic text-ink-3 text-lg leading-6" aria-hidden>
+                          <span className="m-num font-semibold text-text-3 text-md" aria-hidden>
                             {i + 1}.
                           </span>
                           <span>
@@ -677,7 +686,7 @@ export function SubjectBoard() {
                   <Outreach
                     draft={report.outreach_draft}
                     conflict={report.claims.some((k) => k.status === 'conflicts_with_record')}
-                    onCheck={() => document.getElementById('subj-claims')?.scrollIntoView({ block: 'start', behavior: 'smooth' })}
+                    onCheck={() => document.getElementById('subj-claims')?.scrollIntoView({ block: 'start', behavior: motionInstant() ? 'auto' : 'smooth' })}
                   />
                 </div>
                 {(report.method?.length || Object.keys(report.text_source ?? {}).length) ? (
@@ -700,23 +709,23 @@ export function SubjectBoard() {
                       <h4 className="smallcaps mb-2">{t('report.skeptic')}</h4>
                       <ul role="list" className="flex flex-col gap-2">
                         {report.skeptic_notes.map((n, i) => (
-                          <li key={i} className="text-base text-ink-2 border-l-2 border-ink-3 pl-3">
+                          <li key={i} className="text-base text-text-2 border-l-2 border-line-strong pl-3">
                             <RichText text={pick(n, lang)} />
                           </li>
                         ))}
                       </ul>
                     </div>
                   )}
-                  <div className="mt-4 border border-dashed border-rule-strong rounded-sm px-4 py-3 flex items-center gap-4">
-                    <span className="counter">{report.sensitive_filtered}</span>
+                  <div className="mt-4 border border-dashed border-line-strong rounded-sm px-4 py-3 flex items-center gap-4">
+                    <span className="text-num font-semibold m-num">{report.sensitive_filtered}</span>
                     <div>
-                      <h4 className="smallcaps !text-ink-2">{t('report.sensitive')}</h4>
-                      <p className="text-sm text-ink-2">{t('report.sensitive.value', { n: report.sensitive_filtered })}</p>
+                      <h4 className="smallcaps">{t('report.sensitive')}</h4>
+                      <p className="text-sm text-text-2">{t('report.sensitive.value', { n: report.sensitive_filtered })}</p>
                     </div>
                   </div>
                 </div>
                 {c && c.profile?.source?.mode === 'mock' && (
-                  <p className="text-sm text-ink-2">
+                  <p className="text-sm text-text-2">
                     <MockTag /> {t('header.status.trust.mock')}
                   </p>
                 )}

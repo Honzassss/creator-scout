@@ -1,9 +1,9 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useApp } from '../store'
 import { lastFinishedRound } from '../state'
 import { fmtCompact, fmtDate, fmtNum, fmtPct, pick, type I18nKey } from '../i18n'
 import type { Candidate, Criterion, CriterionResult } from '../types'
-import { CritIcon, MockTag, Sourced, Toggle, focusSoon } from './primitives'
+import { Handle, MockTag, Sourced, StatusTag, Toggle, focusSoon } from './primitives'
 
 const COLLAB_KINDS = new Set(['coauthor', 'paid_label', 'meta_branded', 'ad_hashtag', 'discount_code', 'affiliate_link'])
 
@@ -93,6 +93,30 @@ function useNarrow() {
   return narrow
 }
 
+/** Whether a horizontally scrollable box has more content to its left / right (for the edge shadows). */
+function useScrollEdges(ref: React.RefObject<HTMLDivElement | null>, deps: unknown) {
+  const [edges, setEdges] = useState({ left: false, right: false })
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => {
+      const left = el.scrollLeft > 1
+      const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 1
+      setEdges((e) => (e.left === left && e.right === right ? e : { left, right }))
+    }
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null
+    ro?.observe(el)
+    if (el.firstElementChild) ro?.observe(el.firstElementChild)
+    return () => {
+      el.removeEventListener('scroll', update)
+      ro?.disconnect()
+    }
+  }, [ref, deps])
+  return edges
+}
+
 export function Compare() {
   const { state, t, lang, openCandidate } = useApp()
   const [sortId, setSortId] = useState('')
@@ -100,6 +124,7 @@ export function Compare() {
   const [onlyDiffPref, setOnlyDiff] = useState<boolean | null>(null)
   const narrow = useNarrow()
   const sortSel = useId()
+  const scroller = useRef<HTMLDivElement>(null)
 
   const criteria = useMemo(() => (state.criteria?.criteria ?? []).filter((c) => c.enabled), [state.criteria])
 
@@ -123,6 +148,8 @@ export function Compare() {
     }
     return list
   }, [state, criteria, sortId, desc])
+
+  const edges = useScrollEdges(scroller, `${narrow}:${rows.length}`)
 
   // hidden until there are finalists (empty state)
   if (rows.length === 0) return null
@@ -168,35 +195,58 @@ export function Compare() {
 
   const cell = (c: Candidate, cr: Criterion) => {
     const r = result(c, cr)
-    if (!r) return <span className="text-ink-3">{t('card.noData')}</span>
+    if (!r)
+      // not checked for this finalist (e.g. not vetted yet): its own dashed neutral tag, glyph + words, never 'cannot verify'
+      return (
+        <span className="inline-flex items-center gap-1.5 rounded-[4px] border border-dashed border-[color:var(--field,#6F8794)] px-1.5 py-0.5 text-[13px] leading-[18px] font-medium text-[var(--text-2,#435965)]">
+          <span aria-hidden>–</span>
+          {t('subject.checks.pending')}
+        </span>
+      )
     const full = pick(r.value, lang)
+    // status (icon + word on a small tint) first, the comparable value under it; the value opens its sources
     return (
-      <div className="flex items-start gap-1">
-        <CritIcon status={r.status} waived={r.waived} label={label(cr)} />
-        <Sourced sources={r.sources} caption={`${label(cr)}: ${full}`} className="clamp-2 min-w-0 tnum">
+      <div className="flex min-w-0 flex-col items-start gap-1">
+        <StatusTag status={r.status} waived={r.waived} label={label(cr)} />
+        <Sourced sources={r.sources} caption={`${label(cr)}: ${full}`} className="min-w-0 tnum [overflow-wrap:anywhere]">
           {short(c, cr, r)}
         </Sourced>
       </div>
     )
   }
 
+  const handleOf = (c: Candidate) => c.profile?.handle ?? c.ref.handle
+  const sortedCr = criteria.find((c) => c.id === sortId)
+  const dirWord = desc ? t('compare.desc') : t('compare.asc')
+  /** Marker on the row the owner sorts by: says it is their choice of order, not a rating. */
+  const sortMark = (cr: Criterion) =>
+    sortId === cr.id ? (
+      <span className="mt-1 flex items-center gap-1 text-[12px] leading-4 font-medium text-[var(--accent,#086B68)]">
+        <span aria-hidden>{desc ? '↓' : '↑'}</span>
+        {t('compare.sort')} · {dirWord}
+      </span>
+    ) : null
+
+  const COL_CRIT = 208
+  const COL_MIN = 176
+
   return (
-    <section id="compare" className="panel" aria-labelledby="compare-h" data-testid="compare">
-      <div className="flex items-end justify-between gap-3 px-4 pt-3 pb-3 flex-wrap">
-        <div>
-          <h2 id="compare-h" className="font-display text-lg font-semibold">
+    <section id="compare" className="panel !p-0 min-w-0 max-w-full overflow-hidden" aria-labelledby="compare-h" data-testid="compare">
+      <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3 p-4 md:p-6 md:pb-4">
+        <div className="min-w-0 max-w-[62ch]">
+          <h2 id="compare-h" className="text-[20px] leading-7 font-semibold text-[var(--text,#182C36)]">
             {t('compare.title')}
           </h2>
-          <p className="text-sm text-ink-2 mt-1">{t('compare.note')}</p>
+          <p className="mt-1 text-[13px] leading-[18px] text-[var(--text-2,#435965)]">{t('compare.note')}</p>
         </div>
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           {diffCount > 0 ? (
-            <>
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Toggle checked={onlyDiff} onChange={(v) => setOnlyDiff(v)} label={`${t('compare.onlyDiff')} (${diffCount})`} />
               {onlyDiff && (
                 <button
                   type="button"
-                  className="btn-link text-sm"
+                  className="btn-link text-[13px] max-md:min-h-11"
                   onClick={() => {
                     setOnlyDiff(false)
                     // this link unmounts: focus stays in the controls, on the switch it just changed
@@ -206,19 +256,19 @@ export function Compare() {
                   {t('compare.showAll', { n: criteria.length })}
                 </button>
               )}
-            </>
+            </span>
           ) : (
-            <span className="text-sm text-ink-2">{t('compare.noDiff')}</span>
+            <span className="text-[13px] leading-[18px] text-[var(--text-2,#435965)]">{t('compare.noDiff')}</span>
           )}
-          <span className="flex items-center gap-2">
-            <label className="text-sm text-ink-2" htmlFor={sortSel}>
+          <span className="flex flex-wrap items-center gap-2">
+            <label className="text-[13px] leading-[18px] text-[var(--text-2,#435965)]" htmlFor={sortSel}>
               {t('compare.sort')}
             </label>
             <select
               id={sortSel}
               data-testid="compare-sort"
               name="sort"
-              className="field !w-auto !min-h-8 !py-1 text-sm"
+              className="field !w-auto max-w-[260px] text-[14px] max-md:!min-h-11"
               value={sortId}
               onChange={(e) => {
                 const id = e.target.value
@@ -235,8 +285,8 @@ export function Compare() {
               ))}
             </select>
             {sortId && (
-              <button type="button" className="btn btn-sm" data-testid="compare-sort-dir" onClick={() => setDesc((v) => !v)} aria-label={t('compare.dirLabel', { dir: desc ? t('compare.desc') : t('compare.asc') })}>
-                <span aria-hidden>{desc ? '↓' : '↑'}</span> {desc ? t('compare.desc') : t('compare.asc')}
+              <button type="button" className="btn !min-h-10 max-md:!min-h-11" data-testid="compare-sort-dir" onClick={() => setDesc((v) => !v)} aria-label={t('compare.dirLabel', { dir: dirWord })}>
+                <span aria-hidden>{desc ? '↓' : '↑'}</span> {dirWord}
               </button>
             )}
           </span>
@@ -244,31 +294,35 @@ export function Compare() {
       </div>
 
       {narrow ? (
-        // phones: one card per criterion, finalists listed under it
-        <div className="px-4 pb-4 flex flex-col gap-3 border-t border-rule pt-3" data-testid="compare-table">
+        // phones: one block per criterion, finalists listed under it (the whole page stays one column)
+        <div className="flex flex-col gap-4 border-t border-[var(--line,#DCE4E8)] p-4" data-testid="compare-table">
           <ul role="list" className="flex flex-wrap gap-2">
             {rows.map((c) => (
-              <li key={c.id}>
-                <button type="button" className="btn btn-sm" onClick={() => openCandidate(c.id)}>
-                  <span translate="no" className={c.status === 'eliminated' ? 'elim-id' : ''}>
-                    @{c.profile?.handle ?? c.ref.handle}
+              <li key={c.id} className="min-w-0 max-w-full">
+                <button type="button" className="btn btn-sm min-h-11 max-w-full !whitespace-normal text-left" onClick={() => openCandidate(c.id)}>
+                  <span translate="no" className={`font-semibold [overflow-wrap:anywhere] ${c.status === 'eliminated' ? 'elim-id' : ''}`}>
+                    <Handle handle={handleOf(c)} />
                   </span>
-                  {c.report && <span className="text-ink-3">· {t('funnel.openDossier')}</span>}
+                  {c.report && <span className="font-normal text-[var(--text-2,#435965)]">· {t('funnel.openDossier')}</span>}
                 </button>
               </li>
             ))}
           </ul>
           {groups.map((g) => (
             <div key={g.round} className="flex flex-col gap-2">
-              <h3 className="smallcaps !text-ink-2">{t('compare.group', { n: g.round, name: t(`round.${g.round}` as I18nKey) })}</h3>
+              <h3 className="text-[12px] leading-4 font-semibold uppercase tracking-[0.04em] text-[var(--text-3,#5F717B)]">{t('compare.group', { n: g.round, name: t(`round.${g.round}` as I18nKey) })}</h3>
               {g.list.map((cr) => (
-                <div key={cr.id} className={`sheet p-3 ${sortId === cr.id ? '!bg-accent-soft' : ''}`}>
-                  <h4 className="text-base font-semibold">{label(cr)}</h4>
-                  <ul role="list" className="mt-2 flex flex-col gap-2">
+                <div
+                  key={cr.id}
+                  className={`rounded-[12px] border bg-[var(--surface,#FFFFFF)] p-4 ${sortId === cr.id ? 'border-[var(--accent,#086B68)]' : 'border-[var(--line,#DCE4E8)]'}`}
+                >
+                  <h4 className="text-[15px] leading-[22px] font-semibold text-[var(--text,#182C36)]">{label(cr)}</h4>
+                  {sortMark(cr)}
+                  <ul role="list" className="mt-3 flex flex-col divide-y divide-[var(--line,#DCE4E8)]">
                     {rows.map((c) => (
-                      <li key={c.id} className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                        <span translate="no" title={`@${c.profile?.handle ?? c.ref.handle}`} className={`font-medium truncate ${c.status === 'eliminated' ? 'elim-id' : ''}`}>
-                          @{c.profile?.handle ?? c.ref.handle}
+                      <li key={c.id} className="grid grid-cols-[minmax(0,40%)_minmax(0,1fr)] gap-3 py-2 text-[14px] leading-5 first:pt-0 last:pb-0">
+                        <span translate="no" title={`@${handleOf(c)}`} className={`font-semibold [overflow-wrap:anywhere] ${c.status === 'eliminated' ? 'elim-id' : ''}`}>
+                          <Handle handle={handleOf(c)} />
                         </span>
                         {cell(c, cr)}
                       </li>
@@ -280,55 +334,104 @@ export function Compare() {
           ))}
         </div>
       ) : (
-        <div className="relative overflow-x-auto scroll-thin border-t border-rule">
-          <table className="ctable" data-testid="compare-table">
-            <thead>
-              <tr>
-                <th className="min-w-[200px] !left-0 !z-[2]" style={{ position: 'sticky' }} scope="col">
-                  {t('compare.criterion')}
-                </th>
-                {rows.map((c) => {
-                  const handle = c.profile?.handle ?? c.ref.handle
-                  const elim = c.status === 'eliminated'
-                  return (
-                    <th key={c.id} className="min-w-[164px]" scope="col">
-                      <button type="button" className={`text-left hover:text-accent min-h-6 ${elim ? 'elim-id' : ''}`} onClick={() => openCandidate(c.id)}>
-                        <span className="text-base font-semibold text-ink" translate="no">
-                          @{handle}
-                        </span>
-                      </button>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className="meta">{fmtCompact(c.profile?.followers, lang)}</span>
-                        {(c.profile?.source?.mode ?? c.ref.source?.mode) === 'mock' && <MockTag />}
-                      </div>
-                      {c.report && (
-                        <button type="button" className="btn btn-sm mt-2 font-normal" onClick={() => openCandidate(c.id)}>
-                          <span aria-hidden>▤</span> {t('funnel.openDossier')}
+        // desktop: the table scrolls inside this box (both ways); header row and criterion column stay put
+        <div className="relative min-w-0 border-t border-[var(--line,#DCE4E8)]">
+          <div
+            ref={scroller}
+            className="scroll-thin max-h-[min(75vh,820px)] max-w-full overflow-auto focus-visible:outline-offset-[-2px]"
+            role="region"
+            aria-label={`${t('compare.title')}: ${t('ui.table.scrollHint')}`}
+            tabIndex={0}
+          >
+            <table
+              data-testid="compare-table"
+              className="w-full table-fixed border-separate border-spacing-0 bg-[var(--surface,#FFFFFF)] text-[14px] leading-5 text-[var(--text,#182C36)] tnum"
+              style={{ minWidth: COL_CRIT + rows.length * COL_MIN, maxWidth: COL_CRIT + rows.length * 360 }}
+            >
+              <colgroup>
+                <col style={{ width: COL_CRIT }} />
+                {rows.map((c) => (
+                  <col key={c.id} />
+                ))}
+              </colgroup>
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    className="sticky top-0 left-0 z-[3] border-r border-b border-[var(--line,#DCE4E8)] bg-[var(--bg,#F3F6F8)] px-4 py-3 text-left align-bottom text-[12px] leading-4 font-semibold uppercase tracking-[0.04em] text-[var(--text-3,#5F717B)]"
+                  >
+                    {t('compare.criterion')}
+                  </th>
+                  {rows.map((c) => {
+                    const elim = c.status === 'eliminated'
+                    return (
+                      <th key={c.id} scope="col" className="sticky top-0 z-[2] border-b border-[var(--line,#DCE4E8)] bg-[var(--bg,#F3F6F8)] px-4 py-3 text-left align-top font-normal">
+                        <button
+                          type="button"
+                          className={`min-h-6 max-w-full rounded-[4px] text-left text-[16px] leading-[22px] font-semibold text-[var(--text,#182C36)] [overflow-wrap:anywhere] hover:text-[var(--accent,#086B68)] ${elim ? 'elim-id' : ''}`}
+                          onClick={() => openCandidate(c.id)}
+                        >
+                          <span translate="no">
+                            <Handle handle={handleOf(c)} />
+                          </span>
                         </button>
-                      )}
-                      {elim && c.elimination && <div className="text-sm text-ink-2 mt-1 font-normal">{t('compare.eliminated', { n: c.elimination.round })}</div>}
-                    </th>
-                  )
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((g) => (
-                <GroupRows key={g.round} round={g.round} n={rows.length + 1}>
-                  {g.list.map((cr) => (
-                    <tr key={cr.id} className={sortId === cr.id ? 'is-sorted' : ''}>
-                      <th scope="row">
-                        <span className="text-sm">{label(cr)}</span>
+                        <div className="mt-1 flex flex-wrap items-center gap-2 text-[12px] leading-4 text-[var(--text-3,#5F717B)] tnum">
+                          <span>{t('card.followersN', { n: fmtCompact(c.profile?.followers, lang) })}</span>
+                          {(c.profile?.source?.mode ?? c.ref.source?.mode) === 'mock' && <MockTag />}
+                        </div>
+                        {elim && c.elimination && <div className="mt-1 text-[13px] leading-[18px] text-[var(--text-2,#435965)]">{t('compare.eliminated', { n: c.elimination.round })}</div>}
+                        {c.report && (
+                          <button type="button" className="btn btn-sm mt-2" onClick={() => openCandidate(c.id)}>
+                            {t('funnel.openDossier')}
+                          </button>
+                        )}
                       </th>
-                      {rows.map((c) => (
-                        <td key={c.id}>{cell(c, cr)}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </GroupRows>
-              ))}
-            </tbody>
-          </table>
+                    )
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {groups.map((g) => (
+                  <GroupRows key={g.round} round={g.round} n={rows.length + 1}>
+                    {g.list.map((cr) => {
+                      const on = sortId === cr.id
+                      return (
+                        <tr key={cr.id}>
+                          <th
+                            scope="row"
+                            className={`sticky left-0 z-[1] h-14 border-r border-b border-[var(--line,#DCE4E8)] px-4 py-3 text-left align-top font-medium ${
+                              on ? 'bg-[var(--accent-tint,#E4F3F0)] shadow-[inset_3px_0_0_var(--accent,#086B68)]' : 'bg-[var(--surface,#FFFFFF)]'
+                            }`}
+                          >
+                            <span className="[overflow-wrap:anywhere]">{label(cr)}</span>
+                            {sortMark(cr)}
+                          </th>
+                          {rows.map((c) => (
+                            <td key={c.id} className="h-14 border-b border-[var(--line,#DCE4E8)] px-4 py-3 align-top">
+                              {cell(c, cr)}
+                            </td>
+                          ))}
+                        </tr>
+                      )
+                    })}
+                  </GroupRows>
+                ))}
+              </tbody>
+            </table>
+            <span className="sr-only" aria-live="polite">
+              {sortedCr ? `${t('compare.sort')}: ${label(sortedCr)}, ${dirWord}` : ''}
+            </span>
+          </div>
+          {/* edge shadows: more finalists to the side (static, only opacity changes) */}
+          <span
+            aria-hidden
+            className={`pointer-events-none absolute top-0 bottom-0 z-[4] w-3 bg-gradient-to-r from-[rgba(24,44,54,.10)] to-transparent transition-opacity duration-[var(--dur-2,200ms)] ${edges.left ? 'opacity-100' : 'opacity-0'}`}
+            style={{ left: COL_CRIT }}
+          />
+          <span
+            aria-hidden
+            className={`pointer-events-none absolute top-0 right-0 bottom-0 z-[4] w-6 bg-gradient-to-l from-[rgba(24,44,54,.12)] to-transparent transition-opacity duration-[var(--dur-2,200ms)] ${edges.right ? 'opacity-100' : 'opacity-0'}`}
+          />
         </div>
       )}
     </section>
@@ -339,9 +442,12 @@ function GroupRows({ round, n, children }: { round: number; n: number; children:
   const { t } = useApp()
   return (
     <>
-      <tr className="group-row">
-        <th colSpan={n} scope="colgroup" className="smallcaps !text-ink-2 text-left" style={{ position: 'static' }}>
-          {t('compare.group', { n: round, name: t(`round.${round}` as I18nKey) })}
+      <tr>
+        <th colSpan={n} scope="colgroup" className="border-b border-[var(--line,#DCE4E8)] bg-[var(--surface,#FFFFFF)] px-0 pt-4 pb-2 text-left">
+          {/* the label stays visible while the table scrolls sideways */}
+          <span className="sticky left-0 inline-block px-4 text-[12px] leading-4 font-semibold uppercase tracking-[0.04em] text-[var(--text-3,#5F717B)]">
+            {t('compare.group', { n: round, name: t(`round.${round}` as I18nKey) })}
+          </span>
         </th>
       </tr>
       {children}

@@ -8,6 +8,7 @@ import type { Anchor, Brief, ChatEvent, Competitor, CriteriaSet, Lang, RunEvent 
 import { createDemoReplay, type DemoController, type DemoStatus } from './dev/demoReplay'
 import { PRESETS, type PresetName } from './lib/presets'
 import { anchorText, parseSubject } from './lib/subject'
+import { DUR, LAG_MAX_MS, createPresenter, flash, motionInstant, whenPresented, type Presenter } from './lib/motion'
 
 const RUN_EVENTS: RunEvent['type'][] = [
   'run.started',
@@ -32,8 +33,43 @@ const RUN_EVENTS: RunEvent['type'][] = [
 let seq = 0
 const uid = (p: string) => `${p}${Date.now().toString(36)}${(++seq).toString(36)}`
 
-export type Theme = 'light' | 'dark' | 'system'
-const THEME_COLOR = { light: '#f2ece0', dark: '#12141a' }
+/** JSON with sorted keys: the same object from the stream and from a snapshot compares equal */
+function stable(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(stable).join(',')}]`
+  if (v && typeof v === 'object') {
+    const o = v as Record<string, unknown>
+    return `{${Object.keys(o)
+      .sort()
+      .map((k) => `${JSON.stringify(k)}:${stable(o[k])}`)
+      .join(',')}}`
+  }
+  return JSON.stringify(v) ?? 'null'
+}
+
+type DiffLike = { candidate_id?: string; id?: string; handle?: string } | string
+const diffIds = (xs: unknown): string[] => (Array.isArray(xs) ? (xs as DiffLike[]).map((x) => (typeof x === 'string' ? x : (x?.candidate_id ?? x?.id ?? x?.handle ?? ''))) : [])
+
+/**
+ * The backend sends every diff and report diff twice: on the run stream and in the HTTP response of
+ * the change. A key per copy, so the second one never reaches the queue (it would hold the stage and,
+ * for report.diff, post a second chat card). The seen keys are cleared when the user starts a change.
+ */
+function copyKey(ev: RunEvent): string | null {
+  const d = ev.data as Record<string, unknown> | undefined
+  if (!d) return null
+  if (ev.type === 'report.diff') {
+    const rd = (d.diff ?? {}) as Record<string, unknown>
+    const goal = (g: unknown) => {
+      const x = (g ?? {}) as Record<string, unknown>
+      return x.brief_key ?? x.business_type ?? null
+    }
+    const summary = (rd.summary ?? {}) as Record<string, unknown>
+    return `rd:${stable([d.candidate_id ?? rd.candidate_id, goal(rd.from_goal), goal(rd.to_goal), summary.en ?? summary.cs ?? null, rd.added, rd.removed, rd.moved_up, rd.moved_down])}`
+  }
+  if (ev.type === 'diff') return `diff:${stable([diffIds(d.dropped), diffIds(d.returned), !!d.pending_fetch, !!d.replaces_pending])}`
+  return null
+}
+const COPY_WINDOW_MS = 30000
 
 function readPref<T extends string>(key: string, fallback: T, allowed: readonly T[]): T {
   try {
@@ -81,8 +117,6 @@ interface Ctx {
   lang: Lang
   setLang: (l: Lang) => void
   t: (key: I18nKey, vars?: Record<string, string | number>) => string
-  theme: Theme
-  setTheme: (t: Theme) => void
   blur: boolean
   setBlur: (b: boolean) => void
   openId: string | null
@@ -154,16 +188,82 @@ const AFFIRMATIVE = /^\s*(yes|yep|yeah|ok|okay|sure|go|go ahead|start|run|do it|
 const criteriaSig = (c: CriteriaSet | null | undefined) =>
   JSON.stringify((c?.criteria ?? []).map((x) => [x.id, x.enabled, x.params]))
 
+// Direct (user-driven) dispatches of these first apply whatever the presentation queue still holds,
+// so a queued event can never land on top of a reset, a run switch, a new subject or a user edit.
+const FLUSH_BEFORE = new Set<Action['type']>(['reset', 'run.id', 'subject.start', 'snapshot', 'restore.local', 'goal.submitted', 'criteria.local', 'recomputing'])
+
 export function AppProvider({ children }: { children: ReactNode }) {
   const params = useMemo(urlParams, [])
   const isDemo = params.get('demo') === '1'
-  const [state, dispatch] = useReducer(reducer, isDemo, initialState)
+  const [state, rawDispatch] = useReducer(reducer, isDemo, initialState)
+  const stateRef = useRef(state)
+  stateRef.current = state
+  // ---------- presentation queue (lib/motion.ts): live events, snapshots, notices, errors and the
+  // demo replay are applied one after another, paced per round; instant under reduced motion,
+  // in a hidden tab, with ?instant=1 and while a stream replays its history ----------
+  const presenterRef = useRef<Presenter<Action> | null>(null)
+  if (!presenterRef.current) {
+    presenterRef.current = createPresenter<Action>(rawDispatch, {
+      instant: isDemo && params.get('instant') === '1',
+      clearExits: (before) => rawDispatch({ type: 'anim.clear', before }),
+      // what moves nothing on screen must not hold the stage (a recompute repeats all of these)
+      quiet: (a) => {
+        if (a.type !== 'event') return false
+        const s = stateRef.current
+        const ev = a.event
+        // round.finished whose numbers did not change
+        if (ev.type === 'round.finished') {
+          const cur = s.rounds.find((x) => x.round === ev.data?.round)
+          return !!cur && stable(cur) === stable(ev.data)
+        }
+        // discovery shows report diffs nowhere (the funnel diff and its goal notice say it)
+        if (ev.type === 'report.diff') return s.mode !== 'subject'
+        // a re-rendered report announced by id only: the snapshot brings it, nothing changes now
+        if (ev.type === 'report.ready') {
+          const id = ev.data?.candidate_id
+          return !!id && !!s.vetDone[id] && !s.vetting[id] && !ev.data?.report
+        }
+        return false
+      },
+    })
+  }
+  const present = presenterRef.current
+  useEffect(() => {
+    const off = present.activate()
+    return () => {
+      off()
+      present.flush()
+    }
+  }, [present])
+  const dispatch = useCallback(
+    (a: Action) => {
+      if (FLUSH_BEFORE.has(a.type)) present.flush()
+      rawDispatch(a)
+    },
+    [present],
+  )
+  const push = present.push
+  // run events from the stream, the chat stream and HTTP bodies: a second copy of a diff is dropped
+  const seenCopies = useRef(new Map<string, number>())
+  const pushEvent = useCallback(
+    (event: RunEvent, runId?: string | null) => {
+      const k = copyKey(event)
+      if (k) {
+        const t = Date.now()
+        const seen = seenCopies.current
+        for (const [key, at] of seen) if (t - at > COPY_WINDOW_MS) seen.delete(key)
+        if (seen.has(k)) return
+        seen.set(k, t)
+      }
+      push({ type: 'event', event, at: Date.now(), runId })
+    },
+    [push],
+  )
   // English by default (the jury reads English); ?lang=cs|en wins over a saved preference
   const [lang, setLangState] = useState<Lang>(() => {
     const q = params.get('lang')
     return q === 'cs' || q === 'en' ? q : readPref<Lang>('cs.lang', 'en', ['cs', 'en'])
   })
-  const [theme, setThemeState] = useState<Theme>(() => readPref<Theme>('cs.theme', 'system', ['light', 'dark', 'system']))
   const [blur, setBlur] = useState(false)
   // ?c=<candidateId> keeps the open dossier in the URL (reload reopens it)
   const [openId, setOpenId] = useState<string | null>(() => params.get('c'))
@@ -186,8 +286,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     [setChatCollapsed],
   )
-  const stateRef = useRef(state)
-  stateRef.current = state
   const langRef = useRef(lang)
   langRef.current = lang
 
@@ -204,31 +302,25 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // a ?lang= left in the URL would undo this choice on reload
     setParam('lang', null)
   }, [])
-  const setTheme = useCallback((th: Theme) => {
-    setThemeState(th)
-    writePref('cs.theme', th)
-  }, [])
 
   useEffect(() => {
     document.documentElement.lang = lang
   }, [lang])
   useEffect(() => {
-    const root = document.documentElement
-    if (theme === 'system') root.removeAttribute('data-theme')
-    else root.setAttribute('data-theme', theme)
-    // browser chrome follows the chosen theme too, not only the OS setting
-    for (const m of Array.from(document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'))) {
-      const darkMeta = (m.getAttribute('media') ?? '').includes('dark')
-      const dark = theme === 'system' ? darkMeta : theme === 'dark'
-      m.setAttribute('content', dark ? THEME_COLOR.dark : THEME_COLOR.light)
+    // light theme only (spec 1): drop any saved theme preference from the old dark-mode builds
+    document.documentElement.removeAttribute('data-theme')
+    try {
+      localStorage.removeItem('cs.theme')
+    } catch {
+      /* storage blocked */
     }
-  }, [theme])
+  }, [])
 
   // ---------- demo replay ----------
   const demoRef = useRef<DemoController | null>(null)
   if (isDemo && !demoRef.current) {
     const sc = params.get('scenario')
-    demoRef.current = createDemoReplay(dispatch, {
+    demoRef.current = createDemoReplay(push, {
       speed: Number(params.get('speed')) || 1,
       instant: params.get('instant') === '1',
       full: params.get('full') === '1',
@@ -289,10 +381,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       .then((r) => {
         if (stateRef.current.runId !== linkRunId) return
         const messages = (r.messages ?? []).filter((m) => (m.role === 'user' || m.role === 'assistant') && m.text)
-        if (messages.length) dispatch({ type: 'chat.restore', chatId: r.chat_id, lang: r.lang ?? null, messages })
-        else dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') })
+        if (messages.length) push({ type: 'chat.restore', chatId: r.chat_id, lang: r.lang ?? null, messages })
+        else push({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') })
       })
-      .catch(() => dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') }))
+      .catch(() => push({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') }))
   }, [restoredSig, linkRunId])
 
   useEffect(() => {
@@ -331,7 +423,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const failed = c.results.filter((r) => crit.get(r.criterion_id)?.round === 4 && r.status === 'fail' && !r.waived).map((r) => r.criterion_id)
       if (failed.length) fails.push({ id, handle: c.profile?.handle ?? c.ref.handle, criteria: failed })
     }
-    dispatch({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'vet', vetted: vettedIds.length, fails } })
+    push({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'vet', vetted: vettedIds.length, fails } })
   }, [vettingN, hasRound4])
 
   // subject runs: the report diff is the news, not the (empty) funnel diff
@@ -341,7 +433,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     announced.current.add(goalSig)
     const d = stateRef.current.diff
     if (!d) return
-    dispatch({
+    push({
       type: 'chat.notice',
       id: uid('n'),
       text: '',
@@ -359,21 +451,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const board = document.getElementById('board')
       const diff = document.getElementById('diff')
       if (!board || !diff || !board.getClientRects().length) return
-      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-      board.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
-      diff.classList.remove('flash-ring')
-      void diff.offsetWidth
-      diff.classList.add('flash-ring')
-    }, 60)
+      board.scrollTo({ top: 0, behavior: motionInstant() ? 'auto' : 'smooth' })
+      flash(diff)
+    }, DUR[2])
   }, [goalSig])
 
   // report diffs after a goal / criteria change: a subject run gets one line with a link to its panel; a
   // discovery run gets ONE line for the whole batch (the stream and the HTTP response each carry one
-  // report.diff per vetted finalist) that names each creator whose report changed
+  // report.diff per vetted finalist) that names each creator whose report changed.
+  // Pacing (redesign): the subject card enters once the board's "What changed" panel has settled
+  // (enter, staggered groups, scroll and its pulse), and both notices wait for the queue to be idle:
+  // one animated region at a time.
   const rdLatest = useMemo(() => Object.values(state.reportDiffs).reduce((m, r) => Math.max(m, r.at), 0), [state.reportDiffs])
   const rdAnnounced = useRef(0)
   useEffect(() => {
     if (!rdLatest || rdLatest <= rdAnnounced.current) return
+    // the batch window; also lets the panel mount and its pulse start after the diff is applied
     const timer = window.setTimeout(() => {
       const s = stateRef.current
       const fresh = Object.values(s.reportDiffs).filter((r) => r.at > rdAnnounced.current)
@@ -381,7 +474,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
       rdAnnounced.current = Math.max(rdAnnounced.current, ...fresh.map((r) => r.at))
       if (s.mode === 'subject') {
         const rd = s.reportDiff ?? fresh[fresh.length - 1]
-        dispatch({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'reportDiff', candidateId: rd.candidateId, diff: rd.diff } })
+        const notice = { type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'reportDiff', candidateId: rd.candidateId, diff: rd.diff } } as const
+        // WhatChanged enters, staggers its groups, scrolls into view and pulses (--dur-3 x 3, from --dur-3
+        // on): wait until none of that runs any more (at most ~2.5 s), then until the queue is idle.
+        // Not cancelled with the effect: the notice is announced, it must still come.
+        const started = performance.now()
+        const busy = () => {
+          const el = document.getElementById('what-changed')
+          if (!el || motionInstant() || typeof el.getAnimations !== 'function') return false
+          return el.getAnimations({ subtree: true }).some((a) => a.playState === 'running' && Number.isFinite(a.effect?.getComputedTiming().endTime ?? Infinity))
+        }
+        const tick = () => {
+          if (busy() && performance.now() - started < 2500) window.setTimeout(tick, 100)
+          else whenPresented(() => push(notice))
+        }
+        tick()
         return
       }
       const items = fresh
@@ -390,10 +497,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
           const c = s.candidates[r.candidateId]
           return { candidateId: r.candidateId, handle: c?.profile?.handle ?? c?.ref.handle ?? r.candidateId, summary: r.diff.summary }
         })
-      if (items.length) dispatch({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'reportDiffs', items } })
-    }, 500)
+      if (items.length) whenPresented(() => push({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'reportDiffs', items } }))
+    }, motionInstant() ? 500 : Math.max(500, DUR[3] + DUR[2]))
     return () => window.clearTimeout(timer)
-  }, [rdLatest])
+  }, [rdLatest, push])
 
   // a subject check started from the form: say in the chat when its report is ready
   const subj = subjectCandidate(state)
@@ -402,7 +509,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!readySig || announced.current.has(readySig)) return
     announced.current.add(readySig)
     const c = subjectCandidate(stateRef.current)
-    if (c) dispatch({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'subjectReady', candidateId: c.id } })
+    if (c) push({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'subjectReady', candidateId: c.id } })
   }, [readySig])
 
   // a subject check from the form found no profile: the guide says so, what was tried and what to send instead
@@ -411,7 +518,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!nfSig || announced.current.has(nfSig)) return
     announced.current.add(nfSig)
     const s = stateRef.current
-    dispatch({
+    push({
       type: 'chat.notice',
       id: uid('n'),
       text: '',
@@ -430,7 +537,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!intSig || announced.current.has(intSig)) return
     announced.current.add(intSig)
-    dispatch({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'interrupted' } })
+    push({ type: 'chat.notice', id: uid('n'), text: '', notice: { kind: 'interrupted' } })
   }, [intSig])
 
   // ---------- snapshot + event stream for the active run ----------
@@ -447,20 +554,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     snapshotTimer.current = window.setTimeout(() => {
       api
         .run(id)
-        .then((run) => dispatch({ type: 'snapshot', run, at: Date.now() }))
+        .then((run) => push({ type: 'snapshot', run, at: Date.now() }))
         .catch((e: Error) => {
           if (stateRef.current.runId !== id) return
           // an old link to a deleted run: say so once, drop ?run= ("try again" cannot help)
           if (/^404\b/.test(e.message)) {
             dispatch({ type: 'reset', keepChat: true })
             setRunParam(null)
-            dispatch({ type: 'error', message: tRef.current('error.runGone') })
+            push({ type: 'error', message: tRef.current('error.runGone') })
             return
           }
-          dispatch({ type: 'error', message: tRef.current('error.generic', { msg: e.message }) })
+          push({ type: 'error', message: tRef.current('error.generic', { msg: e.message }) })
         })
     }, delay)
-  }, [])
+  }, [push])
 
   // A subject run whose server stopped mid-check has no task and no report: nothing will ever finish it.
   const checkInterrupted = useCallback((id: string) => {
@@ -531,6 +638,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isDemo || !state.runId) return
     const id = state.runId
+    // the stream replays the run's history first: apply that burst at once, pace what comes live
+    present.catchUp(150)
     refreshSnapshot(id)
     const es = new EventSource(`/api/runs/${encodeURIComponent(id)}/events`)
     // a run that was busy when the server stopped never sends run.finished: find out once the history replayed
@@ -550,7 +659,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         refreshSnapshot(id, 150)
         return
       }
-      dispatch({ type: 'event', event: { type, data } as RunEvent, at: Date.now(), runId: id })
+      pushEvent({ type, data } as RunEvent, id)
       // report.ready only carries the id; the full report comes with the snapshot.
       if (type === 'report.ready' && !(data as { report?: unknown }).report) refreshSnapshot(id, 250)
       if (type === 'run.finished' || type === 'diff') refreshSnapshot(id, 150)
@@ -569,7 +678,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const m = JSON.parse(e.data)
         if (m && typeof m.type === 'string' && RUN_EVENTS.includes(m.type)) {
           if ((m.type === 'diff' || m.type === 'report.diff') && !acceptDiff()) return
-          dispatch({ type: 'event', event: { type: m.type, data: m.data ?? m } as RunEvent, at: Date.now(), runId: id })
+          pushEvent({ type: m.type, data: m.data ?? m } as RunEvent, id)
         }
       } catch {
         /* ignore */
@@ -581,37 +690,41 @@ export function AppProvider({ children }: { children: ReactNode }) {
       es.onerror = null
       es.close()
     }
-  }, [state.runId, isDemo, refreshSnapshot, refreshHealth, checkInterrupted, streamEpoch])
+  }, [state.runId, isDemo, refreshSnapshot, refreshHealth, checkInterrupted, streamEpoch, present, pushEvent])
 
   // clear animation flags
   useEffect(() => {
     const iv = window.setInterval(() => {
       const s = stateRef.current
-      if (Object.keys(s.dropping).length || Object.keys(s.arriving).length) dispatch({ type: 'anim.clear', before: Date.now() - 1400 })
-    }, 500)
+      // safety net: the queue removes leaving cards right before round.finished (so the column closes
+      // once, then the counters move); flags without a round end (recompute, restore) go after this
+      if (Object.keys(s.dropping).length || Object.keys(s.arriving).length) rawDispatch({ type: 'anim.clear', before: Date.now() - LAG_MAX_MS })
+    }, 250)
     return () => window.clearInterval(iv)
   }, [])
 
   // ---------- actions ----------
   const fail = useCallback((e: unknown) => {
     const msg = e instanceof Error ? e.message : String(e)
-    dispatch({ type: 'error', message: tRef.current('error.generic', { msg }) })
+    push({ type: 'error', message: tRef.current('error.generic', { msg }) })
     dispatch({ type: 'recomputing', on: false })
-  }, [])
+  }, [push, dispatch])
 
   const applyMutationResult = useCallback(
     (id: string, body: unknown) => {
-      // report diffs first: the diff panel keeps the report as it was before the change
-      for (const rd of extractReportDiffs(body)) dispatch({ type: 'event', event: { type: 'report.diff', data: { candidate_id: rd.candidate_id, diff: rd } }, at: Date.now(), runId: id })
+      // the funnel diff first, as the run stream sends it: it still sees the goal change in flight
+      // (pendingGoal, which a report diff clears), so it is titled with both goals. Report diffs
+      // before the snapshot: their panel keeps the report as it was before the change.
       const diff = extractDiff(body)
-      if (diff) dispatch({ type: 'event', event: { type: 'diff', data: diff }, at: Date.now(), runId: id })
+      if (diff) pushEvent({ type: 'diff', data: diff } as RunEvent, id)
+      for (const rd of extractReportDiffs(body)) pushEvent({ type: 'report.diff', data: { candidate_id: rd.candidate_id, diff: rd } } as RunEvent, id)
       const crit = body && typeof body === 'object' ? (body as { criteria?: CriteriaSet }).criteria : undefined
-      if (crit && typeof crit === 'object' && !Array.isArray(crit) && 'criteria' in crit) dispatch({ type: 'criteria.local', criteria: crit })
-      dispatch({ type: 'recomputing', on: false })
+      if (crit && typeof crit === 'object' && !Array.isArray(crit) && 'criteria' in crit) push({ type: 'criteria.local', criteria: crit })
+      push({ type: 'recomputing', on: false })
       refreshSnapshot(id)
       refreshHealth()
     },
-    [refreshSnapshot, refreshHealth],
+    [refreshSnapshot, refreshHealth, push, pushEvent],
   )
 
   const subjectStarting = useRef(false)
@@ -630,7 +743,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return {
         sendChat: (text) => demo.userChat(text, langRef.current),
         startRun: () => demo.resume(),
-        vet: () => dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('demo.vetOnlyScripted') }),
+        vet: () => push({ type: 'chat.notice', id: uid('n'), text: tRef.current('demo.vetOnlyScripted') }),
         saveCriteria: (c) => {
           dispatch({ type: 'criteria.local', criteria: c })
           dispatch({ type: 'event', event: { type: 'log', data: { text: tRef.current('demo.localOnly'), actor: 'demo', mode: 'mock' } }, at: Date.now() })
@@ -643,7 +756,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           if (stateRef.current.mode === 'subject') {
             const p = brief.business_type && /fit/i.test(brief.business_type) ? 'fitness' : /pek|bake/i.test(brief.business_type ?? '') ? 'bakery' : null
             if (p) demo.subjectGoal(p)
-            else dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('demo.otherGoal') })
+            else push({ type: 'chat.notice', id: uid('n'), text: tRef.current('demo.otherGoal') })
             return
           }
           demo.playGoalChange()
@@ -657,7 +770,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         purge: () => {
           demo.stop()
           dispatch({ type: 'reset' })
-          dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('purge.demo') })
+          push({ type: 'chat.notice', id: uid('n'), text: tRef.current('purge.demo') })
         },
       }
     }
@@ -692,6 +805,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     const sendChat = (text: string, s: AppState, runOverride?: string): Promise<boolean> => {
       localChange.current = true
+      // a new change: its diffs are new even if they equal an earlier one (goal A -> B -> A -> B)
+      seenCopies.current.clear()
       const msgId = uid('a')
       dispatch({ type: 'chat.assistantStart', id: msgId })
       let sawRun: string | null = null
@@ -734,7 +849,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
               dispatch({ type: 'chat.end', id: msgId, error: m })
             } else if (RUN_EVENTS.includes(event as RunEvent['type'])) {
               // some backends interleave run events in the chat stream
-              dispatch({ type: 'event', event: { type: event, data } as RunEvent, at: Date.now() })
+              pushEvent({ type: event, data } as RunEvent)
             } else if (event === 'message' && data && typeof data === 'object' && 'text' in (data as object)) {
               dispatch({ type: 'chat.event', id: msgId, event: { type: 'chat.delta', data: data as { text: string } } })
             }
@@ -796,10 +911,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const id = stateRef.current.runId
         if (!id) return
         localChange.current = true
+        dispatch({ type: 'vet.requested', ids })
         api.vet(id, ids).catch(fail)
       },
       saveCriteria: (c: CriteriaSet) => {
         localChange.current = true
+        // a new change: its diffs are new even if they equal an earlier one (goal A -> B -> A -> B)
+        seenCopies.current.clear()
         dispatch({ type: 'criteria.local', criteria: c })
         const id = stateRef.current.runId
         if (!id) {
@@ -817,6 +935,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const id = stateRef.current.runId
         if (!id) return
         localChange.current = true
+        // a new change: its diffs are new even if they equal an earlier one (goal A -> B -> A -> B)
+        seenCopies.current.clear()
         dispatch({ type: 'awaitDiff' })
         api
           .restore(id, candidateId, criterionId)
@@ -827,6 +947,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const id = stateRef.current.runId
         if (!id) return
         localChange.current = true
+        // a new change: its diffs are new even if they equal an earlier one (goal A -> B -> A -> B)
+        seenCopies.current.clear()
         dispatch({ type: 'goal.submitted', brief })
         api
           .goal(id, brief)
@@ -857,7 +979,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
               status: 'pending',
             },
           })
-          dispatch({
+          push({
             type: 'chat.notice',
             id: uid('n'),
             text: '',
@@ -881,6 +1003,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (!id || s.recomputing || goalInFlight.current) return
         goalInFlight.current = true
         localChange.current = true
+        // a new change: its diffs are new even if they equal an earlier one (goal A -> B -> A -> B)
+        seenCopies.current.clear()
         let brief = { ...PRESETS[preset][langRef.current] }
         const fg = formGoal.current
         if (fg && fg.runId === id) {
@@ -901,14 +1025,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           .purge()
           .then(() => {
             dispatch({ type: 'reset' })
-            dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('purge.done') })
+            push({ type: 'chat.notice', id: uid('n'), text: tRef.current('purge.done') })
             setRunParam(null)
             api.health().then((h) => dispatch({ type: 'health', health: h })).catch(() => undefined)
           })
           .catch(fail)
       },
     }
-  }, [fail, applyMutationResult, refreshSnapshot, refreshHealth])
+  }, [fail, applyMutationResult, refreshSnapshot, refreshHealth, dispatch, push, pushEvent])
 
   const reveal = useCallback((targetId: string, focusId?: string) => {
     setView('board')
@@ -921,11 +1045,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (++tries < 25) window.setTimeout(attempt, 50)
         return
       }
-      const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-      el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
-      el.classList.remove('flash-ring')
-      void el.offsetWidth
-      el.classList.add('flash-ring')
+      el.scrollIntoView({ behavior: motionInstant() ? 'auto' : 'smooth', block: 'start' })
+      flash(el)
       // WCAG 2.4.3: focus follows the reveal. The trigger may sit in the now hidden guide panel; the
       // next Tab continues in the revealed section. focusId wins, else its heading takes focus (and names it).
       const own = focusId ? document.getElementById(focusId) : null
@@ -942,8 +1063,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     lang,
     setLang,
     t,
-    theme,
-    setTheme,
     blur,
     setBlur,
     openId,

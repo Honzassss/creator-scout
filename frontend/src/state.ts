@@ -130,6 +130,9 @@ export interface AppState {
   logKeys: Record<string, true>
   modeSummary: Partial<Record<Mode, number>>
   vetting: Record<string, string>
+  /** the ids of the vetting batch the owner confirmed (live mode), and those of them whose report arrived: "Vetting 3 of 5" */
+  vetBatch: string[]
+  vetDone: Record<string, true>
   sensitive: Record<string, number>
   diff: DiffView | null
   pendingGoal: { a: Brief | null; b: Brief; eliminationsA: Record<string, Elimination | null> } | null
@@ -169,6 +172,8 @@ export const initialState = (demo = false): AppState => ({
   logKeys: {},
   modeSummary: {},
   vetting: {},
+  vetBatch: [],
+  vetDone: {},
   sensitive: {},
   diff: null,
   pendingGoal: null,
@@ -209,6 +214,7 @@ export type Action =
   | { type: 'restore.local'; candidateId: string; criterionId: string; at: number }
   | { type: 'goal.submitted'; brief: Brief }
   | { type: 'diff.dismiss' }
+  | { type: 'vet.requested'; ids: string[] }
   | { type: 'health'; health: Health | null }
   | { type: 'error'; message: string }
   | { type: 'error.dismiss'; id: string }
@@ -415,6 +421,7 @@ function applyRunEvent(state: AppState, ev: RunEvent, at: number): AppState {
     case 'report.ready': {
       const vetting = { ...state.vetting }
       delete vetting[ev.data.candidate_id]
+      state = { ...state, vetDone: { ...state.vetDone, [ev.data.candidate_id]: true } }
       const prev = state.candidates[ev.data.candidate_id]
       const report: Report | undefined = ev.data.report
       if (prev && report) {
@@ -562,6 +569,8 @@ function reduce(state: AppState, action: Action): AppState {
     }
     case 'chat.id':
       return { ...state, chatId: action.id }
+    case 'vet.requested':
+      return { ...state, vetBatch: action.ids, vetDone: {} }
     case 'snapshot': {
       const run = action.run
       // a late snapshot of the previous run (or of a purged one) must not switch the board back

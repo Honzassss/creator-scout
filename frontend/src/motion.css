@@ -1,0 +1,158 @@
+/* ------------------------------------------------------------------------------------------
+   Motion contract (docs/design/motion-audit.md, API in src/lib/motion.ts).
+
+   - Three durations, one easing. Only transform and opacity move; .m-flash is the one
+     background pulse ("What changed"). Never width/height/top/left on text.
+   - One region animates at a time: the presentation queue in store.tsx paces live events
+     (round.started -> eliminations staggered -> round.finished counters, then the guide).
+   - No two texts in one box at any moment: a changing string remounts with a key and
+     enters (.m-enter / .m-swap); it never crossfades over the old one.
+   - prefers-reduced-motion: every duration is 0 and nothing is paced.
+   Imported once, after index.css, in main.tsx.
+   ------------------------------------------------------------------------------------------ */
+
+:root {
+  --dur-1: 120ms; /* hover, press, small state changes */
+  --dur-2: 200ms; /* a region or an item enters */
+  --dur-3: 320ms; /* an item leaves, a counter counts, a panel opens */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --stagger: 60ms; /* per item in .m-stagger, capped at 8 items */
+
+  /* the names index.css used before the contract: same timing, one source */
+  --dur-fast: var(--dur-1);
+  --dur-base: var(--dur-2);
+  --dur-count: var(--dur-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+    --stagger: 0ms;
+  }
+}
+
+@layer motion {
+  @keyframes m-enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes m-exit {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+  @keyframes m-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  /* 0 % and 100 % fall back to the element's own background: one soft pulse, no colour jump */
+  @keyframes m-flash {
+    35% {
+      background-color: var(--accent-tint, #e4f3f0);
+    }
+  }
+
+  /* a region, a card, a message enters (opacity 0 -> 1, 6 px up) */
+  .m-enter {
+    animation: m-enter var(--dur-2) var(--ease) both;
+    animation-delay: var(--m-delay, 0ms);
+  }
+  /* an item leaves; it keeps its box until the store removes it (no reflow under moving text) */
+  .m-exit {
+    animation: m-exit var(--dur-3) var(--ease) both;
+    pointer-events: none;
+  }
+  /* a string replaced in place: key the element by its text so the old one unmounts first,
+     the new one fades in where it stands (no translate, no overlap) */
+  .m-swap {
+    animation: m-fade var(--dur-2) var(--ease) both;
+  }
+  /* a list whose children enter one after another: style={staggerStyle(i)} sets --i (0..8) */
+  .m-stagger > * {
+    animation: m-enter var(--dur-2) var(--ease) both;
+    animation-delay: calc(min(var(--i, 0), 8) * var(--stagger));
+  }
+  /* fallback order when a child has no inline --i (staggerStyle wins: inline beats these) */
+  .m-stagger > :nth-child(2) { --i: 1; }
+  .m-stagger > :nth-child(3) { --i: 2; }
+  .m-stagger > :nth-child(4) { --i: 3; }
+  .m-stagger > :nth-child(5) { --i: 4; }
+  .m-stagger > :nth-child(6) { --i: 5; }
+  .m-stagger > :nth-child(7) { --i: 6; }
+  .m-stagger > :nth-child(8) { --i: 7; }
+  .m-stagger > :nth-child(n + 9) { --i: 8; }
+  /* "What changed": one soft background pulse (flash() in lib/motion.ts restarts it).
+     On an element that also enters, the pulse is ADDED to the enter animation: replacing it would
+     restart the enter (the panel blinks out and in again) when .m-flash is removed. */
+  .m-flash {
+    animation: m-flash calc(var(--dur-3) * 3) var(--ease) 1;
+  }
+  .m-enter.m-flash {
+    animation:
+      m-enter var(--dur-2) var(--ease) both,
+      m-flash calc(var(--dur-3) * 3) var(--ease) 1;
+    animation-delay: var(--m-delay, 0ms), 0ms;
+  }
+  .m-swap.m-flash {
+    animation:
+      m-fade var(--dur-2) var(--ease) both,
+      m-flash calc(var(--dur-3) * 3) var(--ease) 1;
+  }
+  /* numbers that count: equal digit widths so neighbours do not shift while they roll */
+  .m-num {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  /* ---------- existing classes brought onto the contract (index.css keyframes stay) ---------- */
+
+  /* Odometer: the old value used to roll out on top of the new one (two numbers in one box).
+     Now only the new value is drawn and fades in; useCountUp() is the preferred replacement. */
+  .odo-out {
+    display: none;
+  }
+  .odo-in {
+    animation: m-fade var(--dur-3) var(--ease) both;
+  }
+  /* eliminated card: leaves in --dur-3; the queue waits for it before the counters move */
+  .ccard.dropping {
+    animation: m-exit var(--dur-3) var(--ease) forwards;
+  }
+  .ccard.arriving {
+    animation: m-enter var(--dur-3) var(--ease) both;
+    animation-delay: calc(min(var(--i, 0), 8) * var(--stagger));
+  }
+  .ccard.arriving::after,
+  .flash-ring::after,
+  .finding.flash::after {
+    animation-duration: calc(var(--dur-3) * 3);
+  }
+}
+
+/* reduced motion: no pacing, no pulse, nothing moves (the store's queue is instant as well) */
+@media (prefers-reduced-motion: reduce) {
+  .m-enter,
+  .m-exit,
+  .m-swap,
+  .m-stagger > *,
+  .m-flash {
+    animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
+  }
+}

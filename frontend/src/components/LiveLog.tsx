@@ -132,74 +132,93 @@ export function LiveLog() {
   })
 
   return (
-    <section ref={secRef} className="livelog sticky bottom-0 z-10 -mx-4 mt-2 border-t border-rule-strong bg-paper" aria-labelledby="log-h">
+    <section
+      ref={secRef}
+      className="livelog sticky bottom-0 z-10 -mx-3 sm:-mx-4 md:-mx-6 mt-2 border-t border-[var(--line)] bg-[var(--surface)] shadow-[0_-1px_2px_rgba(24,44,54,.06)]"
+      aria-labelledby="log-h"
+    >
       <h2 id="log-h" className="sr-only">
         {t('log.title')}
       </h2>
       <button
         ref={btnRef}
         type="button"
-        className="w-full flex items-start gap-3 px-4 py-2 text-left min-h-11"
+        className="w-full flex items-center gap-3 px-3 sm:px-4 md:px-6 py-2 text-left min-h-11 focus-visible:outline-offset-[-2px] transition-colors duration-[var(--dur-1)] hover:bg-[var(--neutral-tint)]"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="log-body"
         // one short name ("Run log, idle, 20 lines"); the last line shown next to it is a visual preview
         aria-label={`${t('log.title')}, ${running ? t('log.running') : t('log.idle')}, ${t('log.lines', { n: rowCount })}`}
       >
-        <span className={`dot mt-2 ${running ? 'dot-live' : 'dot-idle'}`} aria-hidden />
-        <span className="font-display text-md font-semibold whitespace-nowrap" aria-hidden>
+        <span className={`dot ${running ? 'dot-live' : 'dot-idle'}`} aria-hidden />
+        <span className="text-[15px] leading-[22px] font-semibold text-[var(--text)] whitespace-nowrap" aria-hidden>
           {t('log.title')}
         </span>
-        <span className="meta whitespace-nowrap pt-1 max-sm:hidden" aria-hidden>
+        <span className="text-[12px] leading-4 text-[var(--text-3)] tabular-nums whitespace-nowrap max-sm:hidden" aria-hidden>
           {t('log.lines', { n: rowCount })}
         </span>
-        {sens > 0 && <span className="meta !text-ink-2 border border-dashed border-rule-strong px-1 rounded-xs max-md:hidden">{t('log.sensitive', { n: sens })}</span>}
-        {!open && last && (
-          <span className="flex-1 min-w-0 text-sm text-ink-2 pt-1 max-sm:hidden" aria-hidden>
+        {sens > 0 && (
+          <span className="text-[12px] leading-4 text-[var(--text-2)] border border-dashed border-[var(--field)] px-1.5 py-px rounded-[var(--r-tag)] whitespace-nowrap max-md:hidden">
+            {t('log.sensitive', { n: sens })}
+          </span>
+        )}
+        {/* the latest line: replaced in place, not animated (the round regions carry the motion) */}
+        {!open && last ? (
+          <span className="flex-1 min-w-0 truncate text-[13px] leading-[18px] text-[var(--text-2)] max-sm:hidden" aria-hidden>
             {last.actor && (
-              <span className="num text-xs text-ink-3 mr-2" translate="no">
+              <span className="font-mono text-[12px] text-[var(--text-3)] mr-2" translate="no">
                 {last.actor}
               </span>
             )}
             <RichText text={wordCut(last.text)} />
           </span>
+        ) : (
+          <span className="flex-1" />
         )}
-        <span className="ml-auto smallcaps pt-1 whitespace-nowrap" aria-hidden>
-          {open ? t('log.hide') : t('log.show')} <span aria-hidden>{open ? '↓' : '↑'}</span>
+        <span className="ml-auto flex-none inline-flex items-center gap-1 text-[13px] leading-[18px] font-medium text-[var(--accent)] whitespace-nowrap" aria-hidden>
+          {open ? t('log.hide') : t('log.show')}
+          <span aria-hidden>{open ? '↓' : '↑'}</span>
         </span>
       </button>
       {open && (
-        <div id="log-body" ref={listRef} className="max-h-[300px] overflow-y-auto scroll-thin px-4 pb-3 border-t border-rule overscroll-contain" tabIndex={0} role="group" aria-label={t('log.title')}>
-          {state.log.length === 0 && <p className="text-sm text-ink-2 py-3">{t('log.empty')}</p>}
+        <div
+          id="log-body"
+          ref={listRef}
+          className="m-enter max-h-[300px] overflow-y-auto scroll-thin px-3 sm:px-4 md:px-6 pb-3 border-t border-[var(--line)] overscroll-contain"
+          tabIndex={0}
+          role="group"
+          aria-label={t('log.title')}
+        >
+          {state.log.length === 0 && <p className="text-[13px] leading-[18px] text-[var(--text-2)] py-3">{t('log.empty')}</p>}
           {groups.map((g, gi) => (
             <div key={gi} className="mt-3">
-              <h3 className="smallcaps !text-ink-2 sticky top-0 bg-paper py-1 flex items-center gap-2">
-                <span className="w-4 text-center" aria-hidden>
+              <h3 className="sticky top-0 z-[1] bg-[var(--surface)] py-1.5 flex items-center gap-2 text-[12px] leading-4 font-semibold text-[var(--text-2)]">
+                <span className="w-4 text-center text-[var(--text-3)]" aria-hidden>
                   {g.round == null ? '~' : state.rounds.some((r) => r.round === g.round) && state.currentRound !== g.round ? '✓' : '·'}
                 </span>
                 {g.round == null ? t('log.group.other') : t('log.group', { n: g.round, name: t(`round.${g.round}` as I18nKey) })}
-                <span className="text-ink-3">· {t('log.lines', { n: g.rows.length })}</span>
+                <span className="font-normal text-[var(--text-3)] tabular-nums">· {t('log.lines', { n: g.rows.length })}</span>
               </h3>
               <ol role="list" className="flex flex-col">
                 {g.rows.map(({ key, line: l, detail }) => (
                   <li
                     key={key}
-                    className="grid grid-cols-[minmax(0,180px)_1fr_auto_64px] gap-3 py-1 border-b border-dotted border-rule text-sm items-baseline max-md:grid-cols-[1fr_auto] max-md:gap-x-2"
->
-                    <span className="num text-xs text-ink-2 truncate max-md:col-span-2" title={l.actor ?? ''} translate="no">
+                    className="grid grid-cols-[minmax(0,180px)_1fr_auto_64px] gap-3 py-1.5 border-b border-[var(--line)] last:border-b-0 text-[13px] leading-[18px] items-baseline max-md:grid-cols-[1fr_auto] max-md:gap-x-2"
+                  >
+                    <span className="font-mono text-[12px] leading-4 text-[var(--text-3)] truncate max-md:col-span-2" title={l.actor ?? ''} translate="no">
                       {l.actor ?? '–'}
                     </span>
-                    <span className="text-ink">
+                    <span className="text-[var(--text)] min-w-0 break-words">
                       <RichText text={l.text} />
                       {/* the technical twin ("MOCK discover: …; under 18 left out: 1") stays readable, and blurrable */}
                       {detail && (
-                        <span className="block text-xs text-ink-3 mt-0.5">
+                        <span className="block text-[12px] leading-4 text-[var(--text-3)] mt-0.5">
                           <RichText text={detail} />
                         </span>
                       )}
                     </span>
                     <span>{l.mode && <ModeBadge mode={l.mode} />}</span>
-                    <span className="meta text-right max-md:hidden">{fmtTime(l.ts, lang)}</span>
+                    <span className="text-[12px] leading-4 text-[var(--text-3)] tabular-nums text-right max-md:hidden">{fmtTime(l.ts, lang)}</span>
                   </li>
                 ))}
               </ol>

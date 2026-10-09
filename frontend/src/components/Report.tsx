@@ -6,11 +6,105 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { useApp } from '../store'
 import { pick, type I18nKey } from '../i18n'
-import type { ClaimCheck, Confidence, Finding, I18nText, RelevanceTier, Report, ReportSection } from '../types'
+import type { ClaimCheck, Confidence, Finding, FindingKind, I18nText, RelevanceTier, Report, ReportSection, SourceRef } from '../types'
 import { ClaimCard, CollabTimeline, IdentityPanel } from './CandidateDrawer'
 import { RichText, SourceChip, SourceChips, scrollToEl } from './primitives'
 
 // ---------------- small parts ----------------
+
+/** Shared detail typography (spec 3, 13): one sans family, few caps. Class strings, used inside render only. */
+export const CLS = {
+  /** small group label: 13/18 600, never mono caps */
+  label: 'text-[13px] leading-[18px] font-semibold text-[color:var(--text-2)]',
+  /** section title in the detail: 18/26 600 */
+  section: 'text-[18px] leading-[26px] font-semibold text-[color:var(--text)]',
+  /** sub-section title: 16/22 600 */
+  sub: 'text-[16px] leading-[22px] font-semibold text-[color:var(--text)]',
+  /** a white block with a light border */
+  block: 'bg-[color:var(--surface)] border border-[color:var(--line)] rounded-[12px]',
+  /** a small info block (sources, notes) */
+  info: 'bg-[color:var(--bg)] border border-[color:var(--line)] rounded-[8px]',
+  meta: 'text-[12px] leading-4 text-[color:var(--text-3)] tabular-nums',
+} as const
+
+const KIND_TAG: Record<FindingKind, string> = {
+  fact: 'text-[color:var(--fact)] bg-[color:var(--accent-tint)] border-solid border-[color:color-mix(in_oklab,var(--fact)_35%,transparent)]',
+  inference: 'text-[color:var(--inference)] bg-[#FFF3DC] border-solid border-[color:color-mix(in_oklab,var(--inference)_35%,transparent)]',
+  gap: 'text-[color:var(--gap)] bg-[color:var(--bg)] border-dashed border-[color:var(--field)]',
+}
+
+/** The mark inside a kind label: filled square (fact), diamond (inference), hollow square (gap). Shape, not colour. */
+export function KindMark({ kind }: { kind: FindingKind }) {
+  const cls =
+    kind === 'fact'
+      ? 'w-2 h-2 rounded-[1px] bg-current'
+      : kind === 'inference'
+        ? 'w-[7px] h-[7px] rotate-45 bg-current mx-[1px]'
+        : 'w-2 h-2 rounded-[1px] border-[1.5px] border-current'
+  return <span aria-hidden className={`inline-block flex-none ${cls}`} />
+}
+
+/** Fact / inference / gap: the same label everywhere, told apart by its word and shape (mark + solid or dashed
+ *  outline); colour is only the third cue. */
+export function KindLabel({ kind, children }: { kind: FindingKind; children?: ReactNode }) {
+  const { t } = useApp()
+  return (
+    <span className={`kind-tag inline-flex items-center gap-1.5 min-h-[22px] px-2 rounded-[4px] border text-[12px] leading-4 font-semibold whitespace-nowrap ${KIND_TAG[kind]}`}>
+      <KindMark kind={kind} />
+      {children ?? t(`drawer.kind.${kind}`)}
+    </span>
+  )
+}
+
+/** A finding and its evidence side by side: the claim on the left, a small bordered source block on the right
+ *  (under it on a narrow column), so the statement and what it rests on read as one unit. */
+export function EvidenceItem({
+  kind,
+  id,
+  head,
+  sources,
+  children,
+  focusable,
+  dataAttrs,
+}: {
+  kind: FindingKind
+  id?: string
+  head?: ReactNode
+  sources?: SourceRef[] | null
+  children: ReactNode
+  focusable?: boolean
+  /** stable test hooks (data-testid and friends): no behaviour or visual change */
+  dataAttrs?: Record<`data-${string}`, string | undefined>
+}) {
+  const { t } = useApp()
+  const src = sources ?? []
+  return (
+    <li
+      id={id}
+      tabIndex={focusable ? -1 : undefined}
+      {...dataAttrs}
+      className={`evidence-item @container relative list-none scroll-mt-16 rounded-[8px] border ${
+        kind === 'gap' ? 'border-dashed border-[color:var(--field)] bg-[color:var(--bg)]' : 'border-[color:var(--line)] bg-[color:var(--surface)]'
+      }`}
+    >
+      <div className={`grid ${src.length ? '@xl:grid-cols-[minmax(0,1fr)_minmax(136px,22%)]' : ''}`}>
+        <div className="min-w-0 px-3 py-3 @md:px-4">
+          {head && <div className="flex items-center gap-x-2 gap-y-1 flex-wrap mb-2">{head}</div>}
+          <div className="text-[15px] leading-[22px] text-[color:var(--text)] min-w-0">{children}</div>
+        </div>
+        {src.length > 0 && (
+          <div className="min-w-0 px-3 py-2 border-t @xl:border-t-0 @xl:border-l border-[color:var(--line)] bg-[color:color-mix(in_oklab,var(--bg)_70%,var(--surface))] rounded-b-[8px] @xl:rounded-b-none @xl:rounded-r-[8px]">
+            <span className="block text-[12px] leading-4 text-[color:var(--text-3)] mb-1">{src.length > 1 ? t('source.dialogs', { n: src.length }) : t('source.dialog')}</span>
+            <span className="flex gap-1 flex-wrap">
+              <SourceChips sources={src} />
+            </span>
+          </div>
+        )}
+      </div>
+    </li>
+  )
+}
+
 
 /** "medium confidence · public like and comment counts, 24 posts": about the finding, never a score. */
 export function ConfidenceTag({ level, basis, compact }: { level?: Confidence | null; basis?: I18nText | null; compact?: boolean }) {
@@ -23,7 +117,7 @@ export function ConfidenceTag({ level, basis, compact }: { level?: Confidence | 
       <span>{t('report.conf', { level: t(`report.confidence.${level}`) })}</span>
       {compact && b && <span className="sr-only">: {b}</span>}
       {!compact && b && (
-        <span className="text-ink-3">
+        <span className="text-[color:var(--text-3)]">
           <span aria-hidden> · </span>
           {b}
         </span>
@@ -36,7 +130,7 @@ export function TierTag({ tier }: { tier?: RelevanceTier | null }) {
   const { t } = useApp()
   if (tier !== 'key') return null
   return (
-    <span className="tier-key" title={t('report.tier.keyTitle')}>
+    <span className="tier-key !bg-[color:var(--accent-tint)] !text-[color:var(--accent)] !font-sans !rounded-[4px] border border-[color:color-mix(in_oklab,var(--accent)_30%,transparent)]" title={t('report.tier.keyTitle')}>
       {t('report.tier.key')}
     </span>
   )
@@ -48,15 +142,13 @@ export function WhyLine({ why }: { why?: I18nText | null }) {
   const text = pick(why, lang)
   if (!text) return null
   return (
-    <p className="why">
-      <span className="why-label">{t('report.why')}</span> <RichText text={text} />
+    <p className="mt-2 text-[13px] leading-[18px] text-[color:var(--text-2)]">
+      <span className="font-semibold text-[color:var(--text)] mr-1">{t('report.why')}</span> <RichText text={text} />
     </p>
   )
 }
 
 const NO_SKIP: ReadonlySet<string> = new Set()
-
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII']
 
 /** DOM id of a finding / claim row. The prefix keeps the board and the drawer apart (both can be in the DOM). */
 export const itemDomId = (prefix: string, id: string) => `${prefix}-rf-${id}`
@@ -70,10 +162,16 @@ export function jumpToItem(id: string, prefix: string) {
     if (details && !details.open) details.open = true
     scrollToEl(el, 'center')
     el.focus({ preventScroll: true })
-    el.classList.remove('flash')
-    void el.offsetWidth
-    el.classList.add('flash')
+    flashEl(el)
   }, 20)
+}
+
+/** One soft pulse on a jump target (motion contract .m-flash); restarts if it is already flashing. */
+export function flashEl(el: HTMLElement) {
+  el.classList.remove('flash', 'm-flash')
+  void el.offsetWidth
+  el.classList.add('flash', 'm-flash')
+  window.setTimeout(() => el.classList.remove('m-flash'), 1600)
 }
 
 /** The goal checks are shown as the checklist (board) or the candidate card (drawer), not as findings. Both places
@@ -83,41 +181,48 @@ export const SKIP_GOAL: ReadonlySet<string> = new Set(['goal'])
 export function FindingRow({ f, no, findingNo, idPrefix }: { f: Finding; no?: number; findingNo: Map<string, number>; idPrefix: string }) {
   const { t, lang } = useApp()
   return (
-    <li id={itemDomId(idPrefix, f.id)} tabIndex={-1} className={`finding finding-${f.kind} scroll-mt-16`} data-testid="finding" data-kind={f.kind} data-confidence={f.confidence ?? undefined} data-tier={f.tier ?? undefined}>
-      <div className="flex items-baseline gap-2 flex-wrap">
-        <span className={`kind-label kind-${f.kind}`}>{t(`drawer.legend.${f.kind}`)}</span>
-        <TierTag tier={f.tier} />
-        {no != null && <span className="meta">{t('report.finding', { n: no })}</span>}
-        <span className="ml-auto">
-          <ConfidenceTag level={f.confidence} basis={f.confidence_basis} />
-        </span>
-      </div>
-      <div className="flex items-start justify-between gap-3 mt-1">
-        <div className="text-base min-w-0">
-          <RichText text={pick(f.text, lang)} />
-          {(f.based_on?.length ?? 0) > 0 && (
-            <span className="text-sm text-ink-2 ml-1">
-              ({t('report.basedOn')}{' '}
-              {f.based_on!.map((id, i) => (
-                <span key={id}>
-                  {i > 0 && ', '}
-                  <button type="button" className="btn-link !min-h-0 text-sm" onClick={() => jumpToItem(id, idPrefix)}>
-                    {t('report.finding', { n: findingNo.get(id) ?? 0 })}
-                  </button>
-                </span>
-              ))}
-              )
-            </span>
-          )}
-        </div>
-        {f.sources.length > 0 && (
-          <span className="flex gap-1 flex-wrap justify-end flex-none">
-            <SourceChips sources={f.sources} />
+    <EvidenceItem
+      kind={f.kind}
+      id={itemDomId(idPrefix, f.id)}
+      focusable
+      dataAttrs={{ 'data-testid': 'finding', 'data-kind': f.kind, 'data-confidence': f.confidence ?? undefined, 'data-tier': f.tier ?? undefined }}
+      sources={f.sources}
+      head={
+        <>
+          <KindLabel kind={f.kind} />
+          <TierTag tier={f.tier} />
+          {no != null && <span className={CLS.meta}>{t('report.finding', { n: no })}</span>}
+          <span className="ml-auto">
+            <ConfidenceTag level={f.confidence} basis={f.confidence_basis} />
           </span>
-        )}
-      </div>
+        </>
+      }
+    >
+      <RichText text={pick(f.text, lang)} />
+      {(f.based_on?.length ?? 0) > 0 && <BasedOn ids={f.based_on!} findingNo={findingNo} onJump={(id) => jumpToItem(id, idPrefix)} />}
       <WhyLine why={f.why_it_matters} />
-    </li>
+    </EvidenceItem>
+  )
+}
+
+/** "(based on Finding 3, Finding 5)": the inference points at the facts it rests on. */
+export function BasedOn({ ids, findingNo, onJump }: { ids: string[]; findingNo: Map<string, number>; onJump: (id: string) => void }) {
+  const { t } = useApp()
+  return (
+    <span className="text-[13px] leading-[18px] text-[color:var(--text-2)] ml-1">
+      ({t('report.basedOn')}{' '}
+      {ids.map((id, i) => (
+        <span key={id}>
+          {i > 0 && ', '}
+          <span className="whitespace-nowrap">
+            <button type="button" className="btn-link !min-h-0 text-[13px]" onClick={() => onJump(id)}>
+              {t('report.finding', { n: findingNo.get(id) ?? 0 })}
+            </button>
+            {i === ids.length - 1 && ')'}
+          </span>
+        </span>
+      ))}
+    </span>
   )
 }
 
@@ -132,7 +237,7 @@ function ClaimItem({ k, report, findingNo, idPrefix }: { k: ClaimCheck; report: 
         onJump={(id) => jumpToItem(id, idPrefix)}
         extra={
           (k.tier === 'key' || k.why_it_matters) && (
-            <div className="px-4 py-2 border-t border-rule flex flex-col gap-1">
+            <div className="px-4 py-2 border-t border-[color:var(--line)] flex flex-col gap-1">
               {k.tier === 'key' && (
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <TierTag tier={k.tier} />
@@ -144,6 +249,16 @@ function ClaimItem({ k, report, findingNo, idPrefix }: { k: ClaimCheck; report: 
         }
       />
     </li>
+  )
+}
+
+/** A small status label whose outline shape carries the meaning together with its word (never a traffic light). */
+export function StatusTag({ shape, children }: { shape: 'solid' | 'dashed' | 'dotted' | 'double'; children: ReactNode }) {
+  const b = shape === 'double' ? 'border-[3px] border-double' : shape === 'dashed' ? 'border-[1.5px] border-dashed' : shape === 'dotted' ? 'border-[1.5px] border-dotted' : 'border-[1.5px] border-solid'
+  return (
+    <span className={`status-tag inline-flex items-center min-h-6 px-2 rounded-[4px] ${b} border-[color:var(--text-2)] text-[13px] leading-[18px] font-semibold text-[color:var(--text)] bg-[color:var(--surface)] whitespace-nowrap`}>
+      {children}
+    </span>
   )
 }
 
@@ -159,23 +274,26 @@ export function VerdictBlock({ report, idPrefix }: { report: Report; idPrefix: s
   const aside = v.set_aside ?? []
   const others = report.identity ?? []
   return (
-    <section className="verdict" aria-labelledby={hId} data-testid="identity-verdict" data-status={v.status}>
-      <div className="flex items-baseline gap-3 flex-wrap">
-        <h3 id={hId} className="text-md font-semibold">
+    <section className={`${CLS.block} p-4 sm:p-5`} aria-labelledby={hId} data-testid="identity-verdict" data-status={v.status}>
+      <div className="flex items-center gap-3 flex-wrap">
+        <h3 id={hId} className={CLS.sub}>
           {t('verdict.title')}
         </h3>
-        <span className={`stamp verdict-${v.status}`}>{t(`verdict.${v.status}`)}</span>
+        <StatusTag shape={v.status === 'confirmed' ? 'solid' : v.status === 'likely' ? 'dashed' : 'dotted'}>{t(`verdict.${v.status}`)}</StatusTag>
       </div>
-      <p className="mt-2 text-md leading-relaxed">
+      <p className="mt-2 text-[15px] leading-[22px]">
         <RichText text={pick(v.text, lang)} />
       </p>
       <div className="grid gap-4 mt-3 sm:grid-cols-2">
         <div>
-          <h4 className="smallcaps !text-ink-2">{t('verdict.supporting', { n: sup.length })}</h4>
+          <h4 className={CLS.label}>{t('verdict.supporting', { n: sup.length })}</h4>
+          {sup.length === 0 && (
+            <p className="text-[13px] leading-[18px] text-[color:var(--text-2)] mt-1">{t('verdict.supporting.none')}</p>
+          )}
           <ul role="list" className="mt-1 flex flex-col gap-1">
             {sup.map((s, i) => (
-              <li key={i} className="text-sm flex items-start gap-2">
-                <span aria-hidden className="num text-ink-2">
+              <li key={i} className="text-[14px] leading-5 flex items-start gap-2">
+                <span aria-hidden className="text-[color:var(--text-2)] font-semibold w-3 flex-none text-center">
                   ✓
                 </span>
                 <span className="flex-1 min-w-0">
@@ -187,14 +305,14 @@ export function VerdictBlock({ report, idPrefix }: { report: Report; idPrefix: s
           </ul>
         </div>
         <div>
-          <h4 className="smallcaps !text-ink-2">{t('verdict.contradicting', { n: con.length })}</h4>
+          <h4 className={CLS.label}>{t('verdict.contradicting', { n: con.length })}</h4>
           {con.length === 0 ? (
-            <p className="text-sm text-ink-2 mt-1">{t('verdict.contradicting.none')}</p>
+            <p className="text-[13px] leading-[18px] text-[color:var(--text-2)] mt-1">{t('verdict.contradicting.none')}</p>
           ) : (
             <ul role="list" className="mt-1 flex flex-col gap-1">
               {con.map((s, i) => (
-                <li key={i} className="text-sm flex items-start gap-2">
-                  <span aria-hidden className="num text-ink-2">
+                <li key={i} className="text-[14px] leading-5 flex items-start gap-2">
+                  <span aria-hidden className="text-[color:var(--text-2)] font-semibold w-3 flex-none text-center">
                     ✕
                   </span>
                   <span className="flex-1 min-w-0">
@@ -209,7 +327,7 @@ export function VerdictBlock({ report, idPrefix }: { report: Report; idPrefix: s
       </div>
       {aside.length > 0 && (
         <div className="mt-4">
-          <h4 className="smallcaps !text-ink-2">{t('verdict.setAside', { n: aside.length })}</h4>
+          <h4 className={CLS.label}>{t('verdict.setAside', { n: aside.length })}</h4>
           <ul role="list" className="mt-1">
             {aside.map((a) => (
               <li key={a.ref} className="aside-row">
@@ -218,7 +336,7 @@ export function VerdictBlock({ report, idPrefix }: { report: Report; idPrefix: s
                   <span className="font-medium [overflow-wrap:anywhere]" translate="no">
                     <RichText text={pick(a.label, lang)} />
                   </span>
-                  <span className="text-ink-2">
+                  <span className="text-[color:var(--text-2)]">
                     {' · '}
                     <RichText text={pick(a.reason, lang)} />
                   </span>
@@ -229,9 +347,9 @@ export function VerdictBlock({ report, idPrefix }: { report: Report; idPrefix: s
           </ul>
         </div>
       )}
-      <p className="mt-3 text-sm text-ink-2 italic">{t('verdict.note')}</p>
+      <p className="mt-3 text-[13px] leading-[18px] text-[color:var(--text-2)]">{t('verdict.note')}</p>
       {others.length > 0 && (
-        <details className="mt-2 disclosure">
+        <details className="mt-3 disclosure !border-solid !border-[color:var(--line)] !rounded-[8px]">
           <summary>{t('verdict.matches')}</summary>
           <div className="mt-2">
             <IdentityPanel items={others} />
@@ -308,15 +426,15 @@ export function RankedFindings({ report, skipGoal, idPrefix, goalNote = 'report.
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-sm text-ink-2 italic">{t('report.ranked.note')}</p>
-      {skipGoal && all.some((s) => s.id === 'goal') && <p className="text-sm text-ink-2 -mt-4">{t(goalNote)}</p>}
+      <p className="text-[13px] leading-[18px] text-[color:var(--text-2)]">{t('report.ranked.note')}</p>
+      {skipGoal && all.some((s) => s.id === 'goal') && <p className="text-[13px] leading-[18px] text-[color:var(--text-2)] -mt-4">{t(goalNote)}</p>}
       {secs
         .filter((s) => s.item_ids.length > 0)
         .map((s, i) => (
           <section key={s.id} id={`${idPrefix}-${s.id}`} aria-labelledby={`${idPrefix}-${s.id}-h`} className="scroll-mt-16">
-            <h4 id={`${idPrefix}-${s.id}-h`} className="rsec-h">
-              <span className="roman" aria-hidden>
-                {ROMAN[i]}.
+            <h4 id={`${idPrefix}-${s.id}-h`} className={`${CLS.sub} flex items-center gap-2 pb-2 border-b border-[color:var(--line)]`}>
+              <span className={`${CLS.meta} min-w-5`} aria-hidden>
+                {i + 1}
               </span>
               {sectionTitle(s, lang, t)}
               {s.tier === 'key' && <TierTag tier="key" />}
@@ -332,17 +450,17 @@ export function RankedFindings({ report, skipGoal, idPrefix, goalNote = 'report.
           </section>
         ))}
       {lessN > 0 && (
-        <details className="less-group" open={lessOpen} onToggle={(e) => setLessOpen((e.currentTarget as HTMLDetailsElement).open)}>
+        <details className="less-group !border-[color:var(--field)] !rounded-[8px] !px-4" open={lessOpen} onToggle={(e) => setLessOpen((e.currentTarget as HTMLDetailsElement).open)}>
           <summary>
             <span className="font-semibold">{lessSkipped > 0 ? t('report.less.withChecks', { n: lessN, k: lessSkipped }) : t('report.less', { n: lessN })}</span>
-            <span className="text-sm text-ink-2 ml-2 max-sm:block max-sm:ml-0">{t('report.less.hint')}</span>
+            <span className="text-[13px] text-[color:var(--text-2)] ml-2 max-sm:block max-sm:ml-0">{t('report.less.hint')}</span>
           </summary>
           <div className="mt-3 flex flex-col gap-4">
             {secs
               .filter((s) => (s.less_ids?.length ?? 0) > 0)
               .map((s) => (
                 <div key={s.id}>
-                  <h5 className="smallcaps !text-ink-2 mb-1">{sectionTitle(s, lang, t)}</h5>
+                  <h5 className={`${CLS.label} mb-2`}>{sectionTitle(s, lang, t)}</h5>
                   <ul role="list" className="flex flex-col gap-2 p-0 m-0">
                     {(s.less_ids ?? []).map(item)}
                   </ul>
@@ -383,15 +501,15 @@ export function MethodPanel({ report, runRequests }: { report: Report; runReques
       )}
       {ts.length > 0 && (
         <div className="mt-3 text-sm flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="smallcaps">{t('report.textSource')}</span>
+          <span className={CLS.label}>{t('report.textSource')}</span>
           {ts.map(([k, v]) => (
             <span key={k} className="whitespace-nowrap">
-              <span className="text-ink-2">{stepLabel(k)}:</span> <span className="font-medium">{tsLabel(v)}</span>
+              <span className="text-[color:var(--text-2)]">{stepLabel(k)}:</span> <span className="font-medium">{tsLabel(v)}</span>
             </span>
           ))}
         </div>
       )}
-      {runRequests != null && <p className="mt-2 text-sm text-ink-2">{t('report.runRequests', { n: runRequests })}</p>}
+      {runRequests != null && <p className="mt-2 text-[13px] leading-[18px] text-[color:var(--text-2)]">{t('report.runRequests', { n: runRequests })}</p>}
     </div>
   )
 }
@@ -405,8 +523,8 @@ export function SummaryLine({ report }: { report: Report }) {
     .replace(/^\s*(?:(?:Key for this goal|Klíčové pro tento cíl)\s*:\s*)+/i, '')
     .replace(/\.\s*;\s*/g, '; ')
   return (
-    <div className="summary-line">
-      <span className="smallcaps !text-ink-2 block mb-1">{t('report.summary')}</span>
+    <div className="summary-line !border-l-[3px] !border-[color:var(--accent)] !pl-3">
+      <span className={`${CLS.label} block mb-1`}>{t('report.summary')}</span>
       <RichText text={text} />
     </div>
   )

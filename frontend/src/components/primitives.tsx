@@ -4,7 +4,30 @@ import { useApp } from '../store'
 import { fmtCompact, fmtDate, fmtDayMonth, fmtTime, hasKey, type I18nKey } from '../i18n'
 import { csTypo } from '../lib/typo'
 import { useDialog } from '../lib/useDialog'
+import { useCountUp } from '../lib/motion'
 import type { Lang, Mode, ResultStatus, SourceRef } from '../types'
+
+// ---------------- light-system class sets (tokens from index.css, with the contract values as fallback) ----------------
+
+/** Meta text: 12/16, tertiary ink, tabular digits. */
+const META = 'text-[12px] leading-4 text-[var(--text-3,#5F717B)] tnum'
+
+/** Small tag / badge: 4 px radius, 12/16 semibold caps. Caps only on these tiny labels. */
+const TAG = 'inline-flex flex-none items-center gap-1 min-h-5 rounded-[4px] border px-1.5 align-middle text-[12px] leading-4 font-semibold uppercase tracking-[0.04em] whitespace-nowrap'
+/** MOCK: quiet neutral tag (solid outline, dark ink); colour stays reserved for petrol. Differs from CACHED by its solid border and word. */
+const TAG_MOCK = `${TAG} border-[var(--field,#6F8794)] bg-[var(--neutral-tint,#EEF2F4)] text-[var(--text,#182C36)]`
+const TAG_LIVE = `${TAG} border-transparent bg-[var(--accent-tint,#E4F3F0)] text-[var(--accent,#086B68)]`
+const TAG_CACHE = `${TAG} border-dashed border-[var(--field,#6F8794)] bg-[var(--surface,#FFFFFF)] text-[var(--text-2,#435965)]`
+
+/** Criterion result tones: met = ok, not met = bad, cannot verify / waived = neutral (never amber). */
+type Tone = 'pass' | 'fail' | 'unknown' | 'waived'
+const toneOf = (status: ResultStatus, waived?: boolean): Tone => (waived ? 'waived' : status === 'pass' ? 'pass' : status === 'fail' ? 'fail' : 'unknown')
+const TONE: Record<Tone, string> = {
+  pass: 'text-[var(--ok,#1D6B3B)] bg-[var(--ok-tint,#E8F4EC)]',
+  fail: 'text-[var(--bad,#A33A3A)] bg-[var(--bad-tint,#FBEDED)]',
+  unknown: 'text-[var(--neutral,#4B5D67)] bg-[var(--neutral-tint,#EEF2F4)]',
+  waived: 'text-[var(--neutral,#4B5D67)] bg-[var(--neutral-tint,#EEF2F4)]',
+}
 
 // ---------------- MOCK mode ----------------
 
@@ -118,12 +141,20 @@ function SourcePopover({ pop, id, onClose }: { pop: PopState; id: string; onClos
   }, [onClose, pop.trigger, ref])
 
   return (
-    <div ref={ref} id={id} className="popover" style={{ left: pos.left, top: pos.top }} role="dialog" aria-labelledby={titleId} tabIndex={-1}>
+    <div
+      ref={ref}
+      id={id}
+      className={`m-enter fixed z-[60] w-[340px] max-w-[calc(100vw-24px)] overscroll-contain rounded-[12px] border border-[var(--field,#6F8794)] bg-[var(--surface,#FFFFFF)] p-4 text-[var(--text,#182C36)] shadow-[0_1px_2px_rgba(24,44,54,.06)] focus:outline-2 focus:outline-offset-0 focus:outline-[var(--accent,#086B68)]`}
+      style={{ left: pos.left, top: pos.top }}
+      role="dialog"
+      aria-labelledby={titleId}
+      tabIndex={-1}
+    >
       <h2 id={titleId} className="sr-only">
         {t('source.dialog')}
       </h2>
-      {pop.caption && <p className="text-base text-ink mb-3 pb-3 border-b border-rule">{pop.caption}</p>}
-      <div className="flex flex-col gap-4 max-h-[60vh] overflow-auto scroll-thin">
+      {pop.caption && <p className="mb-3 border-b border-[var(--line,#DCE4E8)] pb-3 text-[15px] leading-[22px]">{pop.caption}</p>}
+      <div className="scroll-thin flex max-h-[60vh] flex-col gap-4 overflow-auto">
         {pop.sources.map((s, i) => {
           const fake = /\.invalid(\/|$)/.test(s.url)
           // MOCK sources never link out: a fictional finding must not open a real account that may own the handle
@@ -134,26 +165,26 @@ function SourcePopover({ pop, id, onClose }: { pop: PopState; id: string; onClos
             <div key={`${s.id}:${i}`} className="flex flex-col gap-2">
               <div className="flex items-center gap-2 flex-wrap">
                 {s.mode === 'mock' ? <MockTag /> : <ModeBadge mode={s.mode} />}
-                <span className="text-sm font-medium">{platformLong(s.platform, t)}</span>
-                <span className="meta">
+                <span className="text-[13px] leading-[18px] font-medium">{platformLong(s.platform, t)}</span>
+                <span className={META}>
                   {t('source.fetched')} {fmtDate(s.fetched_at, lang)} {fmtTime(s.fetched_at, lang)}
                 </span>
               </div>
               {s.quote && (
-                <blockquote className={`font-display italic text-md border-l-2 border-rule-strong pl-2 text-ink ${hide}`}>
+                <blockquote className={`m-0 border-l-2 border-[var(--line,#DCE4E8)] pl-3 text-[15px] leading-[22px] italic ${hide}`}>
                   {lang === 'cs' ? `„${csTypo(s.quote)}“` : `“${s.quote}”`}
                 </blockquote>
               )}
-              <div className={`meta break-all ${hide}`} translate="no">
+              <div className={`${META} font-mono break-all ${hide}`} translate="no">
                 {s.url}
               </div>
-              <div className="meta">
+              <div className={META}>
                 {t('source.actor')}: <span translate="no">{s.actor ?? '–'}</span>
               </div>
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 {noLink ? (
                   <>
-                    <span id={noteId} className="text-xs text-ink-2 flex-1 min-w-[160px]">
+                    <span id={noteId} className="min-w-[160px] flex-1 text-[12px] leading-4 text-[var(--text-2,#435965)]">
                       {t('source.mockUrl')}
                     </span>
                     <button type="button" className="btn btn-sm" aria-disabled="true" aria-describedby={noteId} onClick={(e) => e.preventDefault()}>
@@ -170,7 +201,7 @@ function SourcePopover({ pop, id, onClose }: { pop: PopState; id: string; onClos
           )
         })}
       </div>
-      <div className="flex justify-end mt-2 pt-2 border-t border-rule">
+      <div className="mt-3 flex justify-end border-t border-[var(--line,#DCE4E8)] pt-2">
         <button type="button" className="btn btn-sm btn-ghost" onClick={onClose}>
           {t('source.close')}
         </button>
@@ -196,32 +227,51 @@ export function platformLong(p: string, t: TFn) {
   return hasKey(k) ? t(k) : p
 }
 
+/** Static mode dot (no pulsing): live = petrol disc, mock = dark square, cache = hollow ring. */
 export function ModeDot({ mode }: { mode?: Mode | null }) {
   if (!mode) return null
-  return <span className={`dot ${mode === 'live' ? 'dot-live' : mode === 'mock' ? 'dot-mock' : 'dot-idle'}`} aria-hidden />
+  const shape =
+    mode === 'live'
+      ? 'rounded-full bg-[var(--accent,#086B68)]'
+      : mode === 'mock'
+        ? 'rounded-[2px] bg-[var(--neutral,#4B5D67)]'
+        : 'rounded-full border-[1.5px] border-[var(--text-2,#435965)]'
+  return <span className={`inline-block size-2 flex-none ${shape}`} aria-hidden />
 }
 
+/** Data-mode badge: MOCK, CACHED or LIVE, each with its own text and shape (not colour alone). */
 export function ModeBadge({ mode }: { mode?: Mode | null }) {
-  const { t } = useApp()
   if (!mode) return null
   if (mode === 'mock') return <MockTag />
-  return (
-    <span className="inline-flex items-center gap-2 meta !text-ink-2">
-      <ModeDot mode={mode} />
-      {t(`mode.${mode}`)}
-    </span>
-  )
+  if (mode === 'cache') return <CacheTag />
+  return <LiveTag />
 }
 
 export function MockTag({ short }: { short?: boolean }) {
   if (short)
     return (
-      <span className="mock-tag" title="MOCK">
+      <span className={TAG_MOCK} title="MOCK">
         <span aria-hidden>M</span>
         <span className="sr-only">MOCK</span>
       </span>
     )
-  return <span className="mock-tag">MOCK</span>
+  return <span className={TAG_MOCK}>MOCK</span>
+}
+
+/** CACHED: dashed outline, so it reads differently from MOCK and LIVE without colour. */
+export function CacheTag() {
+  const { t } = useApp()
+  return <span className={TAG_CACHE}>{t('mode.cache')}</span>
+}
+
+export function LiveTag() {
+  const { t } = useApp()
+  return (
+    <span className={TAG_LIVE}>
+      <span className="inline-block size-1.5 flex-none rounded-full bg-current" aria-hidden />
+      {t('mode.live')}
+    </span>
+  )
 }
 
 /** Screen-reader-only separator, so composed accessible names pause between parts. */
@@ -243,15 +293,20 @@ export function NoValue() {
 /** A @handle that may wrap after "_" or "." (never cut off with an ellipsis). */
 export function Handle({ handle }: { handle: string }) {
   const parts = handle.split(/(?<=[_.])/)
+  // <wbr> makes Chrome put a space into the accessible name ('@mlsna_ brnenka'), so the
+  // breakable copy is hidden from screen readers and the plain handle is read instead
   return (
     <>
-      @
-      {parts.map((p, i) => (
-        <Fragment key={i}>
-          {p}
-          {i < parts.length - 1 && <wbr />}
-        </Fragment>
-      ))}
+      <span aria-hidden>
+        @
+        {parts.map((p, i) => (
+          <Fragment key={i}>
+            {p}
+            {i < parts.length - 1 && <wbr />}
+          </Fragment>
+        ))}
+      </span>
+      <span className="sr-only">@{handle}</span>
     </>
   )
 }
@@ -277,12 +332,16 @@ export function groupSources(list: SourceRef[]): SourceRef[][] {
   return [...by.values()]
 }
 
+/** Source chip: small gray tag (6 px radius) that opens the source popover; petrol on hover / open. */
+const CHIP_BASE = 'inline-flex items-center gap-1 min-h-6 rounded-[6px] border px-1.5 align-middle text-[12px] leading-4 font-medium whitespace-nowrap'
+const CHIP = `${CHIP_BASE} border-[var(--field,#6F8794)] bg-[var(--bg,#F3F6F8)] text-[var(--text-2,#435965)] transition-colors duration-[var(--dur-1,120ms)] hover:border-[var(--accent,#086B68)] hover:text-[var(--accent,#086B68)] aria-expanded:border-[var(--accent,#086B68)] aria-expanded:bg-[var(--accent-tint,#E4F3F0)] aria-expanded:text-[var(--accent,#086B68)]`
+
 export function SourceChip({ src, sources }: { src?: SourceRef | null; sources?: SourceRef[]; compact?: boolean }) {
   const { open, openFor, id } = useContext(PopCtx)
   const { t, lang } = useApp()
   const btn = useRef<HTMLButtonElement>(null)
   const list = sources ?? (src ? [src] : [])
-  if (!list.length) return <span className="src-chip is-none">{t('source.none')}</span>
+  if (!list.length) return <span className={`${CHIP_BASE} border-dashed border-[var(--field,#6F8794)] bg-[var(--surface,#FFFFFF)] text-[var(--text-3,#5F717B)]`}>{t('source.none')}</span>
   const s = list[0]
   const mock = s.mode === 'mock'
   const expanded = openFor != null && openFor === btn.current
@@ -290,9 +349,10 @@ export function SourceChip({ src, sources }: { src?: SourceRef | null; sources?:
   // what is on screen (WCAG 2.5.3): "Zdroj: IG (Instagram) · MOCK · staženo 9. 10. 2026".
   return (
     <button
+      data-testid="source-chip"
       ref={btn}
       type="button"
-      className="src-chip"
+      className={CHIP}
       aria-haspopup="dialog"
       aria-expanded={expanded}
       aria-controls={expanded ? id : undefined}
@@ -305,20 +365,20 @@ export function SourceChip({ src, sources }: { src?: SourceRef | null; sources?:
       {!mock && <ModeDot mode={s.mode} />}
       <span>{platformLabel(s.platform, t)}</span>
       {platformLabel(s.platform, t) !== platformLong(s.platform, t) && <span className="sr-only"> ({platformLong(s.platform, t)})</span>}
-      <span aria-hidden className="text-ink-3">
+      <span aria-hidden className="text-[var(--text-3,#5F717B)]">
         ·
       </span>
       {mock ? (
-        <span className="src-mock">MOCK</span>
+        <span className="font-semibold tracking-[0.04em] text-[var(--text,#182C36)]">MOCK</span>
       ) : s.mode === 'cache' ? (
         <>
-          <span className="src-cache">{t('cache.tag')}</span>
-          <span>{fmtDayMonth(s.fetched_at, lang)}</span>
+          <span className="border-b border-dashed border-[var(--field,#6F8794)] font-semibold uppercase tracking-[0.04em] text-[var(--text,#182C36)]">{t('cache.tag')}</span>
+          <span className="tnum">{fmtDayMonth(s.fetched_at, lang)}</span>
         </>
       ) : (
-        <span>{fmtDayMonth(s.fetched_at, lang)}</span>
+        <span className="tnum">{fmtDayMonth(s.fetched_at, lang)}</span>
       )}
-      {list.length > 1 && <span className="text-ink-3">{t('source.more', { n: list.length })}</span>}
+      {list.length > 1 && <span className="tnum text-[var(--text-3,#5F717B)]">{t('source.more', { n: list.length })}</span>}
       <span className="sr-only">
         {' '}
         · {mock ? '' : `${t(`mode.${s.mode}`)}, `}
@@ -347,8 +407,9 @@ export function Sourced({ sources, children, className = '', caption }: { source
   if (!sources || !sources.length) return <span className={className} title={caption}>{children}</span>
   return (
     <button
+      data-testid="sourced"
       type="button"
-      className={`sourced ${className}`}
+      className={`m-0 border-0 bg-transparent p-0 text-left text-inherit underline decoration-[var(--text-3,#5F717B)] decoration-dotted decoration-1 underline-offset-[3px] hover:text-[var(--accent,#086B68)] hover:decoration-[var(--accent,#086B68)] ${className}`}
       aria-haspopup="dialog"
       onClick={(e) => {
         e.stopPropagation()
@@ -362,23 +423,57 @@ export function Sourced({ sources, children, className = '', caption }: { source
 
 // ---------------- criterion status ----------------
 
-/** Pass / fail / unknown as a bare glyph in ink, same size and weight; the meaning is in hidden text
- *  (splněno / nesplněno / nejde ověřit). Never a box, never a traffic light. */
+/** The mark's shape carries the meaning on its own: check, cross, question mark, dash (waived). */
+function MarkSvg({ tone, size = 12 }: { tone: Tone; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden focusable="false" className="flex-none">
+      {tone === 'pass' && <path d="M3.5 8.5l3 3 6-7" />}
+      {tone === 'fail' && <path d="M4.5 4.5l7 7M11.5 4.5l-7 7" />}
+      {tone === 'unknown' && (
+        <>
+          <path d="M5.6 5.8a2.4 2.4 0 1 1 3.5 2.2c-.7.4-1.1.9-1.1 1.7v.3" />
+          <circle cx="8" cy="12.9" r="0.4" fill="currentColor" />
+        </>
+      )}
+      {tone === 'waived' && <path d="M4 8h8" />}
+    </svg>
+  )
+}
+
+/** Met / not met / cannot verify as a 16 px tinted mark (icon + hidden word). Use it only where the
+ *  status word or a sentence saying it is visible next to it; otherwise use StatusTag. */
 export function CritIcon({ status, waived, label: crit, silent }: { status: ResultStatus; waived?: boolean; label?: string; silent?: boolean }) {
   const { t } = useApp()
-  const glyph = waived ? '✕' : status === 'pass' ? '✓' : status === 'fail' ? '✕' : '?'
+  const tone = toneOf(status, waived)
   const word = waived ? t('card.waived') : t(`card.${status}`)
+  const box = `inline-flex size-4 flex-none items-center justify-center rounded-[4px] ${TONE[tone]}`
   // silent: the text next to the mark already says it (e.g. "nesplňuje: …")
   if (silent)
     return (
-      <span className={`crit-mark ${waived ? 'is-waived' : ''}`} aria-hidden>
-        {glyph}
+      <span className={box} aria-hidden>
+        <MarkSvg tone={tone} />
       </span>
     )
   return (
-    <span className={`crit-mark ${waived ? 'is-waived' : ''}`} title={crit ? `${crit}: ${word}` : word}>
-      <span aria-hidden>{glyph}</span>
+    <span className={box} title={crit ? `${crit}: ${word}` : word}>
+      <MarkSvg tone={tone} />
       <span className="sr-only">{word}</span>
+    </span>
+  )
+}
+
+/** Met / not met / cannot verify as icon + visible word on a small tint (4 px radius). */
+export function StatusTag({ status, waived, label: crit, className = '' }: { status: ResultStatus; waived?: boolean; label?: string; className?: string }) {
+  const { t } = useApp()
+  const tone = toneOf(status, waived)
+  const word = waived ? t('card.waived') : t(`card.${status}`)
+  return (
+    <span
+      className={`inline-flex max-w-full items-center gap-1 rounded-[4px] px-1.5 py-0.5 text-[13px] leading-[18px] font-medium ${TONE[tone]} ${className}`}
+      title={crit ? `${crit}: ${word}` : undefined}
+    >
+      <MarkSvg tone={tone} />
+      <span className="min-w-0">{word}</span>
     </span>
   )
 }
@@ -387,7 +482,7 @@ export function CritIcon({ status, waived, label: crit, silent }: { status: Resu
 
 export function Toggle({ checked, onChange, label, className = '', testId }: { checked: boolean; onChange: (v: boolean) => void; label: string; className?: string; testId?: string }) {
   return (
-    <button type="button" role="switch" aria-checked={checked} className={`toggle ${className}`} data-testid={testId} onClick={() => onChange(!checked)}>
+    <button type="button" role="switch" aria-checked={checked} className={`toggle max-md:min-h-11 ${className}`} data-testid={testId} onClick={() => onChange(!checked)}>
       <span className="track" aria-hidden />
       <span>{label}</span>
     </button>
@@ -483,30 +578,17 @@ export function useNow(interval = 1000) {
   return now
 }
 
-/** Count that rolls to its new value; the previous value greys out and rolls away (<= 500 ms,
- *  transform/opacity only; reduced motion just swaps). */
-export function Odometer({ value, format }: { value: number; format?: (n: number) => string }) {
+/** Count that counts to its new value in place (lib/motion useCountUp: one string in one box, never two
+ *  overlapping; --dur-3 ease-out, tabular digits; `delayMs` lets it start after its region has entered;
+ *  instant with reduced motion or a hidden tab). Screen readers get the final value only. */
+export function Odometer({ value, format, delayMs = 0 }: { value: number; format?: (n: number) => string; delayMs?: number }) {
   const { lang } = useApp()
   const fmt = format ?? ((n: number) => (n >= 10000 ? fmtCompact(n, lang) : new Intl.NumberFormat(lang === 'cs' ? 'cs-CZ' : 'en-GB').format(n)))
-  const [prev, setPrev] = useState<number | null>(null)
-  const last = useRef(value)
-  useEffect(() => {
-    if (last.current === value) return
-    setPrev(last.current)
-    last.current = value
-    const tm = window.setTimeout(() => setPrev(null), 520)
-    return () => window.clearTimeout(tm)
-  }, [value])
+  const shown = useCountUp(value, { delayMs })
   return (
-    <span className="odo">
-      <span key={value} className={prev != null ? 'odo-in' : undefined}>
-        {fmt(value)}
-      </span>
-      {prev != null && (
-        <span aria-hidden className="odo-out">
-          {fmt(prev)}
-        </span>
-      )}
+    <span className="tnum">
+      <span aria-hidden>{fmt(shown)}</span>
+      <span className="sr-only">{fmt(value)}</span>
     </span>
   )
 }
@@ -555,7 +637,7 @@ export function DiscardBar({ guard }: { guard: ReturnType<typeof useDiscardGuard
   }, [guard.asking])
   if (!guard.asking) return null
   return (
-    <div role="group" aria-labelledby={`${id}-q`} className="px-6 py-3 border-t border-ink-2 bg-paper-2 flex items-center gap-2 flex-wrap">
+    <div role="group" aria-labelledby={`${id}-q`} className="flex flex-wrap items-center gap-2 border-t border-[var(--line,#DCE4E8)] bg-[var(--bg,#F3F6F8)] px-4 py-3 md:px-6">
       <p id={`${id}-q`} className="text-base font-medium mr-auto">
         {t('discard.title')}
       </p>

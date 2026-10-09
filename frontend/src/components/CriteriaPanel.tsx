@@ -5,6 +5,7 @@ import { runStarted } from '../state'
 import { csTypo } from '../lib/typo'
 import { useDialog } from '../lib/useDialog'
 import { DiscardBar, focusSoon, useDiscardGuard } from './primitives'
+import { ResultsSummary } from './Funnel'
 import type { Brief, Criterion, CriterionParams, Lang, ParamValue } from '../types'
 
 export const TOPICS = [
@@ -116,7 +117,7 @@ function ToggleGroup({
           <button
             key={o}
             type="button"
-            className={`chip !min-h-8 ${on ? '!border-ink !bg-paper-3 font-medium' : ''}`}
+            className={`chip !min-h-8 max-md:!min-h-11 ${on ? '!border-accent !bg-accent-tint !text-accent font-medium' : ''}`}
             aria-pressed={on}
             onClick={() => {
               const next = new Set(set)
@@ -241,7 +242,7 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
               onChange={(e) => setDrafts((d) => ({ ...d, [k]: e.target.value }))}
             />
             {unitSuffix(k, lang) && (
-              <span className="text-base text-ink-2" aria-hidden>
+              <span className="text-base text-text-2" aria-hidden>
                 {unitSuffix(k, lang)}
               </span>
             )}
@@ -252,12 +253,12 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
             )}
           </div>
           {noLimit && (
-            <span id={`${id}-n`} className="block text-sm text-ink-3 mt-1">
+            <span id={`${id}-n`} className="block text-sm text-text-3 mt-1">
               {t('criteria.noLimit')}
             </span>
           )}
           {errors[k] && (
-            <span id={errId} className="block text-sm text-ink mt-1">
+            <span id={errId} className="block text-sm text-bad mt-1">
               {t('criteria.error.number')}
             </span>
           )}
@@ -288,7 +289,7 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
             }
           />
           {unit && (
-            <span id={unitId} className="block text-sm text-ink-3 mt-1">
+            <span id={unitId} className="block text-sm text-text-3 mt-1">
               {t(unit)}
             </span>
           )}
@@ -323,15 +324,15 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
           save()
         }}
       >
-        <div className="px-6 pt-6 pb-4 border-b border-rule">
-          <div className="smallcaps">
+        <div className="px-6 pt-6 pb-4 border-b border-line">
+          <div className="text-sm font-semibold text-text-2">
             {t('criteria.edit')} · {t('criteria.round', { n: c.round })} {t(`round.${c.round}` as I18nKey)}
           </div>
-          <h2 id={titleId} className="font-display text-xl font-semibold mt-1">
+          <h2 id={titleId} className="text-lg font-semibold mt-1">
             {pick(c.label, lang)}
           </h2>
-          <p className="text-base text-ink-2 mt-2">
-            <span className="font-medium text-ink">{t('criteria.why')}: </span>
+          <p className="text-base text-text-2 mt-2">
+            <span className="font-medium text-text">{t('criteria.why')}: </span>
             {pick(c.why, lang)}
           </p>
         </div>
@@ -342,13 +343,13 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
           </label>
           {Object.keys(params).length > 0 && (
             <fieldset className="flex flex-col gap-4 border-0 p-0 m-0">
-              <legend className="smallcaps mb-2">{t('criteria.params')}</legend>
+              <legend className="text-sm font-semibold text-text-2 mb-2">{t('criteria.params')}</legend>
               {Object.entries(params).map(([k, v]) => field(k, v))}
             </fieldset>
           )}
         </div>
         <DiscardBar guard={guard} />
-        <div className="px-6 py-3 border-t border-rule flex justify-end gap-2 bg-paper-2/60" hidden={guard.asking}>
+        <div className="px-6 py-3 border-t border-line flex justify-end gap-2 bg-bg" hidden={guard.asking}>
           <button type="button" className="btn" onClick={onClose}>
             {t('criteria.cancel')}
           </button>
@@ -362,10 +363,22 @@ function CriterionEditor({ c, onClose }: { c: Criterion; onClose: () => void }) 
   )
 }
 
+/** The short value, or '' when the label already states it ("At most 30% ads" + "≤ 30%" says it twice). */
+function summaryBeyondLabel(label: string, raw: string): string {
+  if (!raw) return ''
+  const norm = (x: string) => x.toLowerCase().replace(/\s/g, '')
+  if (norm(label).includes(norm(raw))) return ''
+  const num = (x: string) => parseFloat(x.replace(',', '.'))
+  const nums = raw.match(/\d+(?:[.,]\d+)?/g)
+  const inLabel = label.match(/\d+(?:[.,]\d+)?/g) ?? []
+  if (nums && nums.every((n) => inLabel.some((m) => num(m) === num(n)))) return ''
+  return raw
+}
+
 function CritChip({ c, onEdit }: { c: Criterion; onEdit: (c: Criterion) => void }) {
   const { t, lang, state, actions } = useApp()
-  const summary = paramSummary(c, lang, state.criteria?.brief)
   const name = pick(c.label, lang)
+  const summary = summaryBeyondLabel(name, paramSummary(c, lang, state.criteria?.brief))
   const body = (
     <>
       <span className="label">
@@ -433,12 +446,15 @@ export function CriteriaPanel() {
 
   if (!cs)
     return (
-      <section id="criteria" className="panel px-4 py-3" aria-labelledby="crit-h">
-        <h2 id="crit-h" className="font-display text-lg font-semibold">
-          {t('criteria.title')}
-        </h2>
-        <p className="text-base text-ink-2 mt-1">{t('criteria.empty')}</p>
-      </section>
+      <>
+        <ResultsSummary />
+        <section id="criteria" className="panel" aria-labelledby="crit-h">
+          <h2 id="crit-h" className="text-lg font-semibold">
+            {t('criteria.title')}
+          </h2>
+          <p className="text-base text-text-2 mt-1">{t('criteria.empty')}</p>
+        </section>
+      </>
     )
 
   const collapsed = started && expandedOverride !== true
@@ -446,138 +462,162 @@ export function CriteriaPanel() {
   const d = cs.discovery ?? {}
   const via = [...(d.hashtags ?? []).map((h) => `#${h}`), ...(d.keywords ?? []).map((k) => (lang === 'cs' ? `„${k}“` : `“${k}”`)), ...(d.places ?? [])]
   const enabledN = cs.criteria.filter((c) => c.enabled).length
+  const offN = cs.criteria.length - enabledN
   const brief = cs.brief
-  const briefBits = [brief?.business_type, brief?.city, brief?.goal].filter(Boolean) as string[]
+  const briefBits = ([brief?.business_type, brief?.city, brief?.goal].filter(Boolean) as string[]).map((b) => (lang === 'cs' ? csTypo(b.replace(/\.$/, '')) : b.replace(/\.$/, '')))
   const showStart = !state.runId && !state.demo && !started
 
   return (
-    <section id="criteria" className="panel" aria-labelledby="crit-h">
-      <div className={`flex items-center gap-3 px-4 ${collapsed ? 'h-12' : 'pt-3 pb-2 flex-wrap'}`}>
-        <h2 id="crit-h" className="font-display text-lg font-semibold whitespace-nowrap">
-          {t('criteria.title')}
-          {collapsed && (
-            <>
+    <>
+      <ResultsSummary />
+      <section id="criteria" className="panel" aria-labelledby="crit-h">
+        {/* title left, the existing edit action right; the summary of active conditions sits below */}
+        <div className="flex items-start gap-x-3 gap-y-2 flex-wrap">
+          <div className="min-w-0 flex-1">
+            <h2 id="crit-h" className="text-lg font-semibold">
+              {t('criteria.title')}
               <span className="sr-only">, {t('criteria.enabledN', { n: enabledN })}</span>
-              <span className="num text-base font-normal text-ink-2 ml-2" aria-hidden>
+              <span className="m-num text-base font-normal text-text-2 ml-2" aria-hidden>
                 {enabledN}
               </span>
-            </>
-          )}
-        </h2>
-        {collapsed ? (
-          // relative: the sr-only spans inside are position:absolute and must not escape this clip into
-          // #board's scroll area (it then scrolled sideways on phones)
-          <span className="relative min-w-0 flex-1 truncate text-sm text-ink-2">
-            {briefBits.map((b, i) => (
-              <span key={i}>
-                <span aria-hidden className="text-ink-3 mx-1">
-                  ·
-                </span>
-                <span className="sr-only">, </span>
-                {lang === 'cs' ? csTypo(b.replace(/\.$/, '')) : b.replace(/\.$/, '')}
-              </span>
-            ))}
-            {cs.refused?.length > 0 && (
-              <span>
-                <span aria-hidden className="text-ink-3 mx-1">
-                  ·
-                </span>
-                <span className="sr-only">, </span>
-                {t('criteria.refusedN', { n: cs.refused.length })}
-              </span>
+            </h2>
+            {briefBits.length > 0 && (
+              <p className="text-sm text-text-2 mt-0.5">
+                {briefBits.map((b, i) => (
+                  <span key={i}>
+                    {i > 0 && (
+                      <span aria-hidden className="text-text-3 mx-1">
+                        ·
+                      </span>
+                    )}
+                    {i > 0 && <span className="sr-only">, </span>}
+                    <span className={i === 2 ? 'italic' : undefined}>{b}</span>
+                  </span>
+                ))}
+              </p>
             )}
-          </span>
-        ) : (
-          brief && (
-            <span className="text-sm text-ink-2 flex-1 min-w-[200px]">
-              {[brief.business_type, brief.city].filter(Boolean).join(' · ')}
-              {brief.goal && (
-                <>
-                  {' · '}
-                  <span className="italic">{lang === 'cs' ? csTypo(brief.goal) : brief.goal}</span>
-                </>
-              )}
-            </span>
-          )
+          </div>
+          <div className="flex items-center gap-2 ml-auto flex-wrap justify-end">
+            {state.recomputing && <span className="text-sm text-text-2 max-md:hidden">{t('criteria.recomputing')}</span>}
+            {showStart && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-testid="run-rounds"
+                onClick={() => {
+                  // this button unmounts once the run starts: focus then goes to the panel toggle (effect above)
+                  focusToggle.current = true
+                  actions.startRun()
+                }}
+                title={t('criteria.startRun.hint')}
+              >
+                {t('criteria.startRun')}
+              </button>
+            )}
+            {started && (
+              <button
+                ref={toggleRef}
+                type="button"
+                className="btn btn-sm"
+                aria-expanded={!collapsed}
+                aria-controls="crit-body"
+                aria-label={collapsed ? t('criteria.expandLabel') : t('criteria.collapseLabel')}
+                onClick={() => setExpanded(collapsed)}
+              >
+                {collapsed ? t('criteria.expand') : t('criteria.collapse')}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* collapsed: a short, readable summary of the active conditions, one line per round, wrapping */}
+        {collapsed && (
+          <dl className="mt-3 grid grid-cols-[max-content_minmax(0,1fr)] gap-x-4 gap-y-1.5 max-sm:grid-cols-1 max-sm:gap-y-0.5">
+            {rounds.map((r) => {
+              const list = cs.criteria.filter((c) => c.round === r && c.enabled)
+              if (!list.length) return null
+              return (
+                <div key={r} className="contents">
+                  <dt className="text-sm font-semibold text-text-2 max-sm:mt-1.5">
+                    {t('criteria.round', { n: r })} · {t(`round.${r}` as I18nKey)}
+                  </dt>
+                  <dd className="m-0 text-sm text-text min-w-0 [overflow-wrap:anywhere]">
+                    {list.map((c, i) => {
+                      const label = pick(c.label, lang)
+                      // "Active in last 30 days ≤ 30 days" says it twice: add the value only when the label lacks it
+                      const sum = summaryBeyondLabel(label, paramSummary(c, lang, brief))
+                      return (
+                        <span key={c.id}>
+                          {i > 0 && (
+                            <span aria-hidden className="text-text-3 mx-1.5">
+                              ·
+                            </span>
+                          )}
+                          {i > 0 && <span className="sr-only">, </span>}
+                          {label}
+                          {sum &&<span className="text-text-2 whitespace-nowrap"> {sum}</span>}
+                        </span>
+                      )
+                    })}
+                  </dd>
+                </div>
+              )
+            })}
+          </dl>
         )}
-        <div className="flex items-center gap-2 ml-auto">
-          {state.recomputing && <span className="text-sm text-ink-2 max-md:hidden">{t('criteria.recomputing')}</span>}
-          {showStart && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              data-testid="run-rounds"
-              onClick={() => {
-                // this button unmounts once the run starts: focus then goes to the panel toggle (effect above)
-                focusToggle.current = true
-                actions.startRun()
-              }}
-              title={t('criteria.startRun.hint')}
-            >
-              {t('criteria.startRun')}
-            </button>
+        {collapsed && (offN > 0 || cs.refused?.length > 0) && (
+          <p className="mt-2 text-sm text-text-3">
+            {[offN > 0 ? `${offN} ${t('criteria.disabled')}` : null, cs.refused?.length > 0 ? t('criteria.refusedN', { n: cs.refused.length }) : null].filter(Boolean).join(' · ')}
+          </p>
+        )}
+
+        <div id="crit-body" hidden={collapsed} className="mt-3 grid gap-3">
+          {showStart && <p className="text-sm text-text-2 -mt-1">{t('criteria.startRun.hint')}</p>}
+          {rounds.map((r) => {
+            const list = cs.criteria.filter((c) => c.round === r)
+            if (!list.length) return null
+            return (
+              <div key={r} className="grid grid-cols-[136px_1fr] gap-3 items-start max-sm:grid-cols-1 max-sm:gap-1">
+                <h3 className="pt-1.5 text-sm font-semibold text-text-2">
+                  {t('criteria.round', { n: r })} · {t(`round.${r}` as I18nKey)} <span className="text-text-3 font-normal m-num">{list.length}</span>
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {list.map((c) => (
+                    <CritChip key={c.id} c={c} onEdit={setEditing} />
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+          {cs.refused?.length > 0 && (
+            <div className="grid grid-cols-[136px_1fr] gap-3 items-start max-sm:grid-cols-1 max-sm:gap-1 pt-1">
+              <h3 className="pt-1.5 text-sm font-semibold text-text-2">{t('criteria.refused')}</h3>
+              <ul className="flex flex-col gap-2" role="list">
+                {cs.refused.map((r, i) => (
+                  <li key={i} className="flex items-start gap-2 flex-wrap">
+                    <span className="chip refused">
+                      <span aria-hidden>⊘</span>
+                      <span className="line-through decoration-gap/60">{lang === 'cs' ? csTypo(r.text) : r.text}</span>
+                    </span>
+                    <span className="text-sm text-text-2 pt-1 flex-1 min-w-[200px]">{pick(r.reason, lang)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
-          {started && (
-            <button
-              ref={toggleRef}
-              type="button"
-              className="btn btn-sm"
-              aria-expanded={!collapsed}
-              aria-controls="crit-body"
-              aria-label={collapsed ? t('criteria.expandLabel') : t('criteria.collapseLabel')}
-              onClick={() => setExpanded(collapsed)}
-            >
-              {collapsed ? t('criteria.expand') : t('criteria.collapse')}
-            </button>
+          {via.length > 0 && state.mode !== 'subject' && (
+            <div className="text-sm text-text-2 pt-3 border-t border-dashed border-line-strong">
+              <span className="font-semibold mr-2">{t('criteria.discovery')}</span>
+              <span className="text-xs" translate="no">
+                {via.join(' · ')}
+              </span>
+              {/* the demo pool mixes food and fitness terms on purpose: say so */}
+              {(d.hashtags ?? []).includes('brnofood') && (d.hashtags ?? []).includes('brnofitness') && <div className="mt-1 italic">{t('criteria.discoveryShared')}</div>}
+            </div>
           )}
         </div>
-      </div>
-      <div id="crit-body" hidden={collapsed} className="px-4 pb-4 grid gap-3">
-        {showStart && <p className="text-sm text-ink-2 -mt-1">{t('criteria.startRun.hint')}</p>}
-        {rounds.map((r) => {
-          const list = cs.criteria.filter((c) => c.round === r)
-          if (!list.length) return null
-          return (
-            <div key={r} className="grid grid-cols-[136px_1fr] gap-3 items-start max-sm:grid-cols-1 max-sm:gap-1">
-              <h3 className="pt-2 smallcaps !text-ink-2">
-                {t('criteria.round', { n: r })} · {t(`round.${r}` as I18nKey)} <span className="text-ink-3">{list.length}</span>
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {list.map((c) => (
-                  <CritChip key={c.id} c={c} onEdit={setEditing} />
-                ))}
-              </div>
-            </div>
-          )
-        })}
-        {cs.refused?.length > 0 && (
-          <div className="grid grid-cols-[136px_1fr] gap-3 items-start max-sm:grid-cols-1 max-sm:gap-1 pt-1">
-            <h3 className="pt-2 smallcaps !text-ink-2">{t('criteria.refused')}</h3>
-            <ul className="flex flex-col gap-2" role="list">
-              {cs.refused.map((r, i) => (
-                <li key={i} className="flex items-start gap-2 flex-wrap">
-                  <span className="chip refused">
-                    <span aria-hidden>⊘</span>
-                    <span className="line-through decoration-gap/60">{lang === 'cs' ? csTypo(r.text) : r.text}</span>
-                  </span>
-                  <span className="text-sm text-ink-2 pt-1 flex-1 min-w-[200px]">{pick(r.reason, lang)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {via.length > 0 && state.mode !== 'subject' && (
-          <div className="text-sm text-ink-2 pt-2 border-t border-dashed border-rule">
-            <span className="smallcaps mr-2">{t('criteria.discovery')}</span>
-            <span className="num text-xs" translate="no">
-              {via.join(' · ')}
-            </span>
-            {/* the demo pool mixes food and fitness terms on purpose: say so */}
-            {(d.hashtags ?? []).includes('brnofood') && (d.hashtags ?? []).includes('brnofitness') && <div className="mt-1 italic">{t('criteria.discoveryShared')}</div>}
-          </div>
-        )}
-      </div>
-      {editing && <CriterionEditor c={editing} onClose={() => setEditing(null)} />}
-    </section>
+        {editing && <CriterionEditor c={editing} onClose={() => setEditing(null)} />}
+      </section>
+    </>
   )
 }
