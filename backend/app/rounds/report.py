@@ -1418,16 +1418,19 @@ def diff_reports(before: Report, after: Report) -> ReportDiff:
     down = [i for i in ta if i in tb and TIER_RANK.get(ta[i], 1) < TIER_RANK.get(tb[i], 1) and i not in collapsed]
     # same tier, other words: the text of a finding rewritten for the new goal ("9 of 9 food" -> "0 of 9 fitness")
     fb = {f.id: f for f in before.findings}
+    chb, cha = before.checks or {}, after.checks or {}
+    status_changed = {k for k in set(chb) | set(cha) if chb.get(k) != cha.get(k)}
+    # a check row whose status changed is listed under checks_changed; one that kept its status but
+    # now reads differently ("3 of 9 posts about food" -> "0 of 9 posts about fitness") is reworded
     text_changed = [f.id for f in after.findings if f.id in fb and f.id not in collapsed and f.id not in up
                     and f.id not in down and (fb[f.id].text or {}).get("en") != (f.text or {}).get("en")
-                    and not f.id.startswith(("f:check:", "g:check:"))]
+                    and not (f.id.startswith(("f:check:", "g:check:")) and f.id.split(":", 2)[-1] in status_changed)]
     cb = {c.id: c for c in before.claims}
     claims_changed = []
     for c in after.claims:
         p = cb.get(c.id)
         if p is not None and (p.status != c.status or (p.tier or "related") != (c.tier or "related")):
             claims_changed.append({"id": c.id, "status": [p.status, c.status], "tier": [p.tier, c.tier]})
-    chb, cha = before.checks or {}, after.checks or {}
     checks_changed = [{"criterion_id": k, "status": [chb.get(k), cha.get(k)]}
                       for k in list(dict.fromkeys(list(chb) + list(cha))) if chb.get(k) != cha.get(k)]
     qb = {fold(q.get("cs", "")) for q in before.questions}

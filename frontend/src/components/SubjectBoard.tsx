@@ -142,7 +142,7 @@ function SubjectHeader({ c }: { c: Candidate | null }) {
 // ---------------- goal bar: one-click switch ----------------
 
 function GoalBar({ report }: { report: Report | null | undefined }) {
-  const { state, t, actions, composeChat } = useApp()
+  const { state, t, lang, actions, composeChat } = useApp()
   const brief = state.criteria?.brief
   const current: PresetName | null = presetOf(report?.rendered_for ? { business_type: report.rendered_for.business_type ?? '', city: null, audience: '', goal: '', budget_hint: null, competitors: [] } : brief)
   const busy = state.recomputing || state.runStatus === 'running' || !report
@@ -152,6 +152,11 @@ function GoalBar({ report }: { report: Report | null | undefined }) {
       <h3 id="subj-goal-h" tabIndex={-1} className="font-display text-lg font-semibold mr-auto">
         {t('report.for', { goal: goalLabel(report, brief, t) })}
       </h3>
+      {!state.demo && brief?.lang && brief.lang !== lang && (
+        <p className="text-sm text-ink-2 w-full order-last" data-testid="report-lang-note">
+          {t(brief.lang === 'cs' ? 'report.langNote.cs' : 'report.langNote.en')}
+        </p>
+      )}
       <div className="flex items-center gap-2 flex-wrap">
         <div className="seg" role="group" aria-label={t('report.goal.label')} data-testid="goal-toggle">
           {PRESET_NAMES.map((k) => (

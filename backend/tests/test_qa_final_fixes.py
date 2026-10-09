@@ -60,3 +60,15 @@ def test_cafe_brief_gets_neutral_criterion_reasons():
     cs = build_criteria_from_answers({"q1": "Mám pekárnu v Brně", "q2": "rodiny", "q3": "víc lidí", "q4": "do 20 tisíc",
                                       "q5": "žádné"}, "cs")
     assert any("ekárn" in (c.why or {}).get("cs", "") for c in cs.criteria)
+
+
+async def test_goal_switch_from_an_english_tab_keeps_the_czech_brief():
+    ctx, ev = SubjectCtx("cs"), Events()
+    await say(ctx, ev, "Prověř @fit_peci_s_klarou pro moji pekárnu v Brně")
+    await say(ctx, ev, "fitpeceni.example")
+    assert calls(ctx, "research_subject")
+    await say(ctx, ev, "Změnit cíl na fitness studio v Brně")
+    ctx.lang = "en"   # a second tab with the English UI on the same run
+    await say(ctx, ev, "What about my bakery in Brno instead?")
+    brief = calls(ctx, "change_goal")[-1][1]
+    assert brief.business_type == "pekárna" and brief.lang == "cs", brief

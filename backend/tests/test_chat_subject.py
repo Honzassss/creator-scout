@@ -768,7 +768,9 @@ async def test_goal_switch_keeps_the_owners_business_and_competitors():
     assert brief.budget_hint is None and "sourdough" not in brief.model_dump_json()
     await say(ctx, ev, "what about my fitness studio?")
     brief = calls(ctx, "change_goal")[-1][1]
-    assert brief.business_type == "fitness studio" and {c["name"] for c in brief.competitors} == {"FitZone Brno", "ProteoMax"}
+    # the preset's sample rivals are not the owner's: none are sent (the API brings back a list the
+    # owner named earlier for that business)
+    assert brief.business_type == "fitness studio" and brief.competitors == []
 
 
 async def test_goal_switch_after_not_found_says_there_is_nothing_to_rewrite():

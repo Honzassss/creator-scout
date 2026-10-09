@@ -78,4 +78,17 @@ async def test_chat_subject_takes_the_owners_competitors():
     ctx, ev = SubjectCtx("en"), Events()
     await say(ctx, ev, "Check @kamvbrne (based in Brno) for my bakery in Brno")
     (_, _, _, brief, _), = calls(ctx, "research_subject")
-    assert [c["name"] for c in brief.competitors] == ["Pekárna B", "Chlebárna Vlnka"]
+    # no competitors named: none are invented (the preset's samples are not the owner's rivals)
+    assert brief.competitors == []
+
+
+async def test_an_empty_list_brings_back_the_owners_list_for_that_business(client):
+    """The chat and the form send competitors: [] for a business the owner named no rivals for; going
+    back to the first business brings the owner's own list back."""
+    run_id = await start(client, OWN)
+    fit = {**preset_brief("fitness", "en").model_dump(mode="json"), "competitors": []}
+    assert (await client.post(f"/api/runs/{run_id}/goal", json={"brief": fit, "preset": "fitness"})).status_code == 200
+    assert names(await brief_of(client, run_id)) == []
+    bak = {**preset_brief("bakery", "en").model_dump(mode="json"), "competitors": []}
+    assert (await client.post(f"/api/runs/{run_id}/goal", json={"brief": bak, "preset": "bakery"})).status_code == 200
+    assert names(await brief_of(client, run_id)) == ["Lidl", "albert_cz"]

@@ -689,8 +689,10 @@ def _keep_owner_competitors(name: PresetName, brief: Brief | None, run: Run | No
     memory = _OWNER_COMPETITORS.setdefault(run.id, {})  # type: ignore[union-attr]
     if key(own) and key(own) not in samples:
         memory[old_type] = [dict(c) for c in own]
-    if brief is not None and key(brief.competitors) not in samples:
-        return brief
+    if brief is not None and key(brief.competitors) and key(brief.competitors) not in samples:
+        return brief   # the owner's own list in this request
+    # no list of the owner's in the request (none, empty or the preset's samples): the list the owner
+    # named earlier in this run for this business comes back
     base = brief if brief is not None else preset_brief(name, lang)
     new_type = (base.business_type or "").strip().lower()
     remembered = memory.get(new_type)

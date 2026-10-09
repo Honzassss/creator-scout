@@ -25,6 +25,9 @@ export const api = {
   health: async (): Promise<Health> => json(await fetch('/api/health')),
   run: async (id: string): Promise<Run> => json(await fetch(`/api/runs/${encodeURIComponent(id)}`)),
   status: async (id: string): Promise<{ busy: boolean; error?: string | null; interrupted?: boolean }> => json(await fetch(`/api/runs/${encodeURIComponent(id)}/status`)),
+  /** GET /api/runs/{id}/chat: the conversation bound to this run (text only), for a reload on ?run= */
+  runChat: async (id: string): Promise<{ chat_id: string | null; lang?: 'cs' | 'en' | null; messages: { role: 'user' | 'assistant'; text: string }[] }> =>
+    json(await fetch(`/api/runs/${encodeURIComponent(id)}/chat`)),
   createRun: async (criteria: CriteriaSet): Promise<{ run_id: string }> => json(await post('/api/runs', { criteria })),
   vet: async (id: string, candidate_ids: string[]): Promise<unknown> => json(await post(`/api/runs/${encodeURIComponent(id)}/vet`, { candidate_ids })),
   criteria: async (id: string, criteria: CriteriaSet): Promise<unknown> =>

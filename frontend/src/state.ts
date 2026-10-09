@@ -196,6 +196,8 @@ export type Action =
   | { type: 'chat.event'; id: string; event: ChatEvent }
   | { type: 'chat.end'; id: string; error?: string }
   | { type: 'chat.notice'; id: string; text: string; notice?: NoticeData }
+  /** ?run= reload: the run's earlier conversation from the server, put before anything said since */
+  | { type: 'chat.restore'; chatId: string | null; lang?: 'cs' | 'en' | null; messages: { role: 'user' | 'assistant'; text: string }[] }
   | { type: 'chat.i18n'; id: string; text: I18nText }
   /** a subject run was created (POST /api/subject or the demo): new board, subject mode */
   | { type: 'subject.start'; runId: string | null; subject: SubjectSpec; fromForm?: boolean }
@@ -622,6 +624,17 @@ function reduce(state: AppState, action: Action): AppState {
         ...patchMessage(state, action.id, (m) => ({ ...m, pending: false, error: action.error ?? m.error })),
         chatBusy: false,
       }
+    case 'chat.restore': {
+      const restored: ChatMessage[] = action.messages.map((m, i) => ({
+        id: `restored-${i}`,
+        role: m.role,
+        text: m.text,
+        tools: [],
+        pending: false,
+        lang: m.role === 'assistant' ? (action.lang ?? undefined) : undefined,
+      }))
+      return { ...state, chatId: state.chatId ?? action.chatId, chat: [...restored, ...state.chat] }
+    }
     case 'chat.notice':
       return { ...state, chat: [...state.chat, { id: action.id, role: 'notice', text: action.text, tools: [], pending: false, notice: action.notice }] }
     case 'chat.i18n':

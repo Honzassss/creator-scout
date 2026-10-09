@@ -25,7 +25,7 @@ export function SubjectEntry({ initialSubject, initialAnchor, title }: { initial
   const [subject, setSubject] = useState(initialSubject ?? (state.demo ? '@kuba.jidlo.brno' : ''))
   const [anchorRaw, setAnchorRaw] = useState(initialAnchor !== undefined ? anchorField(initialAnchor) : state.demo ? 'Brno' : '')
   const [goal, setGoal] = useState<GoalChoice>('bakery')
-  // the owner's real competitors; empty = the preset's sample ones (the scripted demo has its own data)
+  // the owner's real competitors; empty = none (the preset's sample rivals are never the owner's)
   const [compRaw, setCompRaw] = useState('')
   const [error, setError] = useState<I18nKey | null>(null)
   const [busy, setBusy] = useState(false)

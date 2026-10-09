@@ -981,6 +981,11 @@ export function CandidateDrawer() {
           {report?.rendered_for && (
             <p className="mt-4 font-display text-lg font-semibold">{t('report.for', { goal: goalLabel(report, state.criteria?.brief, t) })}</p>
           )}
+          {report && !state.demo && state.criteria?.brief?.lang && state.criteria.brief.lang !== lang && (
+            <p className="mt-1 text-sm text-ink-2" data-testid="report-lang-note">
+              {t(state.criteria.brief.lang === 'cs' ? 'report.langNote.cs' : 'report.langNote.en')}
+            </p>
+          )}
           {report?.last_diff?.summary && state.mode !== 'subject' && (
             <p className="mt-1 text-sm text-ink-2">
               <span className="smallcaps mr-2">{t('changed.title')}</span>

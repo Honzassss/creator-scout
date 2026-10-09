@@ -54,12 +54,12 @@ Then press **Research**. The report is ready in under a second.
 
 ## Before recording: open issues
 
-- **Blocking for moment 3 on dc3b4ae / 2743265:** the one-click switch (and the chat's "what about my
-  fitness studio?") carries the bakery competitors over to fitness. In that case the panel shows only
-  "3 new questions, outreach draft rewritten". The fix is in `frontend/src/store.tsx`: remember the
-  form's competitors with the form's preset, and in `switchGoal` send them for that preset and
-  `competitors: []` for the other preset. The backend already keeps an explicit `[]`. The diffs in
-  moment 3 were checked in the UI with exactly that request body.
+- **Moment 3 (fixed):** the one-click switch now sends the form's competitors with the form's preset
+  and `competitors: []` with the other preset (`switchGoal` in `frontend/src/store.tsx`). Checked in
+  the UI on the cache replay: to fitness "1 finding is no longer key, 1 moved to less relevant, ...
+  1 check changed" (No competitor collaboration: not met -> cannot verify); back to bakery "4 findings
+  became key (@sorrypecemejinak and @william_thomas_bakery are now competitors)". After a reload of
+  `?run=` the page no longer knows the form's list, so start each take from the form.
 - Collaboration timeline, 13 Sep 2026: the row is titled @toulkyspavlem with a COMPETITOR badge,
   because the post also tags @william_thomas_bakery. This is `groupByPost` in
   `frontend/src/components/CandidateDrawer.tsx`. Don't zoom in on that row until it is fixed.

@@ -281,10 +281,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const linkRunId = isDemo ? null : params.get('run')
   const restoredSig = linkRunId && state.runId === linkRunId && state.criteria ? 'restored' : ''
   useEffect(() => {
-    if (!restoredSig || announced.current.has('restored')) return
+    if (!restoredSig || !linkRunId || announced.current.has('restored')) return
     announced.current.add('restored')
-    dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') })
-  }, [restoredSig])
+    // the server keeps the conversation bound to the run: show it and continue the same chat session
+    api
+      .runChat(linkRunId)
+      .then((r) => {
+        if (stateRef.current.runId !== linkRunId) return
+        const messages = (r.messages ?? []).filter((m) => (m.role === 'user' || m.role === 'assistant') && m.text)
+        if (messages.length) dispatch({ type: 'chat.restore', chatId: r.chat_id, lang: r.lang ?? null, messages })
+        else dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') })
+      })
+      .catch(() => dispatch({ type: 'chat.notice', id: uid('n'), text: tRef.current('chat.restored') }))
+  }, [restoredSig, linkRunId])
 
   useEffect(() => {
     if (!isDemo) setRunParam(state.runId)
@@ -606,6 +615,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   )
 
   const subjectStarting = useRef(false)
+  // the form's goal and the competitors the owner typed for it: a one-click switch to the other
+  // preset must not carry them over (a bakery's rivals are not a gym's) nor invent the preset's samples
+  const formGoal = useRef<{ runId: string; preset: PresetName; competitors: Brief['competitors'] | null } | null>(null)
   // synchronous guards: chatBusy / recomputing reach stateRef only after a render (a double submit in one task)
   const chatSending = useRef(false)
   const goalInFlight = useRef(false)
@@ -827,9 +839,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
         subjectStarting.current = true
         const parsed = parseSubject(input.subject)
         const l = langRef.current
-        const brief = input.competitors?.length ? { ...PRESETS[input.preset][l], competitors: input.competitors } : PRESETS[input.preset][l]
+        // the owner's own competitors only: the preset's sample rivals are not theirs
+        const brief = { ...PRESETS[input.preset][l], competitors: input.competitors?.length ? input.competitors : [] }
         try {
           const r = await api.subject({ subject: input.subject.trim(), anchor: input.anchor, brief, preset: input.preset, lang: l })
+          formGoal.current = { runId: r.run_id, preset: input.preset, competitors: input.competitors?.length ? input.competitors : null }
           const handle = r.subject?.handle ?? (parsed.ok ? parsed.handle : input.subject.trim().replace(/^@/, ''))
           dispatch({
             type: 'subject.start',
@@ -867,7 +881,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (!id || s.recomputing || goalInFlight.current) return
         goalInFlight.current = true
         localChange.current = true
-        const brief = { ...PRESETS[preset][langRef.current] }
+        let brief = { ...PRESETS[preset][langRef.current] }
+        const fg = formGoal.current
+        if (fg && fg.runId === id) {
+          // the form's own preset keeps what the form sent; the other preset starts with no competitors
+          brief = { ...brief, competitors: preset === fg.preset ? (fg.competitors ?? []) : [] }
+        }
         dispatch({ type: 'recomputing', on: true })
         api
           .goal(id, brief, preset)

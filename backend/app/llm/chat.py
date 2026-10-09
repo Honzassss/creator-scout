@@ -3126,6 +3126,9 @@ _RX_MY_BUSINESS = re.compile(
 
 async def _fallback_goal(message: str, ctx: ChatContext, emit: Emit, out: _Reply, cs: CriteriaSet) -> None:
     lang = out.lang
+    # the brief (and so the report and outreach) stays in the run's language: a second tab in the other
+    # UI language must not put "bakery" into a Czech report
+    blang = cs.brief.lang if cs is not None and cs.brief.lang in ("cs", "en") else lang
     text = _blank_subjects(message).replace("§S§", " ")
     name = pick_preset(text)
     city = find_city(text) or (cs.brief.city if cs else None)
@@ -3141,13 +3144,13 @@ async def _fallback_goal(message: str, ctx: ChatContext, emit: Emit, out: _Reply
                                      comp_m.group(0))) if comp_m else []
     if name:
         # the preset gives the criteria parameters; the business and competitors stay the owner's
-        base = preset_brief_for(name, lang)
+        base = preset_brief_for(name, blang)
         if own and _names_preset_business(own, base.business_type):
             own = None   # "what about my bakery?" in English in a Czech session -> "pekárna"
         same = own is None and (city or base.city) == base.city
-        brief = base.model_copy(update={"city": city or base.city, "lang": lang,
+        brief = base.model_copy(update={"city": city or base.city, "lang": blang,
                                         "business_type": own or base.business_type,
-                                        "competitors": named or ([] if own else base.competitors)})
+                                        "competitors": named or ([] if own or _is_subject_run(ctx.current_run()) else base.competitors)})
         if not same or _is_subject_run(ctx.current_run()):
             # another business or another city, or a single-creator check (its brief holds only what the
             # owner said): the preset's sample audience / goal / budget are not the owner's
@@ -3156,7 +3159,7 @@ async def _fallback_goal(message: str, ctx: ChatContext, emit: Emit, out: _Reply
         # a business we have no preset for: nothing of the previous goal is carried over (no old
         # audience, goal or budget), so the report never states a goal the owner did not give
         brief = Brief(business_type=own or _business_from(text, lang), city=city, audience="", goal="",
-                      budget_hint=None, competitors=named, lang=lang)  # type: ignore[arg-type]
+                      budget_hint=None, competitors=named, lang=blang)  # type: ignore[arg-type]
     run_before = ctx.current_run()
     result = await ctx.change_goal(brief)
     await _emit_tool(emit, "change_goal", {"brief": brief}, result)
@@ -3418,16 +3421,19 @@ async def _fallback_subject(msgs: list[tuple[str, str | None]], ctx: ChatContext
         return
 
     preset: str | None = None
+    known_comp: list = []
     if goal and goal.get("preset"):
         preset = str(goal["preset"])
         base = preset_brief_for(preset, lang)
         bus = str(goal.get("business") or "")
         bt = base.business_type if (not bus or _names_preset_business(bus, base.business_type)) else clip(bus, 80)
         # The preset lends the criteria: the brief states what the owner said (business, city, goal
-        # words); the preset's sample goal, audience and budget are not the owner's and are dropped. The
-        # sample competitor list stays until the owner names their own (the competitor check needs one).
+        # words); the preset's sample goal, audience, budget and competitors are not the owner's and are
+        # dropped (the report must not name rivals the owner never gave; the check then says so).
+        known_comp = list(base.competitors)
         brief = base.model_copy(update={"business_type": bt, "city": goal.get("city") or None, "audience": "",
-                                        "goal": clip(str(goal.get("goal") or ""), 300), "budget_hint": None})
+                                        "goal": clip(str(goal.get("goal") or ""), 300), "budget_hint": None,
+                                        "competitors": []})
     elif goal and goal.get("business"):
         brief = Brief(business_type=clip(str(goal["business"]), 80), city=goal.get("city"), audience="",
                       goal=clip(str(goal.get("goal") or ""), 300), budget_hint=None, competitors=[], lang=lang)  # type: ignore[arg-type]
@@ -3441,7 +3447,7 @@ async def _fallback_subject(msgs: list[tuple[str, str | None]], ctx: ChatContext
     # "my competitors are Lidl and @albert_cz": the owner's own list replaces the preset's sample one
     # (only the text after the keyword, so the subject's own @handle is never taken for a competitor)
     own = [c for m, _ in msgs for t in [re.search(r"(?i)\b(?:konkuren\w*|competitors?|competition)\b.*", m)] if t
-           for c in parse_competitors(re.sub(r"(?i)\s+(?:and|or|a|nebo)\s+(?=@)", ", ", t.group(0)), brief.competitors)]
+           for c in parse_competitors(re.sub(r"(?i)\s+(?:and|or|a|nebo)\s+(?=@)", ", ", t.group(0)), known_comp or brief.competitors)]
     if own:
         brief = brief.model_copy(update={"competitors": own})
     brief, _ = sanitize_brief(brief)
